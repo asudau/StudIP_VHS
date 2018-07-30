@@ -26,7 +26,13 @@ class Intranetverwaltung_IndexController extends StudipController {
     public function index_action()
     {
         
-         
+        $datafield_id_inst = md5('Eigener Intranetbereich');
+        $this->institutes_with_intranet = array();
+        
+        $institute_fields = DatafieldEntryModel::findBySQL('datafield_id = \'' . $datafield_id_inst . '\' AND content = 1');
+        foreach ($institute_fields as $field){
+            array_push($this->institutes_with_intranet, Institute::find($field->range_id));
+        }
        
         
        
