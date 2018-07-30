@@ -1,0 +1,6 @@
+pluginname=Studip_VHS
+pluginclassname=Studip_VHS
+origin=elan-ev
+version=0.1
+studipMinVersion=3.1
+studipMaxVersion=3.4.99
