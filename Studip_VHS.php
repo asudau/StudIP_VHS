@@ -19,7 +19,6 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         parent::__construct();
         global $perm;
         
-        
         $this->sidebar_images = array(
             'admin' => 'admin-sidebar.png',
             'forum2' => 'forum-sidebar.png',
@@ -35,8 +34,12 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
             'literature' => 'literature-sidebar.png',
             'generic' => 'generic-sidebar.png',
         );
-        if (Navigation::hasItem('/start')){
-            Navigation::getItem('/start')->setURL( PluginEngine::getLink($this, array('cid' => ''), 'start/'));
+        
+        $intranets = $this->getIntranetIDsForUser();
+        $intranets[0] = '97543add4c36b0502bc8dd58a3cf7bd9';
+        
+        if (Navigation::hasItem('/start') && $intranets){
+            Navigation::getItem('/start')->setURL( PluginEngine::getLink($this, array('cid' => ''), 'intranet_start/index/' . $intranets[0]));
         }
         
         if($perm->have_perm('root')){
@@ -47,11 +50,11 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         } 
 
         $referer = $_SERVER['REQUEST_URI'];
-        $ma_intranet = true;
+   
         //Intranetnutzer werden statt auf die allgemeine Startseite auf ihre individuelle Startseite weitergeleitet
-        if ( $referer!=str_replace("dispatch.php/start","",$referer) && $ma_intranet){
+        if ( $referer!=str_replace("dispatch.php/start","",$referer) &&  $intranets){;
             //$result = $this->getSemStmt($GLOBALS['user']->id);
-            header('Location: '. PluginEngine::getLink($this, array(), 'start/'), false, 303);
+            header('Location: '. PluginEngine::getLink($this, array(), 'intranet_start/index/') . '97543add4c36b0502bc8dd58a3cf7bd9', false, 303);
             exit();	
         //Nicht-Intranetnutzer werden, wenn sie die Intranet URL verwenden, auf die allgemeine Startseite weitergeleitet
         } 
@@ -77,7 +80,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         return array(
             'overview_vhs' => new Navigation(
                 'Übersicht',
-                PluginEngine::getURL($this, array('style' => $this->style), 'index')
+                PluginEngine::getURL($this, array('style' => $this->style), 'seminar')
             )
         );
     }
@@ -124,4 +127,17 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         }
     }
 	
+    public function getIntranetIDsForUser(){
+        $user = User::findCurrent();
+        $datafield_id_inst = md5('Eigener Intranetbereich');
+        $intranets = array();
+        foreach($user->institute_memberships as $membership){
+            $entries = DataFieldEntry::getDataFieldEntries($membership->institut_id);
+            if ($entries[$datafield_id_inst]->value){
+                $intranets[] = $membership->institut_id;
+            }
+        }
+        return $intranets;
+    }
+    
 }
