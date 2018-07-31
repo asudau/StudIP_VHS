@@ -2,7 +2,7 @@
 require_once 'app/controllers/news.php';
 
 
-class IndexController extends StudipController {
+class SeminarController extends StudipController {
 
     public function __construct($dispatcher)
     {
@@ -53,7 +53,7 @@ class IndexController extends StudipController {
 
             $actions->addLink(
             'Kurs gestalten',
-            $this->url_for('/index/settings'),'icons/16/blue/edit.png'); 
+            $this->url_for('/seminar/settings'),'icons/16/blue/edit.png'); 
 
             Sidebar::get()->addWidget($actions);
         }
@@ -98,16 +98,16 @@ class IndexController extends StudipController {
 
         $this->description = $this->course->__get('Beschreibung');
 
-        $response = $this->relay("index/members");
+        $response = $this->relay("seminar/members");
         $this->members = $response->body;
 	
         // Fetch dates
         if (!$this->studygroup_mode) {
-            $response = $this->relay("index/display/{$this->course_id}/1210000");
+            $response = $this->relay("seminar/display/{$this->course_id}/1210000");
             $this->dates = $response->body;
         }
 	
-        $response = $this->relay("index/documents");
+        $response = $this->relay("seminar/documents");
         $this->documents = $response->body;
         
         $this->render_action($this->style);
@@ -123,7 +123,7 @@ class IndexController extends StudipController {
 
         $actions->addLink(
         'Zurück zur Übersicht',
-        PluginEngine::getURL($this->plugin, array('style' => $this->plugin->style), 'index'),''); 
+        PluginEngine::getURL($this->plugin, array('style' => $this->plugin->style), 'seminar'),''); 
 
         Sidebar::get()->addWidget($actions);
         
@@ -190,7 +190,7 @@ class IndexController extends StudipController {
         }
         
         //PageLayout::Post_Message(new MessageBox('success', 
-        $this->redirect($this->url_for('index/settings'));
+        $this->redirect($this->url_for('seminar/settings'));
     }
     
     
