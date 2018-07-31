@@ -27,29 +27,40 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
 
 <hr>
 
-
+<?php if($intranet_inst) : ?>
 <form name="intranet-settings" name="settings" method="post" action="<?= $controller->url_for('intranetverwaltung/set') ?>" <?= $dialog_attr ?> class="default collapsable">
     <?= CSRFProtection::tokenTag() ?>
     <input id="open_variable" type="hidden" name="open" value="<?= $flash['open'] ?>">
-    
-    <?php foreach($institutes_with_intranet as $intranet) : ?>
-    <fieldset style='display:none' id="<?=$intranet->id?>" <?= isset($flash['open']) && $flash['open'] != $intranet->id ? 'class="collapsed"' : ''?> data-open="<?=$intranet->id?>">
-        <legend><?= $intranet->name ?></legend>
+
+    <h1><?= $intranet_inst->name ?></h1>
+    <fieldset <?= isset($flash['open']) && $flash['open'] != "courses" ? 'class="collapsed"' : ''?> data-open="courses">
+        <legend>Zugehörige Veranstaltungen</legend>
         <table>
+            <?php if($sem_for_instid[$intranet_inst->institut_id]) : ?>
+            <?php foreach($sem_for_instid[$intranet_inst->institut_id] as $course) : ?>
             <tr>
                 <td>
-                    <input type='radio' name ='style' value ='grid' <?= ($style == 'grid') ? 'checked' : '' ?>> <b> Kachelformat: </b> Bequemer und schneller Zugriff auf alle verfügbaren Inhaltselemente
+                    <input type='checkbox' name ='style' value ='grid' <?= ($style == 'grid') ? 'checked' : '' ?>> <?= $course->name ?>
                 </td>
             </tr>
-
+            <?php endforeach ?>
+            <?php endif ?>
         </table>
     </fieldset>
-    <?php endforeach ?>
+
+    <fieldset <?= !isset($flash['open']) || $flash['open'] != 'page' ? 'class="collapsed"' : ''?> data-open="page">
+        <legend><?= _('Individuelle Startseite gestalten') ?></legend>
+            <label for="description"><?= _('Inhalt') ?></label>
+            <textarea name="page" id="page"><?= $inst_config[$intranet_inst->institut_id] ?></textarea>
+            <?= $inst_config[$intranet_inst->institut_id] ?>
+    </fieldset>
+    
+    
 </form>
+<?php endif ?>
 
 <script>
     function select_inst_id(value){
-        $('fieldset').hide();
-        $('#'+value).show();
+        window.location.href = '<?=$controller->url_for('intranetverwaltung/index/index/')?>' + value;
     }
 </script>
