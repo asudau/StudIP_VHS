@@ -10,6 +10,8 @@ class SeminarController extends StudipController {
         $this->plugin = $dispatcher->plugin;
         Navigation::activateItem('course/overview_vhs');
         
+        $this->datafiel_id =  Datafield::findOneBySQL('name = \'Design für Übersichtsseite\'');
+        
     }
 
     public function before_filter(&$action, &$args)
@@ -35,7 +37,7 @@ class SeminarController extends StudipController {
     {
         $course = Course::findCurrent()->id;
         $localEntries = DataFieldEntry::getDataFieldEntries(Course::findCurrent()->id);
-        $this->style = $localEntries['8a8bf27eebccfb0604e9db6151d228f4']->value;
+        $this->style = $localEntries[$this->datafiel_id]->value;
         
         //defaultwert wenn noch nichts gewählt wurde
         if(!$this->style){
@@ -131,8 +133,7 @@ class SeminarController extends StudipController {
         $localEntries = DataFieldEntry::getDataFieldEntries(Course::findCurrent()->id);
         $this->tabs = $this->get_tabs();
         
-        $this->style = $localEntries['8a8bf27eebccfb0604e9db6151d228f4']->value;
-        
+        $this->style = $localEntries[$this->datafiel_id]->value;
        
     }
     
@@ -141,7 +142,7 @@ class SeminarController extends StudipController {
         $description = Request::get('description');
         
         $localEntries = DataFieldEntry::getDataFieldEntries(Course::findCurrent()->id);
-        $this->style = $localEntries['8a8bf27eebccfb0604e9db6151d228f4'];
+        $this->style = $localEntries[$this->datafiel_id];
         $this->style->setValue($style);
         $this->style->store();
         
