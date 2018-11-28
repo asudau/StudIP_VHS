@@ -44,7 +44,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         
         if($perm->have_perm('root')){
             $navigation = new Navigation('Intranetverwaltung', PluginEngine::getURL($this, array(), 'intranetverwaltung/index'));
-            $navigation->addSubNavigation('index', new Navigation('Übersicht', PluginEngine::getURL($this, array(), 'intranetverwaltung/index')));
+            $navigation->addSubNavigation('index', new Navigation('ï¿½bersicht', PluginEngine::getURL($this, array(), 'intranetverwaltung/index')));
             $navigation->addSubNavigation('settings', new Navigation('Einstellungen', PluginEngine::getURL($this, array(), 'settings')));
             Navigation::addItem('/admin/intranetverwaltung', $navigation);
         } 
@@ -74,11 +74,20 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
     {
         $course = Course::findCurrent()->id;
         $localEntries = DataFieldEntry::getDataFieldEntries(Course::findCurrent()->id);
-        $this->style = $localEntries['8a8bf27eebccfb0604e9db6151d228f4']->value;
+        $this->style = $localEntries[$this->datafield_id]->value;
 
+        if($this->style == 'standard'){
+            $core_overview = CoreOverview::getTabNavigation($course_id);
+            $item = new Navigation(_('ï¿½bersicht austauschen'), PluginEngine::getURL($this, array('style' => $this->style), 'seminar'));
+            $core_overview['main']->addSubNavigation('switchback', $item);
+            return $core_overview;
+        }
+       
+       
+        
         return array(
             'overview_vhs' => new Navigation(
-                'Übersicht',
+                'ï¿½bersicht',
                 PluginEngine::getURL($this, array('style' => $this->style), 'seminar')
             )
         );
