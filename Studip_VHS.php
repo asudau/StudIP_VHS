@@ -35,8 +35,16 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
             'generic' => 'generic-sidebar.png',
         );
         
+        $this->course = Course::findCurrent();
+	 	$this->course_id = $this->course->id;
+		
+		if ($this->course) 
+		{
+            $this->setupStudIPNavigation();	
+        }
+        
         $intranets = $this->getIntranetIDsForUser();
-        $intranets[0] = '97543add4c36b0502bc8dd58a3cf7bd9';
+        //$intranets[0] = '97543add4c36b0502bc8dd58a3cf7bd9';
         
         if (Navigation::hasItem('/start') && $intranets){
             Navigation::getItem('/start')->setURL( PluginEngine::getLink($this, array('cid' => ''), 'intranet_start/index/' . $intranets[0]));
@@ -44,7 +52,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         
         if($perm->have_perm('root')){
             $navigation = new Navigation('Intranetverwaltung', PluginEngine::getURL($this, array(), 'intranetverwaltung/index'));
-            $navigation->addSubNavigation('index', new Navigation('ï¿½bersicht', PluginEngine::getURL($this, array(), 'intranetverwaltung/index')));
+            $navigation->addSubNavigation('index', new Navigation('Übersicht', PluginEngine::getURL($this, array(), 'intranetverwaltung/index')));
             $navigation->addSubNavigation('settings', new Navigation('Einstellungen', PluginEngine::getURL($this, array(), 'settings')));
             Navigation::addItem('/admin/intranetverwaltung', $navigation);
         } 
@@ -73,23 +81,25 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
     public function getTabNavigation($course_id)
     {
         $course = Course::findCurrent()->id;
+        $datafield =  DataField::findOneBySQL('name = \'Overview style\'');
+        $this->datafield_id = $datafield->datafield_id;
         $localEntries = DataFieldEntry::getDataFieldEntries(Course::findCurrent()->id);
         $this->style = $localEntries[$this->datafield_id]->value;
 
         if($this->style == 'standard'){
             $core_overview = CoreOverview::getTabNavigation($course_id);
-            $item = new Navigation(_('ï¿½bersicht austauschen'), PluginEngine::getURL($this, array('style' => $this->style), 'seminar'));
+            $item = new Navigation(_('Übersicht austauschen'), PluginEngine::getURL($this, array('style' => $this->style), 'seminar'));
             $core_overview['main']->addSubNavigation('switchback', $item);
             return $core_overview;
         }
        
-       
+        $navigation = new Navigation(_('Übersicht'));
+        $navigation->setImage(Icon::create('seminar', 'info_alt'));
+        $navigation->setActiveImage(Icon::create('seminar', 'info'));
+        $navigation->setURL(PluginEngine::getURL($this, array('style' => $this->style), 'seminar'));
         
         return array(
-            'overview_vhs' => new Navigation(
-                'ï¿½bersicht',
-                PluginEngine::getURL($this, array('style' => $this->style), 'seminar')
-            )
+            'overview_vhs' => $navigation
         );
     }
 
@@ -146,6 +156,57 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
             }
         }
         return $intranets;
+    }
+    
+    private function setupStudIPNavigation(){
+		
+        //falls individuelle Einstellungen zur Reihenfogle vorliegen
+		$block = SeminarTab::findOneBySQL('seminar_id = ? ORDER BY position ASC',
+                                 array($this->course_id) );
+		if($block){
+			$this->sortCourseNavigation();
+		}
+
+    }
+	
+    private function sortCourseNavigation(){
+	global $perm;
+   	$restNavigation = array();
+	$newNavigation = Navigation::getItem('/course');
+	foreach(Navigation::getItem('/course') as $key => $tab){
+		$block = SeminarTab::findOneBySQL('seminar_id = ? AND tab IN (?) ORDER BY position ASC',
+                                 array($this->course_id,$key) );
+		if($block){
+			$tab->setTitle($block->getValue('title'));
+			if($block->getValue('tn_visible') == true || $perm->have_studip_perm('dozent', Request::get('cid')) ){
+				$subNavigations[$block->getValue('position')][$key] = $tab;
+			}
+					
+		} else { 
+		   //keine Info bezüglich Reihenfolge also hinten dran
+		   //greift bei neu aktivierten Navigationselementen
+		   $restNavigation[$key] = $tab;
+
+		}
+
+		$newNavigation->removeSubNavigation($key);
+	}	
+	
+	ksort($subNavigations);
+
+	foreach($subNavigations as $subNavs){
+	    foreach($subNavs as $key => $subNav){
+		$newNavigation->addSubNavigation($key, $subNav);
+		
+	    }
+	}
+	if(count($restNavigation)>0){
+        foreach($restNavigation as $key => $restNav){
+            $newNavigation->addSubNavigation($key, $restNav);  
+        }
+	}
+
+	Navigation::addItem('/course', $newNavigation);
     }
     
 }
