@@ -10,7 +10,7 @@ class SeminarController extends StudipController {
         $this->plugin = $dispatcher->plugin;
         Navigation::activateItem('course/overview_vhs');
         
-        $this->datafiel_id =  Datafield::findOneBySQL('name = \'Design für Übersichtsseite\'');
+        $this->datafiel_id =  Datafield::findOneBySQL('name = \'Design fï¿½r ï¿½bersichtsseite\'');
         
     }
 
@@ -21,12 +21,12 @@ class SeminarController extends StudipController {
         $this->course = Course::findCurrent();
         $this->sem = new Seminar($this->course->id);
 
-        PageLayout::setTitle($this->course->getFullname()." - " ._("Übersicht"));
+        PageLayout::setTitle($this->course->getFullname()." - " ._("ï¿½bersicht"));
 
         // $this->set_layout('layouts/base');
         $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
         
-		//falls innerhalb eines Kurses, Kursnavigation gemäß Konfiguration anpassen
+		//falls innerhalb eines Kurses, Kursnavigation gemï¿½ï¿½ Konfiguration anpassen
 		if ($this->course) 
 		{
             $this->setupStudIPNavigation();	
@@ -39,10 +39,23 @@ class SeminarController extends StudipController {
         $localEntries = DataFieldEntry::getDataFieldEntries(Course::findCurrent()->id);
         $this->style = $localEntries[$this->datafiel_id]->value;
         
-        //defaultwert wenn noch nichts gewählt wurde
+        //defaultwert wenn noch nichts gewï¿½hlt wurde
         if(!$this->style){
             $this->style = 'full';
         }
+         
+        $Modules = new Modules();
+        $course_modules = $Modules->getLocalModules($this->course->id);
+        if (!Navigation::hasItem("/course/overview_vhs")) {
+        //Keine ï¿½bersichtsseite. Anstatt eines Fehler wird der Nutzer zum ersten
+        //Reiter der Veranstaltung weiter geleitet. passiert evtl auch schon in seminar_main.php
+        if (Navigation::hasItem("/course")) {
+            foreach (Navigation::getItem("/course")->getSubNavigation() as $navigation) {
+                header('Location: '.URLHelper::getURL($navigation->getURL()));
+                die;
+            }
+        }
+    }
         
         $description = Request::get('description');
         
@@ -124,7 +137,7 @@ class SeminarController extends StudipController {
         $actions->setTitle(_('Aktionen'));
 
         $actions->addLink(
-        'Zurück zur Übersicht',
+        'Zurï¿½ck zur ï¿½bersicht',
         PluginEngine::getURL($this->plugin, array('style' => $this->plugin->style), 'seminar'),''); 
 
         Sidebar::get()->addWidget($actions);
@@ -258,7 +271,7 @@ class SeminarController extends StudipController {
                     'info' => $termin instanceOf SeminarEvent ? array() :
                     array(
                         _('Kategorie') => $termin->toStringCategories(),
-                        _('Priorität') => $termin->toStringPriority(),
+                        _('Prioritï¿½t') => $termin->toStringPriority(),
                         _('Sichtbarkeit') => $termin->toStringAccessibility(),
                         $termin->toStringRecurrence())
                 );
@@ -273,7 +286,7 @@ class SeminarController extends StudipController {
                 // Build info
                 $info = array();
                 if ($courseDate->dozenten[0]) {
-                    $info[_('Durchführende Dozenten')] = join(', ', $courseDate->dozenten->getFullname());
+                    $info[_('Durchfï¿½hrende Dozenten')] = join(', ', $courseDate->dozenten->getFullname());
                 }
                 if ($courseDate->statusgruppen[0]) {
                     $info[_('Beteiligte Gruppen')] = join(', ', $courseDate->statusgruppen->getValue('name'));
@@ -297,7 +310,7 @@ class SeminarController extends StudipController {
 
         // Forge title
         if ($this->termine) {
-            $this->title = sprintf(_("Termine für die Zeit vom %s bis zum %s"), strftime("%d. %B %Y", $start), strftime("%d. %B %Y", $start + $timespan));
+            $this->title = sprintf(_("Termine fï¿½r die Zeit vom %s bis zum %s"), strftime("%d. %B %Y", $start), strftime("%d. %B %Y", $start + $timespan));
         } else {
             $this->title = _('Termine');
         }
@@ -371,7 +384,7 @@ class SeminarController extends StudipController {
     }
     
     private function get_tabs(){
-        //Tabs und zugehörige Einstellung laden
+        //Tabs und zugehï¿½rige Einstellung laden
 		$position = 100;
 		foreach( Navigation::getItem('course') as $key=>$tab){
 		    //systemtabs anlegen/abfragen
@@ -380,7 +393,7 @@ class SeminarController extends StudipController {
 		    $statement->execute(array('key' => $key));
         	    $orig_title = $statement->fetchAll(PDO::FETCH_ASSOC);
 	
-		    //Spezialfall Reiter die nur TN sehen (zB Courseware Fortschrittsübersicht)
+		    //Spezialfall Reiter die nur TN sehen (zB Courseware Fortschrittsï¿½bersicht)
 		    if($key == 'mooc_courseware'){
 			$query2 = "SELECT title FROM `system_tabs` WHERE tab IN (:key)" ;
 		    	$statement2 = DBManager::get()->prepare($query2);
@@ -388,11 +401,11 @@ class SeminarController extends StudipController {
         	    	$orig_title2 = $statement2->fetchAll(PDO::FETCH_ASSOC);
 		    
 			if (!$orig_title2[0]){
-				$values2 = array('id' => md5('mooc_progress'), 'tab' => 'mooc_progress', 'title' => 'Fortschrittsübersicht');
+				$values2 = array('id' => md5('mooc_progress'), 'tab' => 'mooc_progress', 'title' => 'Fortschrittsï¿½bersicht');
 				$query2 = "INSERT INTO `system_tabs` (`id`, `tab`, `title`) VALUES (:id, :tab, :title)" ;
 				$statement2 = DBManager::get()->prepare($query2);
 				$statement2->execute($values2);
-				$orig_title2[0]['title'] = "Fortschrittsübersicht";
+				$orig_title2[0]['title'] = "Fortschrittsï¿½bersicht";
 		        }
 
 			
@@ -407,7 +420,7 @@ class SeminarController extends StudipController {
 						);
 			} else {
 			      $this->tabs[] = array('tab' => 'mooc_progress',
-						 'title' => 'Fortschrittsübersicht', 
+						 'title' => 'Fortschrittsï¿½bersicht', 
 						 'position' => $position,
 						 'orig_title' => $orig_title2[0]['title'],
 						 'visible' => 'checked',
@@ -512,7 +525,7 @@ class SeminarController extends StudipController {
                 }
 
             } else { 
-               //keine Info bezüglich Reihenfolge also hinten dran
+               //keine Info bezï¿½glich Reihenfolge also hinten dran
                //greift bei neu aktivierten Navigationselementen
                $restNavigation[$key] = $tab;
 
