@@ -19,7 +19,7 @@ class Intranetverwaltung_IndexController extends StudipController {
         PageLayout::setTitle(_("Intranetverwaltung - Übersicht"));
 
         // $this->set_layout('layouts/base');
-        $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
+        //$this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
 
     }
 
@@ -34,7 +34,7 @@ class Intranetverwaltung_IndexController extends StudipController {
         $institute_fields = DatafieldEntryModel::findBySQL('datafield_id = \'' . $datafield_id_inst . '\' AND content = 1');
         foreach ($institute_fields as $field){
             array_push($this->institutes_with_intranet, Institute::find($field->range_id)); 
-            $this->inst_config[$field->range_id] = IntranetConfig::find($field->range_id)->startpage;
+            $this->inst_config[$field->range_id] = IntranetConfig::find($field->range_id)->template;
         }
         
         $seminar_fields = DatafieldEntryModel::findBySQL('datafield_id = \'' . $datafield_id_sem . '\' AND content = 1');
@@ -44,10 +44,25 @@ class Intranetverwaltung_IndexController extends StudipController {
             $this->sem_for_instid[$course->institut_id][] = $course;
         }
         
+        if ($this->intranet_inst){
+            $sidebar = Sidebar::Get();
+
+            $navcreate = new ActionsWidget();
+            $navcreate->addLink(_('Veranstaltung hinzufügen'),
+                                  $this->url_for('intranetverwaltung/index/add_sem'),
+                                  Icon::create('seminar+add', 'clickable'))->asDialog('size=big'); 
+            $sidebar->addWidget($navcreate);
+        }
+        
        
       
 
     }
+    
+    public function add_sem_action(){
+
+    }
+    
     
     public function settings_action()
     {
@@ -55,61 +70,18 @@ class Intranetverwaltung_IndexController extends StudipController {
        
     }
     
-    public function set_action() {
-        $style = Request::get('style');
-        $description = Request::get('description');
+    public function set_action($inst_id) {
+        $config = IntranetConfig::find($inst_id);
+        $seminare = Request::getArray('seminare');
+        $template = Request::get('template');
         
-        $localEntries = DataFieldEntry::getDataFieldEntries(Course::findCurrent()->id);
-        $this->style = $localEntries['8a8bf27eebccfb0604e9db6151d228f4'];
-        $this->style->setValue($style);
-        $this->style->store();
+        $config->seminare = $seminare;
+        $config->template = $template;
+        $config->store();
         
-        $this->course->beschreibung = $description;
-        $this->course->store();
-        
-
-        $tab_count = intval(Request::get('tab_num'));
-        $tab_position = array();
-
-        $order = explode(',',Request::get('new_order'));
-        $position = 1;
-        foreach($order as $o){
-            $tab_position['tab_position_'. $o] = $position;
-            $position++;
-        }
-
-        for ($i = 0; $i < $tab_count; $i++){
-
-            $block = new SeminarTab();
-
-            //falls noch kein Eintrag existiert: anlegen
-            if (!SeminarTab::findOneBySQL('seminar_id = ? AND tab IN (?) ORDER BY position ASC',
-                                     array($this->course->id,Request::get('tab_title_'. $i)))){
-                $block->setData(array(
-                    'seminar_id' => $this->course->id,
-                    'tab'       => Request::get('tab_title_'. $i),
-                    'title'       => Request::get('new_tab_title_'. $i),
-                    'position'       => $tab_position['tab_position_'. $i],
-                    'tn_visible'      => Request::get('visible_'. $i) == 'on' ? true : false
-                    ));	
-
-                    $block->store();
-            } 
-
-            //falls ein Eintrag existiert: anpassen
-            else {
-                $block = SeminarTab::findOneBySQL('seminar_id = ? AND tab IN (?) ORDER BY position ASC',
-                                     array($this->course->id,Request::get('tab_title_'. $i)));
-                $block->setValue('title', Request::get('new_tab_title_'. $i));
-                $block->setValue('position', $tab_position['tab_position_'. $i]);
-                $block->setValue('tn_visible', Request::get('visible_'. $i) == 'on' ? true : false);
-                $block->store();
-
-            }
-        }
-        
+       
         //PageLayout::Post_Message(new MessageBox('success', 
-        $this->redirect($this->url_for('index/settings'));
+        $this->render_action('index');
     }
     
        // customized #url_for for plugins

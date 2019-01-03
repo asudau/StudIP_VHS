@@ -38,16 +38,17 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         $this->course = Course::findCurrent();
 	 	$this->course_id = $this->course->id;
 		
-		if ($this->course) 
+		if ($this->course)
 		{
             $this->setupStudIPNavigation();	
         }
         
+        //setup intranet navigation and forward if just logged in
+        //TOTO: auslagern
         $intranets = $this->getIntranetIDsForUser();
-        //$intranets[0] = '97543add4c36b0502bc8dd58a3cf7bd9';
         
         if (Navigation::hasItem('/start') && $intranets){
-            Navigation::getItem('/start')->setURL( PluginEngine::getLink($this, array('cid' => ''), 'intranet_start/index/' . $intranets[0]));
+            Navigation::getItem('/start')->setURL(PluginEngine::getLink($this, array(), 'intranet_start/index/') . $intranets[0]);
         }
         
         if($perm->have_perm('root')){

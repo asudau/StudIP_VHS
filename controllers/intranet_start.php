@@ -24,7 +24,7 @@ class IntranetStartController extends StudipController {
     public function index_action($inst_id)
     {
 
-        $this->startpage = IntranetConfig::find($inst_id)->startpage;
+        $this->template = IntranetConfig::find($inst_id)->template;
         $this->courses = User::findCurrent()->course_memberships;
         
         $this->newsTemplates = array();
@@ -32,7 +32,8 @@ class IntranetStartController extends StudipController {
         foreach(IntranetConfig::find($inst_id)->getRelatedCourses() as $course){
             $this->newsTemplates[] = array('template' => $this->getNewsTemplateForSeminar($course->id));
         }
-        
+        $this->template = IntranetConfig::find($inst_id)->template;
+        $this->render_action($this->template);
 
     }
     

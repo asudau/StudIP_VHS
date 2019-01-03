@@ -28,7 +28,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
 <hr>
 
 <?php if($intranet_inst) : ?>
-<form name="intranet-settings" name="settings" method="post" action="<?= $controller->url_for('intranetverwaltung/set') ?>" <?= $dialog_attr ?> class="default collapsable">
+<form name="intranet-settings" name="settings" method="post" action="<?= $controller->url_for('intranetverwaltung/index/set/' . $intranet_inst->id) ?>" <?= $dialog_attr ?> class="default collapsable">
     <?= CSRFProtection::tokenTag() ?>
     <input id="open_variable" type="hidden" name="open" value="<?= $flash['open'] ?>">
 
@@ -40,7 +40,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
             <?php foreach($sem_for_instid[$intranet_inst->institut_id] as $course) : ?>
             <tr>
                 <td>
-                    <input type='checkbox' name ='style' value ='grid' <?= ($style == 'grid') ? 'checked' : '' ?>> <?= $course->name ?>
+                    <input type='checkbox' name ='seminare' value ='grid' <?= ($style == 'grid') ? 'checked' : '' ?>> <?= $course->name ?>
                 </td>
             </tr>
             <?php endforeach ?>
@@ -50,10 +50,11 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
 
     <fieldset <?= !isset($flash['open']) || $flash['open'] != 'page' ? 'class="collapsed"' : ''?> data-open="page">
         <legend><?= _('Individuelle Startseite gestalten') ?></legend>
-            <label for="description"><?= _('Inhalt') ?></label>
-            <textarea name="page" id="page"><?= $inst_config[$intranet_inst->institut_id] ?></textarea>
-            <?= $inst_config[$intranet_inst->institut_id] ?>
+            <label for="description"><?= _('Template wählen') ?></label>
+            <input type="text" name="template" id="template" value="<?= $inst_config[$intranet_inst->institut_id] ?> "/>
     </fieldset>
+    
+    <button title="Änderungen übernehmen" name="submit" class="button" type="submit">Übernehmen</button></p>
     
     
 </form>
