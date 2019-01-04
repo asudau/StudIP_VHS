@@ -31,6 +31,15 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
                     <img class='style-preview box-shadow' src='<?= URLHelper::getURL($this->plugin->getpluginPath() . '/assets/images/grid.png')?>'/>
                 </td>
                 <td>
+                    <input type='radio' name ='style' value ='standard' <?= ($style == 'standard') ? 'checked' : '' ?>> <b> Standardformat: </b> Die Stud.IP Standardübersicht
+                </td>
+            </tr>
+            
+            <tr>
+                <td>    
+                    <img class='style-preview box-shadow' src='<?= URLHelper::getURL($this->plugin->getpluginPath() . '/assets/images/grid.png')?>'/>
+                </td>
+                <td>
                     <input type='radio' name ='style' value ='grid' <?= ($style == 'grid') ? 'checked' : '' ?>> <b> Kachelformat: </b> Bequemer und schneller Zugriff auf alle verfügbaren Inhaltselemente
                 </td>
             </tr>
@@ -69,12 +78,12 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
         <legend><?= _('Navigation') ?></legend>
 
 
-        <label>
+<!--        <label>
             <h1>Navigationsart</h1>
             <input type='radio' name ='navigation' value ='default' <?= ($style == 'default') ? 'checked' : '' ?>> Navigation über Veranstaltungsreiter <br>
             <input type='radio' name ='navigation' value ='base-grid' <?= ($style == 'base-grid') ? 'checked' : '' ?>> Navigation über Kacheln auf Übersichtseite <br>
             <input type='radio' name ='navigation' value ='left-hand' <?= ($style == 'eft-hand') ? 'checked' : '' ?>> Linksseitige Navigation <br>
-        </label>
+        </label>-->
         <label>
             <input name="new_order" value="" type="hidden" />
             <h1>Benennung, Reihenfolge und Sichtbarkeit der Navigationselemente</h1>

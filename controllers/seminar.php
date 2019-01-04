@@ -10,6 +10,8 @@ class SeminarController extends StudipController {
         $this->plugin = $dispatcher->plugin;
         if (Navigation::hasItem("/course/overview_vhs")){
             Navigation::activateItem('course/overview_vhs');
+        } else if (Navigation::hasItem("/course/main")){
+            Navigation::activateItem('course/main');
         }
         
         $datafield =  DataField::findOneBySQL('name = \'Overview style\'');
@@ -46,9 +48,15 @@ class SeminarController extends StudipController {
             $this->style = 'full';
         }
          
-        $Modules = new Modules();
-        $course_modules = $Modules->getLocalModules($this->course->id);
         if (!Navigation::hasItem("/course/overview_vhs")) {
+       
+            $navigation = new Navigation(_('Übersicht'));
+            $navigation->setImage(Icon::create('seminar', 'info_alt'));
+            $navigation->setActiveImage(Icon::create('seminar', 'info'));
+            $navigation->setURL(PluginEngine::getURL($this, array('style' => $this->style), 'seminar'));
+            Navigation::getItem("/course")->addSubNavigation('overview_vhs', $navigation);
+       /** 
+        
         //Keine Übersichtsseite. Anstatt eines Fehler wird der Nutzer zum ersten
         //Reiter der Veranstaltung weiter geleitet. passiert evtl auch schon in seminar_main.php
         if (Navigation::hasItem("/course")) {
@@ -57,6 +65,8 @@ class SeminarController extends StudipController {
                 die;
             }
         }
+        * 
+        */
     }
         
         $description = Request::get('description');
@@ -140,7 +150,7 @@ class SeminarController extends StudipController {
 
         $actions->addLink(
         'Zurück zur Übersicht',
-        PluginEngine::getURL($this->plugin, array('style' => $this->plugin->style), 'seminar'),''); 
+        URLHelper::getURL('seminar_main.php'));; 
 
         Sidebar::get()->addWidget($actions);
         

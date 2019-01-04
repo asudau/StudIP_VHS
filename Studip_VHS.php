@@ -87,9 +87,9 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         $localEntries = DataFieldEntry::getDataFieldEntries(Course::findCurrent()->id);
         $this->style = $localEntries[$this->datafield_id]->value;
 
-        if($this->style == 'standard'){
+        if($this->style == 'standard'){ //todo: oder keine angabe
             $core_overview = CoreOverview::getTabNavigation($course_id);
-            $item = new Navigation(_('Übersicht austauschen'), PluginEngine::getURL($this, array('style' => $this->style), 'seminar'));
+            $item = new Navigation(_('Kurs gestalten'), PluginEngine::getLink($this, array(), 'seminar/settings'));
             $core_overview['main']->addSubNavigation('switchback', $item);
             return $core_overview;
         }
