@@ -48,7 +48,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         $intranets = $this->getIntranetIDsForUser();
         
         if (Navigation::hasItem('/start') && $intranets){
-            Navigation::getItem('/start')->setURL(PluginEngine::getLink($this, array(), 'intranet_start/index/') . $intranets[0]);
+            Navigation::getItem('/start')->setURL(PluginEngine::getLink($this, array(), 'intranet_start/index/' . $intranets[0]) );
         }
         
         if($perm->have_perm('root')){
@@ -63,7 +63,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         //Intranetnutzer werden statt auf die allgemeine Startseite auf ihre individuelle Startseite weitergeleitet
         if ( $referer!=str_replace("dispatch.php/start","",$referer) &&  $intranets){;
             //$result = $this->getSemStmt($GLOBALS['user']->id);
-            header('Location: '. PluginEngine::getLink($this, array(), 'intranet_start/index/') . '97543add4c36b0502bc8dd58a3cf7bd9', false, 303);
+            header('Location: '. PluginEngine::getLink($this, array(), 'intranet_start/index/' . $intranets[0]) , false, 303);
             exit();	
         //Nicht-Intranetnutzer werden, wenn sie die Intranet URL verwenden, auf die allgemeine Startseite weitergeleitet
         } 
@@ -89,8 +89,10 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
 
         if($this->style == 'standard'){ //todo: oder keine angabe
             $core_overview = CoreOverview::getTabNavigation($course_id);
-            $item = new Navigation(_('Kurs gestalten'), PluginEngine::getLink($this, array(), 'seminar/settings'));
-            $core_overview['main']->addSubNavigation('switchback', $item);
+            if($GLOBALS["perm"]->have_studip_perm('tutor', $course_id)){
+                $item = new Navigation(_('Kurs gestalten'), PluginEngine::getLink($this, array(), 'seminar/settings'));
+                $core_overview['main']->addSubNavigation('switchback', $item);
+            }
             return $core_overview;
         }
        
