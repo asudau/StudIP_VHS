@@ -13,7 +13,6 @@ class IntranetConfig extends Migration
         $db->exec("CREATE TABLE `intranet_config` (
           `Institut_id` varchar(32) NOT NULL,
           `template` text,
-          `seminare` text,
           PRIMARY KEY (Institut_id)
         ) ");
 
