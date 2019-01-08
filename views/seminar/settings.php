@@ -28,7 +28,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
         <table>
             <tr>
                 <td>    
-                    <img class='style-preview box-shadow' src='<?= URLHelper::getURL($this->plugin->getpluginPath() . '/assets/images/grid.png')?>'/>
+                    <img class='style-preview box-shadow' src='<?= URLHelper::getURL($this->plugin->getpluginPath() . '/assets/images/standard.png')?>'/>
                 </td>
                 <td>
                     <input type='radio' name ='style' value ='standard' <?= ($style == 'standard') ? 'checked' : '' ?>> <b> Standardformat: </b> Die Stud.IP Standardübersicht
