@@ -88,7 +88,7 @@
                     <section class="contentbox folder">
                         <a class='folder_open' href=''><?= $folder ?></a>
                         <? foreach ($files as $file): ?>
-                        <li class='file_download' style="display:none"> <a href='../../../sendfile.php?force_download=1&type=0&file_id=<?= $file['dokument_id']?>&file_name=<?= $file['filename'] ?>'><?= $file['name'] ?></a></li>
+                        <li class='file_download' style="display:none"> <a href='<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>sendfile.php?force_download=1&type=0&file_id=<?= $file['dokument_id']?>&file_name=<?= $file['filename'] ?>'><?= $file['name'] ?></a></li>
                         
                         <? endforeach ?>
                         </section>
@@ -108,7 +108,7 @@
                 
                 <!--  Text: [begin] -->
                      <img src="<?=$plugin->getPluginURL().'/assets/images/klee_klein.jpg' ?>" alt="" border="0" width="100%">
-                     <h2 class="intranet"> <a href="<?=$plugin->getPluginURL().'/urlaubskalender/birthday'?>" title="Opens internal link in current window" class="internal-link">Geburtstage</a></h2>
+                     <h2 class="intranet"> <a href="<?=$controller->url_for('urlaubskalender/birthday')?>" title="Opens internal link in current window" class="internal-link">Geburtstage</a></h2>
                       <?php if ($birthday_dates): ?>   
                         <p class="bodytext">   
                         <section class="contentbox folder">
@@ -135,7 +135,7 @@
                 
                 <!--  Text: [begin] -->
                      <img src="<?= $plugin->getPluginURL().'/assets/images/luggage-klein.jpg' ?>" alt="" border="0" width="100%">
-                     <h2 class="intranet"> <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']. 'plugins.php/IntranetMitarbeiterInnen/urlaubskalender/'?>" title="Opens internal link in current window" class="internal-link">Urlaubskalender</a>
+                     <h2 class="intranet"> <a href="<?=$controller->url_for('urlaubskalender')?>" title="Opens internal link in current window" class="internal-link">Urlaubskalender</a>
 <!--                     <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']. 'dispatch.php/calendar/single/week/'. Config::get()->getValue('INTRANET_SEMID_MITARBEITERINNEN'). '?category=13'?>" title="Opens internal link in current window" class="internal-link">Urlaub neu</a>
                      <a href="<?=$plugin->getPluginURL().'/calendar_intern'?>" title="Opens internal link in current window" class="internal-link">Urlaub neu</a>-->
                      </h2>
