@@ -4,11 +4,16 @@
 /**
  * @author  <asudau@uos.de>
  *
- * @property int     $Institut_id
- * @property text    $startpage
- * @computed related_seminars 
+ * @property int     $seminar_id
+ * @property int     $institut_id
+ * @property text    $news_caption
+ * @property bool    $show_news
+ * @property text    $files_caption
+ * @property bool    $use_files
+ * @property text    $add_instuser_as (autor, tutor, dozent)
+ * 
  */
-class IntranetConfig extends SimpleORMap
+class IntranetSeminar extends SimpleORMap
 {
 
     public $errors = array();
@@ -22,7 +27,7 @@ class IntranetConfig extends SimpleORMap
      */
     public function __construct($id = null) {
 
-        $this->db_table = 'intranet_config';
+        $this->db_table = 'intranet_seminar_config';
         parent::__construct($id);
 
     }
