@@ -35,6 +35,13 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
             'generic' => 'generic-sidebar.png',
         );
         
+        $this->templates = array(
+            'index_ammerland',
+            'index_el4',
+            'kacheln',
+            'mitarbeiter');
+            
+        
         $this->course = Course::findCurrent();
 	 	$this->course_id = $this->course->id;
 		

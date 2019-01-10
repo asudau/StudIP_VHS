@@ -51,7 +51,11 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
     <fieldset <?= !isset($flash['open']) || $flash['open'] != 'page' ? 'class="collapsed"' : ''?> data-open="page">
         <legend><?= _('Individuelle Startseite gestalten') ?></legend>
             <label for="description"><?= _('Template wählen') ?></label>
-            <input type="text" name="template" id="template" value="<?= $inst_config[$intranet_inst->institut_id] ?> "/>
+            <select name="template">
+                <?php foreach($plugin->templates as $template) : ?>
+                    <option value='<?= $template?>' <?= ( $inst_config[$intranet_inst->institut_id]  == $template ) ? 'selected' : ''?>><?= $template?></option>
+                <?php endforeach ?>
+            </select>
     </fieldset>
     
     <button title="Änderungen übernehmen" name="submit" class="button" type="submit">Übernehmen</button></p>
