@@ -60,9 +60,31 @@ class Intranetverwaltung_IndexController extends StudipController {
     }
     
     public function add_sem_action(){
-
+        
     }
     
+    public function editseminar_action($sem_id, $inst_id){
+        $this->entry = IntranetSeminar::find([$sem_id, $inst_id]);
+        $this->inst_id = $inst_id;
+        $this->sem_id = $sem_id;
+        
+    }  
+    
+    public function saveseminar_action($sem_id,  $inst_id){
+        $entry = IntranetSeminar::find([$sem_id, $inst_id]);
+        if (!$entry){
+        $entry = new IntranetSeminar([$sem_id, $inst_id]);
+//             $entry->seminar_id = $sem_id;
+//             $entry->institut_id = $inst_id;           
+        }
+        $entry->show_news = Request::get('show_news') ? true : false;
+        $entry->news_caption = Request::get('news_caption');
+        $entry->use_files = Request::get('use_files') ? true : false;
+        $entry->files_caption = Request::get('files_caption');
+        $entry->add_instuser_as = Request::get('add_instuser_as');
+        $entry->store();
+        $this->redirect('intranetverwaltung/index/index/' . $inst_id );
+    }
     
     public function settings_action()
     {
@@ -72,16 +94,17 @@ class Intranetverwaltung_IndexController extends StudipController {
     
     public function set_action($inst_id) {
         $config = IntranetConfig::find($inst_id);
-        $seminare = Request::getArray('seminare');
-        $template = Request::get('template');
+        $template = trim(Request::get('template'));
         
-        $config->seminare = $seminare;
+        if (!$config){
+            $config = new IntranetConfig($inst_id);
+        }
+        
         $config->template = $template;
         $config->store();
-        
        
-        //PageLayout::Post_Message(new MessageBox('success', 
-        $this->render_action('index');
+        PageLayout::postMessage(MessageBox::success('Einstellung gespeichert'));
+        $this->redirect($this->url_for('intranetverwaltung/index/index/' . $inst_id));
     }
     
        // customized #url_for for plugins
