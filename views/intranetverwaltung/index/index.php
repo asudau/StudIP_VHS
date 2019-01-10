@@ -36,8 +36,8 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
     <fieldset <?= isset($flash['open']) && $flash['open'] != "courses" ? 'class="collapsed"' : ''?> data-open="courses">
         <legend>Zugehörige Veranstaltungen</legend>
         <table>
-            <?php if($sem_for_instid[$intranet_inst->institut_id]) : ?>
-            <?php foreach($sem_for_instid[$intranet_inst->institut_id] as $course) : ?>
+            <?php if($intranet_courses) : ?>
+            <?php foreach($intranet_courses as $course) : ?>
             <tr>
                 <td>
                     <a data-dialog href ='<?= $controller->url_for('intranetverwaltung/index/editseminar/' . $course->id . '/' . $intranet_inst->institut_id )?>'> <?= $course->name ?>

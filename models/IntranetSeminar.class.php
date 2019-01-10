@@ -32,19 +32,4 @@ class IntranetSeminar extends SimpleORMap
 
     }
     
-    public function getRelatedCourses(){
-        $seminar_fields = DatafieldEntryModel::findBySQL('datafield_id = \'' . $this->getDatafieldIdSem() . '\' AND content = 1');
-        $sem_for_instid = array();
-        foreach ($seminar_fields as $field){
-            $course = Course::find($field->range_id);
-            if ($this->Institut_id == $course->institut_id){
-                $sem_for_instid[] = $course;
-            }
-        }
-        return $sem_for_instid;
-    }
-    
-    private function getDatafieldIdSem(){
-        return md5('Intranet-Veranstaltung');
-    }
 }

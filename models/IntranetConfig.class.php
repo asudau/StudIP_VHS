@@ -32,12 +32,19 @@ class IntranetConfig extends SimpleORMap
         $sem_for_instid = array();
         foreach ($seminar_fields as $field){
             $course = Course::find($field->range_id);
-            if ($this->Institut_id == $course->institut_id){
+            if (in_array($this->Institut_id, Seminar::getInstitutes($course->id))){
                 $sem_for_instid[] = $course;
             }
         }
         return $sem_for_instid;
     }
+//    $sem_id = $this->id;
+//    $query = "SELECT institut_id FROM seminar_inst WHERE seminar_id = :sem_id
+//                  UNION
+//                  SELECT Institut_id FROM seminare WHERE Seminar_id = :sem_id";
+//        $statement = DBManager::get()->prepare($query);
+//        $statement->execute(compact('sem_id'));
+//        return $statement->fetchAll(PDO::FETCH_COLUMN);
     
     private function getDatafieldIdSem(){
         return md5('Intranet-Veranstaltung');

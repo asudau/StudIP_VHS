@@ -23,9 +23,9 @@ class Intranetverwaltung_IndexController extends StudipController {
 
     }
 
-    public function index_action($intranet = NULL)
+    public function index_action($intranet_id = NULL)
     {
-        $this->intranet_inst = Institute::find($intranet);
+        $this->intranet_inst = Institute::find($intranet_id);
         $datafield_id_inst = md5('Eigener Intranetbereich');
         $datafield_id_sem = md5('Intranet-Veranstaltung');
         $this->institutes_with_intranet = array();
@@ -37,12 +37,7 @@ class Intranetverwaltung_IndexController extends StudipController {
             $this->inst_config[$field->range_id] = IntranetConfig::find($field->range_id)->template;
         }
         
-        $seminar_fields = DatafieldEntryModel::findBySQL('datafield_id = \'' . $datafield_id_sem . '\' AND content = 1');
-        $this->sem_for_instid = array();
-        foreach ($seminar_fields as $field){
-            $course = Course::find($field->range_id);
-            $this->sem_for_instid[$course->institut_id][] = $course;
-        }
+        
         
         if ($this->intranet_inst){
             $sidebar = Sidebar::Get();
@@ -52,6 +47,8 @@ class Intranetverwaltung_IndexController extends StudipController {
                                   $this->url_for('intranetverwaltung/index/add_sem'),
                                   Icon::create('seminar+add', 'clickable'))->asDialog('size=big'); 
             $sidebar->addWidget($navcreate);
+            
+            $this->intranet_courses = IntranetConfig::find($intranet_id)->getRelatedCourses();
         }
         
        
