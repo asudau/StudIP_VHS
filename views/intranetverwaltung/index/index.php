@@ -15,13 +15,13 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
 ?>
 
 <h1>Konfiguration</h1>
-<h3>Um einen Intranetbereich einzurichten wählen Sie unter <a href='<?= URLHelper::getURL('dispatch.php/institute/basicdata/index?cid=')?>' >Einrichtungen</a> eine Einrichtung und aktivieren Sie das Attribut Eigener Intranetbereich</h3>
+<p>Um einen Intranetbereich einzurichten wählen Sie unter <a href='<?= URLHelper::getURL('dispatch.php/institute/basicdata/index?cid=')?>' >Einrichtungen</a> eine Einrichtung und aktivieren Sie das Attribut <b>Eigener Intranetbereich</b></p>
 
 
 <select name='inst_id' onchange="select_inst_id(this.value)">
-    <option value='' > Keine Auswahl </option>
+    <option value='' > Auswählen </option>
     <?php foreach($institutes_with_intranet as $intranet) : ?>
-        <option value='<?=$intranet->id?>' > <?=$intranet->name?> </option>
+        <option <?= ($intranet->id == $intranet_inst->id) ? 'selected' :'' ?> value='<?=$intranet->id?>' > <?=$intranet->name?> </option>
     <? endforeach ?>
 </select> 
 
@@ -40,7 +40,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
             <?php foreach($sem_for_instid[$intranet_inst->institut_id] as $course) : ?>
             <tr>
                 <td>
-                    <input type='checkbox' name ='seminare' value ='grid' <?= ($style == 'grid') ? 'checked' : '' ?>> <?= $course->name ?>
+                    <a data-dialog href ='<?= $controller->url_for('intranetverwaltung/index/editseminar/' . $course->id . '/' . $intranet_inst->institut_id )?>'> <?= $course->name ?>
                 </td>
             </tr>
             <?php endforeach ?>
