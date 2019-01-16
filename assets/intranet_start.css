@@ -72,7 +72,10 @@ h1.csc-firstHeader{
 }
 .dsR15 {
     width: 105px;
-    height: 110px;
+    height: 125px;
+}
+.dsR15 > div {
+    height: 125px;
 }
 
 h1 {
