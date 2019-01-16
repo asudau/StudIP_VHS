@@ -10,7 +10,7 @@ class IntranetSeminarConfig extends Migration
 
     public function up () {
         $db = DBManager::get();
-        $db->exec("CREATE TABLE `intranet_seminar_config` (
+        $db->exec("CREATE TABLE IF NOT EXISTS `intranet_seminar_config` (
           `seminar_id` varchar(32) NOT NULL,
           `institut_id` varchar(32) NOT NULL,
           `show_news` boolean,
