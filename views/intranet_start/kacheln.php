@@ -1,3 +1,8 @@
+<? if (sizeof($intranets) >1) : ?>
+    <?= $this->render_partial('_partials/intranet_selector', array('intranets' => $intranets)) ?>
+<? endif ?>
+
+
 <style>
 iframe {
     height: 320px;
@@ -4482,7 +4487,7 @@ a.th {
 				<div class="portal-boxenoverlay">
 					<h3 class="portal-boxenheadline">English For Your Studies B1</h3>
 					<p class="portal-boxendate">09.04.2018-11.06.2018</p>
-					<div class="portal-boxentext"><p>Unterstützt Sie bei der gezielten Auffrischung und Erweiterung von Lese- und Schreibfähigkeit in der englischen Sprache.<br>Dieser Kurs wird angeboten von der VHS Region Lüneburg.</p></div>
+					<div class="portal-boxentext"><p>Unterstï¿½tzt Sie bei der gezielten Auffrischung und Erweiterung von Lese- und Schreibfï¿½higkeit in der englischen Sprache.<br>Dieser Kurs wird angeboten von der VHS Region Lï¿½neburg.</p></div>
 					<a href="https://vhs.lueneburg.de/kurse/kurssuche/kurs/Englisch-Online+English+For+Your+Studies+B1/nr/181-42000/bereich/details/#inhalt" type="submit" target='_blank' class="btn btn-primary portal-boxenbutton">weiter <img src="/assets/images/icons/white/arr_1right.svg"></a>
 					<button class="portal-boxenclose" onclick="changeBack(this);"><img src="<?=$plugin->getPluginURL()?>/assets/images/close.png" alt="[X]"></button>
 				</div>
@@ -4501,7 +4506,7 @@ a.th {
 				<div class="portal-boxenoverlay">
 					<h3 class="portal-boxenheadline">Tipp: Stud.IP Nachrichten</h3>
 					<p class="portal-boxendate"></p>
-					<div class="portal-boxentext"><p>Stud.IP bietet ein eigenes internes Nachrichtensystem. Interne Nachrichten werden Ihnen zusätzlich per Mail weitergeleitet. Dies können Sie optional im Bereich Profil/Einstellungen anpassen. </p></div>
+					<div class="portal-boxentext"><p>Stud.IP bietet ein eigenes internes Nachrichtensystem. Interne Nachrichten werden Ihnen zusï¿½tzlich per Mail weitergeleitet. Dies kï¿½nnen Sie optional im Bereich Profil/Einstellungen anpassen. </p></div>
 					<a href="https://ohn-kursportal.de/mathematik_fuer_ingenieurwissenschaften" type="submit" class="btn btn-primary portal-boxenbutton">weiter zu meinen Nachrichten <img src="http://localhost/studip3.4/public/assets/images/icons/lightblue/mail.svg"></a>
 					<button class="portal-boxenclose" onclick="changeBack(this);"><img src="<?=$plugin->getPluginURL()?>/assets/images/close.png" alt="[X]"></button>
 				</div>
@@ -4514,13 +4519,13 @@ a.th {
 			<div class="portal-boxeninner" style="background-image: url(<?=$plugin->getPluginURL().'/assets/images/people.jpg' ?>)" onclick="changeclass(this);">
 			
 				<div class="portal-boxenintro">
-					<h3 class="portal-boxenheadline">Stud.IP für DozentInnen</h3>
+					<h3 class="portal-boxenheadline">Stud.IP fï¿½r DozentInnen</h3>
 					<p class="portal-boxendate"></p>
 				</div>
 				<div class="portal-boxenoverlay">
-					<h3 class="portal-boxenheadline">Mathematik für Wirtschaftswissenschaften</h3>
+					<h3 class="portal-boxenheadline">Mathematik fï¿½r Wirtschaftswissenschaften</h3>
 					<p class="portal-boxendate">28.05.2018-22.06.2018</p>
-					<div class="portal-boxentext"><p>Jetzt wirds speziell! In diesem Kurs erwerben Sie gezielt mathematische Grundlagenkenntnisse für ein wirtschaftswissenschaftliches Studium.</p></div>
+					<div class="portal-boxentext"><p>Jetzt wirds speziell! In diesem Kurs erwerben Sie gezielt mathematische Grundlagenkenntnisse fï¿½r ein wirtschaftswissenschaftliches Studium.</p></div>
 					<a href="https://ohn-kursportal.de/mathematik_fuer_wirtschaftswissenschaften" type="submit" class="btn btn-primary portal-boxenbutton">weiter <img src="<?=$plugin->getPluginURL().'/assets/images/icons/white/arr_1right.svg'?>"></a>
 					<button class="portal-boxenclose" onclick="changeBack(this);"><img src="<?=$plugin->getPluginURL()?>/assets/images/close.png" alt="[X]"></button>
 				</div>
@@ -4532,13 +4537,13 @@ a.th {
         <div class="portal-boxeninner" style="background-image: url(http://localhost/studip3.4/public/plugins_packages/asudau@elan-ev.de/VHSViewPlugin/images/banner.jpg)" onclick="changeclass(this);">
 
             <div class="portal-boxenintro">
-                <h3 class="portal-boxenheadline">Die VHS Osnabrück bietet ihren Dozentinnen und Dozenten regelmäßig die Gelegenheit die Funktionen und Einsatzmöglichkeiten von Stud.IP in einer Schulung vor Ort kennenzulernen. Die nächste Schulung findet am 13.02.2019 statt. Zusätzlich stellen wir Ihnen verschiedene Vidoes und Anleitungen bereit um Stud.IP selbst zu erkunden. Viel Spaß!</h3>
+                <h3 class="portal-boxenheadline">Die VHS Osnabrï¿½ck bietet ihren Dozentinnen und Dozenten regelmï¿½ï¿½ig die Gelegenheit die Funktionen und Einsatzmï¿½glichkeiten von Stud.IP in einer Schulung vor Ort kennenzulernen. Die nï¿½chste Schulung findet am 13.02.2019 statt. Zusï¿½tzlich stellen wir Ihnen verschiedene Vidoes und Anleitungen bereit um Stud.IP selbst zu erkunden. Viel Spaï¿½!</h3>
                 <p class="portal-boxendate"></p>
             </div>
             <div class="portal-boxenoverlay">
                 <h3 class="portal-boxenheadline">Vom Beruf ins Studium</h3>
                 <p class="portal-boxendate">20.08.2018-24.09.2018</p>
-                <div class="portal-boxentext"><p>Sie spielen mit dem Gedanken, zu studieren? In diesem Orientierungskurs finden Sie Wege an die Hochschule und Unterstützung bei der Entscheidung für oder gegen ein Studium.</p></div>
+                <div class="portal-boxentext"><p>Sie spielen mit dem Gedanken, zu studieren? In diesem Orientierungskurs finden Sie Wege an die Hochschule und Unterstï¿½tzung bei der Entscheidung fï¿½r oder gegen ein Studium.</p></div>
                 <a href="https://ohn-kursportal.de/vom_beruf_ins_studium" type="submit" class="btn btn-primary portal-boxenbutton">weiter <img src="/assets/images/icons/white/arr_1right.svg"></a>
                 <button class="portal-boxenclose" onclick="changeBack(this);"><img src="<?=$plugin->getPluginURL()?>/assets/images/close.png" alt="[X]"></button>
             </div>
@@ -4580,7 +4585,7 @@ a.th {
 				<div class="portal-boxenoverlay">
 					<h3 class="portal-boxenheadline">HANDWERKSZEUG studieren</h3>
 					<p class="portal-boxendate">10.09.2018-14.10.2018</p>
-					<div class="portal-boxentext"><p>Keine Angst vor Hausarbeiten und Referaten! In dem Kurs „HANDWERKSZEUG studieren“ machen Sie sich mit den wichtigsten Spielregeln vertraut.</p></div>
+					<div class="portal-boxentext"><p>Keine Angst vor Hausarbeiten und Referaten! In dem Kurs ï¿½HANDWERKSZEUG studierenï¿½ machen Sie sich mit den wichtigsten Spielregeln vertraut.</p></div>
 					<a href="https://ohn-kursportal.de/handwerkszeug_studieren" type="submit" class="btn btn-primary portal-boxenbutton">weiter <img src="/assets/images/icons/white/arr_1right.svg"></a>
 					<button class="portal-boxenclose" onclick="changeBack(this);"><img src="<?=$plugin->getPluginURL()?>/assets/images/close.png" alt="[X]"></button>
 				</div>
@@ -4592,13 +4597,13 @@ a.th {
         <div class="portal-boxeninner" style="background-image: url(http://localhost/studip3.4/public/plugins_packages/asudau@elan-ev.de/VHSViewPlugin/images/banner.jpg)" onclick="changeclass(this);">
 
             <div class="portal-boxenintro">
-                <h3 class="portal-boxenheadline">Bei Fragen und Wünschen rund um Stud.IP helfen wir Ihnen gerne weiter:</h3>
+                <h3 class="portal-boxenheadline">Bei Fragen und Wï¿½nschen rund um Stud.IP helfen wir Ihnen gerne weiter:</h3>
                 <p class="portal-boxendate">Albrechtk@osnabrueck.de</p>
             </div>
             <div class="portal-boxenoverlay">
                 <h3 class="portal-boxenheadline">Vom Beruf ins Studium</h3>
                 <p class="portal-boxendate">20.08.2018-24.09.2018</p>
-                <div class="portal-boxentext"><p>Sie spielen mit dem Gedanken, zu studieren? In diesem Orientierungskurs finden Sie Wege an die Hochschule und Unterstützung bei der Entscheidung für oder gegen ein Studium.</p></div>
+                <div class="portal-boxentext"><p>Sie spielen mit dem Gedanken, zu studieren? In diesem Orientierungskurs finden Sie Wege an die Hochschule und Unterstï¿½tzung bei der Entscheidung fï¿½r oder gegen ein Studium.</p></div>
                 <a href="https://ohn-kursportal.de/vom_beruf_ins_studium" type="submit" class="btn btn-primary portal-boxenbutton">weiter <img src="/assets/images/icons/white/arr_1right.svg"></a>
                 <button class="portal-boxenclose" onclick="changeBack(this);"><img src="<?=$plugin->getPluginURL()?>/assets/images/close.png" alt="[X]"></button>
             </div>

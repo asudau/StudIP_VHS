@@ -1,8 +1,6 @@
-<h1 class="sr-only">
-    
-</h1>
-
-
+<? if (sizeof($intranets) >1) : ?>
+    <?= $this->render_partial('_partials/intranet_selector', array('intranets' => $intranets)) ?>
+<? endif ?>
 
 <? if ($flash['question']): ?>
     <?= $flash['question'] ?>
@@ -21,7 +19,7 @@
                     <div class="csc-textpic-text">
                 <!--  Text: [begin] -->
                     <img src="<?= $plugin->getPluginURL().'/assets/images/Kursstart.png' ?>" alt="" border="0" width="100%">
-                    <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/my_courses" title="Zur ausführlichen Übersicht" class="internal-link">Meine Gruppen/Mein Arbeitsbereich</a></h2>
+                    <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/my_courses" title="Zur ausfï¿½hrlichen ï¿½bersicht" class="internal-link">Meine Gruppen/Mein Arbeitsbereich</a></h2>
                     <? foreach ($courses as $course){ ?>
                     <section class="contentbox course">
                         <a href='<?=$GLOBALS['ABSOLUTE_URI_STUDIP']. 'seminar_main.php?auswahl=' . $course['Seminar_id'] ?>'><?= $course['Name'] ?></a></section>
@@ -47,7 +45,7 @@
                     <div class="csc-textpic-text" align='center'>
                 <!--  Text: [begin] -->
                     <img src="<?= $plugin->getPluginURL().'/assets/images/bbb.jpeg' ?>" alt="" border="0" width="50%">
-                    <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>plugins.php/meetingplugin/index?cid=b8d02f67fca5aac0efa01fb1782166d1" title="Hier kommt ihr direkt zum Meeting-reiter in unserer Internen Veranstaltung, dort braucht ihr nur noch den VK-Raum anklicken und seid dabei!" class="internal-link">Abkürzung zur eL4 Videokonferenz in BigBlueButton</a></h2>
+                    <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>plugins.php/meetingplugin/index?cid=b8d02f67fca5aac0efa01fb1782166d1" title="Hier kommt ihr direkt zum Meeting-reiter in unserer Internen Veranstaltung, dort braucht ihr nur noch den VK-Raum anklicken und seid dabei!" class="internal-link">Abkï¿½rzung zur eL4 Videokonferenz in BigBlueButton</a></h2>
                     </div>
                     <!--  Image block: [end] -->
                 </div>
@@ -64,7 +62,7 @@
                     <h2 class="intranet"><a href="" title="" class="internal-link">Rund um meine Kurse</a></h2>
                     
                     <section class="contentbox themen">
-                        <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Leitfaden für neue DozentInnen (PDF)</a>
+                        <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Leitfaden fï¿½r neue DozentInnen (PDF)</a>
                     </section>
                     <section class="contentbox themen">
                         <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Formular xyz (DOC)</a>
@@ -181,7 +179,7 @@
 			<div class="csc-textpic-text">
 		<!--  Text: [begin] -->
             <img src="<?=$plugin->getPluginURL().'/assets/images/Kursstart.png' ?>" alt="" border="0" width="100%">
-			<h2 class="intranet"> <a href="index.php?id=21" title="Opens internal link in current window" class="internal-link">Kurse, die demnächst starten</a>
+			<h2 class="intranet"> <a href="index.php?id=21" title="Opens internal link in current window" class="internal-link">Kurse, die demnï¿½chst starten</a>
                 <? if ($mitarbeiter_admin){ ?>
                     <a style="margin-left: 58%;" href="<?= $this->controller->url_for('start/insertCoursebegin')?>" rel="get_dialog">
                         <?= Icon::create('add', 'clickable')?>             

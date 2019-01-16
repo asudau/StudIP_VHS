@@ -1,6 +1,7 @@
-<? if (sizeof($intranets) >1) : ?>
-    <?= $this->render_partial('_partials/intranet_selector', array('intranets' => $intranets)) ?>
-<? endif ?>
+<h1 class="sr-only">
+    
+</h1>
+
 
 
 <? if ($flash['question']): ?>
@@ -19,8 +20,8 @@
                 <!--  Image block: [begin] -->
                     <div class="csc-textpic-text">
                 <!--  Text: [begin] -->
-                    <img src="<?=$plugin->getPluginURL().'/assets/images/Kursstart.png' ?>" alt="" border="0" width="100%">
-                    <h2 class="intranet"><a href="index.php?id=35" title="Opens internal link in current window" class="internal-link">Meine Angebote/Kurse/Projekte</a></h2>
+                    <img src="<?= $plugin->getPluginURL().'/assets/images/Kursstart.png' ?>" alt="" border="0" width="100%">
+                    <h2 class="intranet"><a href="index.php?id=35" title="Opens internal link in current window" class="internal-link">Meine Gruppen/Mein Arbeitsbereich</a></h2>
                     <? foreach ($courses as $course){ ?>
                     <section class="contentbox course">
                         <a href='<?=$GLOBALS['ABSOLUTE_URI_STUDIP']. 'seminar_main.php?auswahl=' . $course['Seminar_id'] ?>'><?= $course['Name'] ?></a></section>
@@ -49,7 +50,7 @@
                     <h2 class="intranet"><a href="" title="" class="internal-link">Rund um meine Kurse</a></h2>
                     
                     <section class="contentbox themen">
-                        <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Leitfaden fï¿½r neue DozentInnen (PDF)</a>
+                        <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Leitfaden für neue DozentInnen (PDF)</a>
                     </section>
                     <section class="contentbox themen">
                         <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Formular xyz (DOC)</a>
@@ -66,7 +67,7 @@
                 </div>
                   CONTENT ELEMENT, uid:75/textpic [end] -->
                 
-                <!-- Dateien -->
+                
                  <? foreach ($folderwithfiles_array as $course_id => $folderwithfiles) : ?>
                 <!--  CONTENT ELEMENT, uid:14/textpic [begin] -->
                 <div id="c14" class="csc-default csc-space-after-25">
@@ -74,8 +75,8 @@
                 <div class="csc-textpic-text">
                 
                 <!--  Text: [begin] -->
-                    <img src="<?=$plugin->getPluginURL().'/assets/images/unterlagen1.png' ?>" alt="" border="0" width="100%">
-                    <h2 class="intranet"> <a href="index.php?id=21" title="Opens internal link in current window" class="internal-link"><?= $filesCaptions[$course_id] ?></a>
+                    <img src="<?= $plugin->getPluginURL().'/assets/images/unterlagen1.png' ?>" alt="" border="0" width="100%">
+                    <h2 class="intranet"> <a href="index.php?id=21" title="Opens internal link in current window" class="internal-link">Dateien</a>
                     <? if ($mitarbeiter_admin){ ?>
                             <a style="margin-left: 68%;" href="<?=$edit_link_files?>">
                                 <?= Icon::create('add', 'clickable')?>           
@@ -83,15 +84,15 @@
                     <? } ?>
                     </h2>
                      
-                     <? foreach ($folderwithfiles as $folder => $files){ ?>
+                     <? foreach (folderwithfiles as $folder => $files): ?>
                     <section class="contentbox folder">
                         <a class='folder_open' href=''><?= $folder ?></a>
-                        <? foreach ($files as $file){ ?>
-                        <li class='file_download' style="display:none"> <a href='../../../sendfile.php?force_download=1&type=0&file_id=<?= $file['dokument_id']?>&file_name=<?= $file['filename'] ?>'><?= $file['name'] ?></a></li>
+                        <? foreach ($files as $file): ?>
+                        <li class='file_download' style="display:none"> <a href='<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>sendfile.php?force_download=1&type=0&file_id=<?= $file['dokument_id']?>&file_name=<?= $file['filename'] ?>'><?= $file['name'] ?></a></li>
                         
-                        <?}?>
+                        <? endforeach ?>
                         </section>
-                    <?}?>
+                    <? endforeach ?>
                     <hr>
                 <!--  Text: [end] -->
                 </div>
@@ -99,8 +100,53 @@
                 </div>
                 <!--  CONTENT ELEMENT, uid:14/textpic [end] -->
                 <? endforeach ?>
+                
+                 <!--  CONTENT ELEMENT, uid:16/textpic [begin] -->
+                <div id="c16" class="csc-default csc-space-after-25">
+                <!--  Image block: [begin] -->
+                <div class="csc-textpic-text">
+                
+                <!--  Text: [begin] -->
+                     <img src="<?=$plugin->getPluginURL().'/assets/images/klee_klein.jpg' ?>" alt="" border="0" width="100%">
+                     <h2 class="intranet"> <a href="<?=$controller->url_for('urlaubskalender/birthday')?>" title="Opens internal link in current window" class="internal-link">Geburtstage</a></h2>
+                      <?php if ($birthday_dates): ?>   
+                        <p class="bodytext">   
+                        <section class="contentbox folder">
+                        <? foreach ($birthday_dates as $date){ ?>
+                        <? $userinfo = UserModel::getUser($date->user_id); ?>
+                        <li class='birthday' title='... hat heute Geburtstag'><?= Icon::create('star', 'clickable')?> <?= $userinfo['Vorname'] . ' ' . $userinfo['Nachname']?></li>
+                        <?}?>
+                        </section>
 
-     
+                        </p>
+                        <?php endif ?>
+                    
+                <!--  Text: [end] -->
+                </div>
+                <!--  Image block: [end] -->
+                </div>
+            <!--  CONTENT ELEMENT, uid:16/textpic [end] -->  
+                
+                
+                <!--  CONTENT ELEMENT, uid:15/textpic [begin] -->
+                <div id="c15" class="csc-default csc-space-after-25">
+                <!--  Image block: [begin] -->
+                <div class="csc-textpic-text">
+                
+                <!--  Text: [begin] -->
+                     <img src="<?= $plugin->getPluginURL().'/assets/images/luggage-klein.jpg' ?>" alt="" border="0" width="100%">
+                     <h2 class="intranet"> <a href="<?=$controller->url_for('urlaubskalender')?>" title="Opens internal link in current window" class="internal-link">Urlaubskalender</a>
+<!--                     <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']. 'dispatch.php/calendar/single/week/'. Config::get()->getValue('INTRANET_SEMID_MITARBEITERINNEN'). '?category=13'?>" title="Opens internal link in current window" class="internal-link">Urlaub neu</a>
+                     <a href="<?=$plugin->getPluginURL().'/calendar_intern'?>" title="Opens internal link in current window" class="internal-link">Urlaub neu</a>-->
+                     </h2>
+                     <p class="bodytext">
+                        </p>
+                    
+                <!--  Text: [end] -->
+                </div>
+                <!--  Image block: [end] -->
+                </div>
+            <!--  CONTENT ELEMENT, uid:15/textpic [end] -->
                 
   
 				<h4 class="intranet">Unsere Angebote</h4>
@@ -109,7 +155,7 @@
 						<td class="dsR15"><div class="zentriert"><a href="https://www.kvhs-ammerland.de/index.php?id=64" target="_blank"><img src="<?=URLHelper::getLink("plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/pro_gesellschaft.png") ?>" alt="" border="0" width="73" height="72"><br>
 							Gesellschaft</a></div></td>
 						<td class="dsR15"><div class="zentriert"><a href="https://www.kvhs-ammerland.de/index.php?id=65" target="_blank"><img src="<?=URLHelper::getLink("plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/pro_paedagogik.png") ?>" alt="" border="0" width="73" height="72"><br>
-						Pï¿½dagogik</a></div></td>
+						Pädagogik</a></div></td>
 						<td class="dsR15"><a href="https://www.kvhs-ammerland.de/index.php?id=66" target="_blank"></a><div class="zentriert"><a href="index.php?id=66"><img src="<?=URLHelper::getLink("plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/pro_zielgruppen.png") ?>" alt="" border="0" width="73" height="72"><br>
 							Zielgruppen</a></div></td>
 					</tr>
@@ -142,7 +188,7 @@
 		<!--  Image block: [begin] -->
 			<div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight"><div class="csc-textpic-text">
 		<!--  Text: [begin] -->
-            <img src="<?=CourseAvatar::getAvatar($course_id)->getURl('original') ?>" alt="" border="0" width="100%" max-height='171px'>
+            <img src="<?=CourseAvatar::getAvatar($course_id)->getURl('original') ?>" alt="" border="0" width="100%">
 			<h2 class="intranet">
                     <a href="" title="Opens internal link in current window" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
                     <? if ($mitarbeiter_admin){ ?>
@@ -162,8 +208,26 @@
 	<!--  CONTENT ELEMENT, uid:434/textpic [end] -->
     <? endforeach ?>
 		
-    
-    <? if (PluginManager::getInstance()->getPlugin('SchwarzesBrettWidget')) : ?>
+	<!--  CONTENT ELEMENT, uid:71/text [begin] -->
+		<div id="c71" class="intranet_news csc-default csc-space-after-25">
+		<!--  Text: [begin] -->
+        <div style="position:relative">
+       <img src="<?=$plugin->getPluginURL().'/assets/images/Projektbereich.png' ?>" alt="" border="0" width="100%">
+			<h2 class="intranet"><a href="" title="Opens internal link in current window" class="internal-link">Neues aus dem Projektbereich</a>
+                 <? if ($mitarbeiter_admin){ ?>
+                    <a style="margin-left: 58%;" href="<?=$edit_link_projectnews?>" rel="get_dialog">
+                        <?= Icon::create('add', 'clickable')?>             
+                    </a>
+                 <? } ?>
+            </h2>
+        <?= $this->render_partial($projectnewstemplate, compact('widget')) ?>
+        <hr>
+		<!--  Text: [end] -->
+			</div>
+    </div>
+	<!--  CONTENT ELEMENT, uid:71/text [end] -->
+		
+     <? if (PluginManager::getInstance()->getPlugin('SchwarzesBrettWidget')) : ?>
     <!--  CONTENT ELEMENT, uid:42/textpic [begin] -->
 		<div id="c42" class="csc-default csc-space-after-25">
 		<!--  Image block: [begin] -->
@@ -195,6 +259,7 @@
     
     
     
+    
     <? if (false && count($courses_upcoming) >0 ){ ?>
 	<!--  CONTENT ELEMENT, uid:13/textpic [begin] -->
 		<div id="c13" class="csc-default csc-space-after-25">
@@ -202,7 +267,7 @@
 			<div class="csc-textpic-text">
 		<!--  Text: [begin] -->
             <img src="<?=$plugin->getPluginURL().'/assets/images/Kursstart.png' ?>" alt="" border="0" width="100%">
-			<h2 class="intranet"> <a href="index.php?id=21" title="Opens internal link in current window" class="internal-link">Kurse, die demnï¿½chst starten</a>
+			<h2 class="intranet"> <a href="index.php?id=21" title="Opens internal link in current window" class="internal-link">Kurse, die demnächst starten</a>
                 <? if ($mitarbeiter_admin){ ?>
                     <a style="margin-left: 58%;" href="<?= $this->controller->url_for('start/insertCoursebegin')?>" rel="get_dialog">
                         <?= Icon::create('add', 'clickable')?>             
