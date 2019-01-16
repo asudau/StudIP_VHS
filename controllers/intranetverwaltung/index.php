@@ -48,7 +48,9 @@ class Intranetverwaltung_IndexController extends StudipController {
                                   Icon::create('seminar+add', 'clickable'))->asDialog('size=big'); 
             $sidebar->addWidget($navcreate);
             
-            $this->intranet_courses = IntranetConfig::find($intranet_id)->getRelatedCourses();
+            if (IntranetConfig::find($intranet_id)){
+                $this->intranet_courses = IntranetConfig::find($intranet_id)->getRelatedCourses();
+            }
         }
         
        
