@@ -16,13 +16,22 @@ class IntranetStartController extends StudipController {
     {
         parent::before_filter($action, $args);
 
+        if (Request::isXhr()) {
+            $this->set_layout(null);
+            $this->set_content_type('text/html;Charset=windows-1252');
+        }
+        
         PageLayout::addStylesheet($this->plugin->getPluginURL().'/assets/intranet_start.css');
         PageLayout::setTitle(_("Meine Startseite"));
-        $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
+        //$this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
     }
 
     public function index_action($inst_id)
     {
+        $this->intranets = $this->plugin->getIntranetIDsForUser();
+        
+
+
         //get seminars ($inst_id)
         $this->intranet_courses = IntranetConfig::find($inst_id)->getRelatedCourses();        
         foreach($this->intranet_courses as $course){
@@ -31,20 +40,23 @@ class IntranetStartController extends StudipController {
                 $this->newsTemplates[$course->id] = $this->getNewsTemplateForSeminar($course->id);
                 $this->newsCaptions[$course->id] = $config->news_caption;
             }
+            //falls Nutzer in einer der Veranstaltungen Admin ist darf er ein bisschen mehr
+            if ($GLOBALS['perm']->have_studip_perm('dozent', $course->id)){
+                 $this->admin = true;
+            }
         }
 
-        //get permission of currentUser (autor/dozent)
+        //get permission of currentUser (autor/dozent) //ammerland Spezial
         
 //        $sem_id_mitarbeiterinnen = Config::get()->getValue('INTRANET_SEMID_MITARBEITERINNEN');
 //        
 //        $sem_id_projektbereich = Config::get()->getValue('INTRANET_SEMID_PROJEKTBEREICH');
 //        
 //        global $perm; 
-//        $this->mitarbeiter_admin = $perm->have_studip_perm('dozent', $sem_id_mitarbeiterinnen);
+//        $this->admin = $perm->have_studip_perm('dozent', $sem_id_mitarbeiterinnen);
 //        $this->projekt_admin = $perm->have_studip_perm('dozent', $sem_id_projektbereich);
 //        
-//        $this->edit_link_internnews = URLHelper::getLink("dispatch.php/news/edit_news/new/". $sem_id_mitarbeiterinnen);
-//        $this->edit_link_projectnews = URLHelper::getLink("dispatch.php/news/edit_news/new/" . $sem_id_projektbereich);
+
 //        $this->edit_link_files = URLHelper::getLink("folder.php?cid=" . $sem_id_projektbereich . "&cmd=tree");
         
         //get news of connected seminars
@@ -66,7 +78,7 @@ class IntranetStartController extends StudipController {
 //        $this->internnewstemplate->icons = $icons;
         
         //get special dates (maybe)
-//$this->birthday_dates = IntranetDate::findBySQL("type = 'birthday' AND begin = ?", array(date('d.m.Y', time())));
+        $this->birthday_dates = IntranetDate::findBySQL("type = 'birthday' AND begin = ?", array(date('d.m.Y', time())));
 
         //get new and recently visited courses of user
         $statement = DBManager::get()->prepare("SELECT s.Seminar_id, s.Name, ouv.visitdate, ouv.type "
@@ -117,25 +129,6 @@ class IntranetStartController extends StudipController {
         }
 
 
-        //get news of more connected seminars (if configured)
-        $dispatcher = new StudipDispatcher();
-        $controller = new NewsController($dispatcher);
-        $response = $controller->relay('news/display/' . $sem_id_projektbereich);
-        //$response = $controller->relay('news/display/9fc5dd6a84acf0ad76d2de71b473b341'); //localhost
-        $this->projectnewstemplate = $GLOBALS['template_factory']->open('shared/string');
-        $this->projectnewstemplate->content = $response->body;
-        
-
-        if (StudipNews::CountUnread() > 0) {
-            $navigation = new Navigation('', PluginEngine::getLink($this, array(), 'read_all'));
-            $navigation->setImage(Icon::create('refresh', 'clickable', ["title" => _('Alle als gelesen markieren')]));
-            $icons[] = $navigation;
-        }
-
-        $this->projectnewstemplate->icons = $icons;
-        
-        
-
          //get upcoming courses (studip dates of configured category)
         $result = EventData::findBySQL("category_intern = '13' AND start > '" . time() . "' ORDER BY start ASC");
         $this->courses_upcoming = $result;
@@ -164,6 +157,11 @@ class IntranetStartController extends StudipController {
 
         $this->internnewstemplate->icons = $icons;
         return $this->internnewstemplate;
+    }
+    
+    
+    public function infos_action(){
+        
     }
     
     
