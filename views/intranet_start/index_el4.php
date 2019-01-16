@@ -19,7 +19,7 @@
                     <div class="csc-textpic-text">
                 <!--  Text: [begin] -->
                     <img src="<?= $plugin->getPluginURL().'/assets/images/Kursstart.png' ?>" alt="" border="0" width="100%">
-                    <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/my_courses" title="Zur ausfï¿½hrlichen ï¿½bersicht" class="internal-link">Meine Gruppen/Mein Arbeitsbereich</a></h2>
+                    <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/my_courses" title="Zur ausführlichen Übersicht" class="internal-link">Meine Gruppen/Mein Arbeitsbereich</a></h2>
                     <? foreach ($courses as $course){ ?>
                     <section class="contentbox course">
                         <a href='<?=$GLOBALS['ABSOLUTE_URI_STUDIP']. 'seminar_main.php?auswahl=' . $course['Seminar_id'] ?>'><?= $course['Name'] ?></a></section>
@@ -45,7 +45,7 @@
                     <div class="csc-textpic-text" align='center'>
                 <!--  Text: [begin] -->
                     <img src="<?= $plugin->getPluginURL().'/assets/images/bbb.jpeg' ?>" alt="" border="0" width="50%">
-                    <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>plugins.php/meetingplugin/index?cid=b8d02f67fca5aac0efa01fb1782166d1" title="Hier kommt ihr direkt zum Meeting-reiter in unserer Internen Veranstaltung, dort braucht ihr nur noch den VK-Raum anklicken und seid dabei!" class="internal-link">Abkï¿½rzung zur eL4 Videokonferenz in BigBlueButton</a></h2>
+                    <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>plugins.php/meetingplugin/index?cid=b8d02f67fca5aac0efa01fb1782166d1" title="Hier kommt ihr direkt zum Meeting-reiter in unserer Internen Veranstaltung, dort braucht ihr nur noch den VK-Raum anklicken und seid dabei!" class="internal-link">Abkürzung zur eL4 Videokonferenz in BigBlueButton</a></h2>
                     </div>
                     <!--  Image block: [end] -->
                 </div>
@@ -62,7 +62,7 @@
                     <h2 class="intranet"><a href="" title="" class="internal-link">Rund um meine Kurse</a></h2>
                     
                     <section class="contentbox themen">
-                        <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Leitfaden fï¿½r neue DozentInnen (PDF)</a>
+                        <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Leitfaden für neue DozentInnen (PDF)</a>
                     </section>
                     <section class="contentbox themen">
                         <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Formular xyz (DOC)</a>
@@ -118,23 +118,15 @@
 			<div class="haupt">
 	       
                 
-    <!--  CONTENT ELEMENT [begin] -->
+    <!--  eL4 Kooperation Logo [begin] -->
 		<div class="intranet_news csc-default csc-space-after-25">
 		<!--  Image block: [begin] -->
 			<div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight"><div class="csc-textpic-text">
 		<!--  Text: [begin] -->
-            <img src="<?=$plugin->getPluginURL().'/assets/images/el4_vhs_jpg.jpg' ?>" alt="" border="0" width="100%">
-			<h2 class="intranet">
-                    <? if ($mitarbeiter_admin){ ?>
-                    <a style="margin-left: 68%;" href="<?=URLHelper::getLink("dispatch.php/news/edit_news/new/" . $course_id) ?>" rel="get_dialog">
-                        <?= Icon::create('add', 'clickable')?>             
-                    </a>
-                    <? } ?>
-            </h2>
-
-            
-            
-            <hr>
+            <a href='http://el4.me' target='_blank' title='Zur eL4 Homepage'> 
+                <img src="<?=$plugin->getPluginURL().'/assets/images/el4_vhs_jpg.jpg' ?>" alt="" border="0" width="100%">
+            </a>
+			
 		<!--  Text: [end] -->
 			</div></div>
 		<!--  Image block: [end] -->
@@ -169,6 +161,22 @@
 	<!--  CONTENT ELEMENT, uid:434/textpic [end] -->
     <? endforeach ?>
 	
+    <div class="intranet_news csc-default csc-space-after-25">
+		<!--  Image block: [begin] -->
+			<div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight" style='margin-left: 20px'><div class="csc-textpic-text">
+		<!--  Text: [begin] -->
+        <a href='<?=$plugin->getPluginURL().'/assets/images/Intranet eL4.png' ?>' target='_blank'><img src="<?=$plugin->getPluginURL().'/assets/images/Intranet eL4.png' ?>" alt="" height="200px" width="200px"  style="border:1px solid black"></a>
+        <a href='<?=$plugin->getPluginURL().'/assets/images/Intranet Osnabrueck.png' ?>' target='_blank'><img src="<?=$plugin->getPluginURL().'/assets/images/Intranet Osnabrueck.png' ?>" alt="" height="200px" width="200px"  style="border:1px solid black"></a>
+        <a href='<?=$plugin->getPluginURL().'/assets/images/Intranet Ammerland.png' ?>' target='_blank'><img src="<?=$plugin->getPluginURL().'/assets/images/Intranet Ammerland.png' ?>" alt="" height="200px" width="200px"  style="border:1px solid black"></a>
+        <h2 class="intranet">
+                    <a href="" title="" class="internal-link">3 Screenshots verschiedener Intranet Startseiten, einfach drauflicken!</a>
+
+            </h2>
+		<!--  Text: [end] -->
+			</div></div>
+		<!--  Image block: [end] -->
+			</div>
+    
     <img src="<?=$plugin->getPluginURL().'/assets/images/cookies.jpg' ?>" alt="" border="0" width="100%">
     
     
@@ -179,12 +187,9 @@
 			<div class="csc-textpic-text">
 		<!--  Text: [begin] -->
             <img src="<?=$plugin->getPluginURL().'/assets/images/Kursstart.png' ?>" alt="" border="0" width="100%">
-			<h2 class="intranet"> <a href="index.php?id=21" title="Opens internal link in current window" class="internal-link">Kurse, die demnï¿½chst starten</a>
-                <? if ($mitarbeiter_admin){ ?>
-                    <a style="margin-left: 58%;" href="<?= $this->controller->url_for('start/insertCoursebegin')?>" rel="get_dialog">
-                        <?= Icon::create('add', 'clickable')?>             
-                    </a>
-                 <? } ?>        
+            
+			<h2 class="intranet"> <a href="index.php?id=21" title="Opens internal link in current window" class="internal-link"></a>
+                
             </h2>
             <? foreach ($courses_upcoming as $course){ ?>
                     <section class="contentbox">
