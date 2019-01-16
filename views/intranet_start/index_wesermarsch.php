@@ -1,7 +1,6 @@
-<h1 class="sr-only">
-    
-</h1>
-
+<? if (sizeof($intranets) >1) : ?>
+    <?= $this->render_partial('_partials/intranet_selector', array('intranets' => $intranets)) ?>
+<? endif ?>
 
 
 <? if ($flash['question']): ?>
@@ -21,11 +20,20 @@
                     <div class="csc-textpic-text">
                 <!--  Text: [begin] -->
                     <img src="<?= $plugin->getPluginURL().'/assets/images/Kursstart.png' ?>" alt="" border="0" width="100%">
-                    <h2 class="intranet"><a href="index.php?id=35" title="Opens internal link in current window" class="internal-link">Meine Gruppen/Mein Arbeitsbereich</a></h2>
+                    <h2 class="intranet">
+                        <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/my_courses" title="Zur ausführlichen Übersicht" class="internal-link">
+                                Meine Gruppen/Mein Arbeitsbereich
+                        </a>
+                    </h2>
+                    <? if ($GLOBALS['perm']->have_perm('tutor')) : ?>
+                    <section title='Neuen Kurs/Arbeitsgruppe/etc. erstellen' class="contentbox course" style='background-color: #eee'>
+                        <a href="<?=URLHelper::getLink("dispatch.php/course/wizard/step/0") ?>" target='_blank' <?= Icon::create('add', 'clickable')?> Neue Veranstaltung anlegen</a></section>
+                    <? endif ?>     
+                    
                     <? foreach ($courses as $course){ ?>
                     <section class="contentbox course">
                         <a href='<?=$GLOBALS['ABSOLUTE_URI_STUDIP']. 'seminar_main.php?auswahl=' . $course['Seminar_id'] ?>'><?= $course['Name'] ?></a></section>
-                        
+                         
                     <?}
                     
                     if (count($courses) > 6){
@@ -76,7 +84,7 @@
                 
                 <!--  Text: [begin] -->
                     <img src="<?= $plugin->getPluginURL().'/assets/images/unterlagen1.png' ?>" alt="" border="0" width="100%">
-                    <h2 class="intranet"> <a href="index.php?id=21" title="Opens internal link in current window" class="internal-link">Dateien</a>
+                    <h2 class="intranet"> <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>folder.php?cid=<?=$course_id?>&cmd=tree" title="Direkt in den Dateibereich wechseln" class="internal-link"><?=$filesCaptions[$course_id]?></a>
                     <? if ($mitarbeiter_admin){ ?>
                             <a style="margin-left: 68%;" href="<?=$edit_link_files?>">
                                 <?= Icon::create('add', 'clickable')?>           
@@ -84,7 +92,7 @@
                     <? } ?>
                     </h2>
                      
-                     <? foreach (folderwithfiles as $folder => $files): ?>
+                     <? foreach ($folderwithfiles as $folder => $files): ?>
                     <section class="contentbox folder">
                         <a class='folder_open' href=''><?= $folder ?></a>
                         <? foreach ($files as $file): ?>
@@ -101,80 +109,37 @@
                 <!--  CONTENT ELEMENT, uid:14/textpic [end] -->
                 <? endforeach ?>
                 
-                 <!--  CONTENT ELEMENT, uid:16/textpic [begin] -->
-                <div id="c16" class="csc-default csc-space-after-25">
-                <!--  Image block: [begin] -->
-                <div class="csc-textpic-text">
-                
-                <!--  Text: [begin] -->
-                     <img src="<?=$plugin->getPluginURL().'/assets/images/klee_klein.jpg' ?>" alt="" border="0" width="100%">
-                     <h2 class="intranet"> <a href="<?=$controller->url_for('urlaubskalender/birthday')?>" title="Opens internal link in current window" class="internal-link">Geburtstage</a></h2>
-                      <?php if ($birthday_dates): ?>   
-                        <p class="bodytext">   
-                        <section class="contentbox folder">
-                        <? foreach ($birthday_dates as $date){ ?>
-                        <? $userinfo = UserModel::getUser($date->user_id); ?>
-                        <li class='birthday' title='... hat heute Geburtstag'><?= Icon::create('star', 'clickable')?> <?= $userinfo['Vorname'] . ' ' . $userinfo['Nachname']?></li>
-                        <?}?>
-                        </section>
-
-                        </p>
-                        <?php endif ?>
-                    
-                <!--  Text: [end] -->
-                </div>
-                <!--  Image block: [end] -->
-                </div>
-            <!--  CONTENT ELEMENT, uid:16/textpic [end] -->  
-                
-                
-                <!--  CONTENT ELEMENT, uid:15/textpic [begin] -->
-                <div id="c15" class="csc-default csc-space-after-25">
-                <!--  Image block: [begin] -->
-                <div class="csc-textpic-text">
-                
-                <!--  Text: [begin] -->
-                     <img src="<?= $plugin->getPluginURL().'/assets/images/luggage-klein.jpg' ?>" alt="" border="0" width="100%">
-                     <h2 class="intranet"> <a href="<?=$controller->url_for('urlaubskalender')?>" title="Opens internal link in current window" class="internal-link">Urlaubskalender</a>
-<!--                     <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']. 'dispatch.php/calendar/single/week/'. Config::get()->getValue('INTRANET_SEMID_MITARBEITERINNEN'). '?category=13'?>" title="Opens internal link in current window" class="internal-link">Urlaub neu</a>
-                     <a href="<?=$plugin->getPluginURL().'/calendar_intern'?>" title="Opens internal link in current window" class="internal-link">Urlaub neu</a>-->
-                     </h2>
-                     <p class="bodytext">
-                        </p>
-                    
-                <!--  Text: [end] -->
-                </div>
-                <!--  Image block: [end] -->
-                </div>
-            <!--  CONTENT ELEMENT, uid:15/textpic [end] -->
-                
+              
+  
   
 				<h4 class="intranet">Unsere Angebote</h4>
 				<table class="dsR4" cellspacing="0" cellpadding="0" border="0">
-					<tbody><tr>
-						<td class="dsR15"><div class="zentriert"><a href="https://www.kvhs-ammerland.de/index.php?id=64" target="_blank"><img src="<?=URLHelper::getLink("plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/pro_gesellschaft.png") ?>" alt="" border="0" width="73" height="72"><br>
-							Gesellschaft</a></div></td>
-						<td class="dsR15"><div class="zentriert"><a href="https://www.kvhs-ammerland.de/index.php?id=65" target="_blank"><img src="<?=URLHelper::getLink("plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/pro_paedagogik.png") ?>" alt="" border="0" width="73" height="72"><br>
-						Pädagogik</a></div></td>
-						<td class="dsR15"><a href="https://www.kvhs-ammerland.de/index.php?id=66" target="_blank"></a><div class="zentriert"><a href="index.php?id=66"><img src="<?=URLHelper::getLink("plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/pro_zielgruppen.png") ?>" alt="" border="0" width="73" height="72"><br>
-							Zielgruppen</a></div></td>
-					</tr>
-					<tr>
-						<td class="dsR15"><div class="zentriert"><a href="https://www.kvhs-ammerland.de/index.php?id=67" target="_blank"><img src="<?=URLHelper::getLink("plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/pro_grundbildung.png") ?>" alt="" border="0" width="72" height="72"><br>
-							Grundbildung</a></div></td>
-						<td class="dsR15"><div class="zentriert"><a href="https://www.kvhs-ammerland.de/index.php?id=68" target="_blank"><img src="<?=URLHelper::getLink("plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/pro_gesundheit.png") ?>" alt="" border="0" width="73" height="72"><br>
-							Gesundheit</a></div></td>
-						<td class="dsR15"><div class="zentriert"><a href="https://www.kvhs-ammerland.de/index.php?id=69" target="_blank"><img src="<?=URLHelper::getLink("plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/pro_beruf.png") ?>" alt="" border="0" width="73" height="72"><br>
-							Beruf</a></div></td>
-					</tr>
-					<tr>
-						<td class="dsR15"><div class="zentriert"><a href="https://www.kvhs-ammerland.de/index.php?id=70" target="_blank"><img src="<?=URLHelper::getLink("plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/pro_sprachen.png") ?>" alt="" border="0" width="73" height="72"><br>
+					<tbody>
+                    <tr>
+						<td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=92&katid=80&catDepth=1&kathaupt=1#kateg80" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/pro_sprachen.png" ?>" alt="" border="0" width="73" height="72"><br>
 							Sprachen</a></div></td>
-						<td class="dsR15"><div class="zentriert"><a href="https://www.kvhs-ammerland.de/index.php?id=71" target="_blank"><img src="<?=URLHelper::getLink("plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/pro_kultur.png") ?>" alt="" border="0" width="73" height="72"><br>
-						Kultur</a></div></td>
-						<td class="dsR15"><div class="zentriert"><a href="https://www.kvhs-ammerland.de/index.php?id=4" target="_blank"><img src="<?=URLHelper::getLink("plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/pro_beruf.png") ?>" alt="" border="0" width="73" height="72"><br>
-						Projekte</a></div></td>
+                        <td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=92&kathaupt=1&katid=148&catDepth=1#kateg148" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/pro_grundbildung.png" ?>" alt="" border="0" width="72" height="72"><br>
+							Grundbildung</a></div></td>
+                        <td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=92&katid=188&catDepth=1&kathaupt=1#kateg188" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/pro_kultur.png" ?>" alt="" border="0" width="73" height="72"><br>
+                            Kulturelle Bildung</a></div></td>
+                    </tr>        
+                        <td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=92&kathaupt=1&katid=189&catDepth=1#kateg189" target="_blank"><img src="<?= $plugin->getPluginURL()."/assets/images/pro_gesellschaft.png" ?>" alt="" border="0" width="73" height="72"><br>
+							Gesellschaft</a></div></td>
+                        <td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=92&kathaupt=1&katid=189&catDepth=1#kateg189" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/gesundheit.png" ?>" alt="" border="0" width="73" height="72"><br>
+							Gesundheits- bildung</a></div></td>
+						<td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=92&katid=222&catDepth=1&kathaupt=1#kateg222" target="_blank"><img src="<?= $plugin->getPluginURL()."/assets/images/kochen.png" ?>" alt="" border="0" width="73" height="72"><br>
+						Kochen und Ernährung</a></div></td>
+						
 					</tr>
+					<tr>
+                        <td class="dsR15"><div class="zentriert"><a href="https://www.kvhs-ammerland.de/index.php?id=69" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/pro_beruf.png" ?>" alt="" border="0" width="73" height="72"><br>
+							Berufliche Bildung</a></div></td>
+						<td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=92&kathaupt=1&katid=243&catDepth=1#kateg243"><img src="<?=$plugin->getPluginURL()."/assets/images/computer.png" ?>" alt="" border="0" width="73" height="72"><br>
+							Computer und neue Medien</a></div></td>
+						<td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=140" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/bildurlaub.png" ?>" alt="" border="0" width="73" height="72"><br>
+							Bildungsurlaub</a></div></td>
+						
+
 				</tbody></table>
 				
 			</div>
@@ -190,8 +155,8 @@
 		<!--  Text: [begin] -->
             <img src="<?=CourseAvatar::getAvatar($course_id)->getURl('original') ?>" alt="" border="0" width="100%">
 			<h2 class="intranet">
-                    <a href="" title="Opens internal link in current window" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
-                    <? if ($mitarbeiter_admin){ ?>
+                    <a href="" title="" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
+                    <? if ($GLOBALS['perm']->have_studip_perm('dozent', $course_id)){ ?>
                     <a style="margin-left: 68%;" href="<?=URLHelper::getLink("dispatch.php/news/edit_news/new/" . $course_id) ?>" rel="get_dialog">
                         <?= Icon::create('add', 'clickable')?>             
                     </a>
@@ -208,25 +173,27 @@
 	<!--  CONTENT ELEMENT, uid:434/textpic [end] -->
     <? endforeach ?>
 		
-	<!--  CONTENT ELEMENT, uid:71/text [begin] -->
-		<div id="c71" class="intranet_news csc-default csc-space-after-25">
+    <div class="intranet_news csc-default csc-space-after-50">
+		<!--  Image block: [begin] -->
+			<div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight" style='margin-left: 20px'><div class="csc-textpic-text">
 		<!--  Text: [begin] -->
-        <div style="position:relative">
-       <img src="<?=$plugin->getPluginURL().'/assets/images/Projektbereich.png' ?>" alt="" border="0" width="100%">
-			<h2 class="intranet"><a href="" title="Opens internal link in current window" class="internal-link">Neues aus dem Projektbereich</a>
-                 <? if ($mitarbeiter_admin){ ?>
-                    <a style="margin-left: 58%;" href="<?=$edit_link_projectnews?>" rel="get_dialog">
-                        <?= Icon::create('add', 'clickable')?>             
-                    </a>
-                 <? } ?>
+        <a href='<?=$plugin->getPluginURL().'/assets/images/Intranet eL4.png' ?>' target='_blank'><img src="<?=$plugin->getPluginURL().'/assets/images/Intranet eL4.png' ?>" alt="" height="200px" width="200px"  style="border:1px solid black"></a>
+        <a href='<?=$plugin->getPluginURL().'/assets/images/Intranet Osnabrueck.png' ?>' target='_blank'><img src="<?=$plugin->getPluginURL().'/assets/images/Intranet Osnabrueck.png' ?>" alt="" height="200px" width="200px"  style="border:1px solid black"></a>
+        <a href='<?=$plugin->getPluginURL().'/assets/images/Intranet Ammerland.png' ?>' target='_blank'><img src="<?=$plugin->getPluginURL().'/assets/images/Intranet Ammerland.png' ?>" alt="" height="200px" width="200px"  style="border:1px solid black"></a>
+        <h2 class="intranet">
+                    <a href="" title="" class="internal-link">3 Screenshots verschiedener Intranet Startseiten, einfach drauflicken!</a>
+
             </h2>
-        <?= $this->render_partial($projectnewstemplate, compact('widget')) ?>
-        <hr>
 		<!--  Text: [end] -->
-			</div>
-    </div>
-	<!--  CONTENT ELEMENT, uid:71/text [end] -->
-		
+			</div></div>
+		<!--  Image block: [end] -->
+	</div>
+    
+    
+<!--    <iframe width="655px" height="600px" src="https://www.yumpu.com/de/embed/view/3Zg6zYDHcToasqF5" frameborder="0" allowfullscreen="true"  allowtransparency="true"></iframe>
+	-->
+    	
+    
      <? if (PluginManager::getInstance()->getPlugin('SchwarzesBrettWidget')) : ?>
     <!--  CONTENT ELEMENT, uid:42/textpic [begin] -->
 		<div id="c42" class="csc-default csc-space-after-25">
@@ -260,40 +227,15 @@
     
     
     
-    <? if (false && count($courses_upcoming) >0 ){ ?>
-	<!--  CONTENT ELEMENT, uid:13/textpic [begin] -->
-		<div id="c13" class="csc-default csc-space-after-25">
-		<!--  Image block: [begin] -->
-			<div class="csc-textpic-text">
-		<!--  Text: [begin] -->
-            <img src="<?=$plugin->getPluginURL().'/assets/images/Kursstart.png' ?>" alt="" border="0" width="100%">
-			<h2 class="intranet"> <a href="index.php?id=21" title="Opens internal link in current window" class="internal-link">Kurse, die demnächst starten</a>
-                <? if ($mitarbeiter_admin){ ?>
-                    <a style="margin-left: 58%;" href="<?= $this->controller->url_for('start/insertCoursebegin')?>" rel="get_dialog">
-                        <?= Icon::create('add', 'clickable')?>             
-                    </a>
-                 <? } ?>        
-            </h2>
-            <? foreach ($courses_upcoming as $course){ ?>
-                    <section class="contentbox">
-                        
-                        <? if ($mitarbeiter_admin){ ?>
-                            <a href="<?= $this->controller->url_for('start/insertCoursebegin/' . $course['event_id'])?>" rel="get_dialog">
-                            <img src="/assets/images/icons/blue/edit.svg" alt="edit" class="icon-role-clickable icon-shape-add" width="16" height="16">            
-                            </a>
-                        <? } ?>   
-                        <a target='_blank'  href='<?= $course['description'] ?>'><?= $course['summary'] ?>  <?= date('d.m.Y', $course['start']) ?></a>
-                        
-                    </section>
-                        
-                    <?}?>
-            <hr>
-		<!--  Text: [end] -->
-			</div>
-		<!--  Image block: [end] -->
-			</div>
+   
+	<!--  CONTENT ELEMENT -->
+<!--		<div class="csc-space-after-25">
+		  Image block: [begin] 
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/VAibAJquJSo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+		  Image block: [end] 
+        </div>-->
 	<!--  CONTENT ELEMENT, uid:13/textpic [end] -->
-    <? } ?>
+
     
     
 		
@@ -301,7 +243,7 @@
 		</div>
 
 <script>
-    var courses = 3;
+    var courses = 6;
 hidecourses = "- zuklappen";
 showcourses = "+ Alle Kurse anzeigen";
 
