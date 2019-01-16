@@ -30,7 +30,7 @@ class UrlaubskalenderController extends StudipController
         PageLayout::addScript($this->plugin->getPluginURL().'/assets/scripts/locale_de.js');
         PageLayout::addScript($this->plugin->getPluginURL().'/assets/scripts/dhtmlxscheduler_timeline.js');
         
-        $this->sem_id = '568fce7262620700103ce1657cabc5e3';
+        $this->sem_id = 'b8d02f67fca5aac0efa01fb1782166d1';
     }
     
     
@@ -208,12 +208,13 @@ class UrlaubskalenderController extends StudipController
     }
     
     
-     public function new_action($id = '')
+    public function new_action($id = '')
     {
+    
         PageLayout::setTitle(_('Neuen Urlaubstermin eintragen'));
-      
+        $this->id = '568fce7262620700103ce1657cabc5e3';
         global $perm;
-        $this->mitarbeiter_admin = $perm->have_studip_perm('autor', $this->sem_id);
+        $this->mitarbeiter_admin = $perm->have_studip_perm('tutor', $this->id);
 
         $sidebar = Sidebar::get();
         $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/luggage-klein.jpg");
@@ -240,14 +241,14 @@ class UrlaubskalenderController extends StudipController
 
             $sidebar->addWidget($actions);
 
-        $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen');
+        $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen' . $this->id);
 
         $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname, username, perms "
                             . "FROM auth_user_md5 "
                             . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
                             . "LEFT JOIN seminar_user ON (auth_user_md5.user_id = seminar_user.user_id) "
                             . "WHERE "
-                            . "seminar_user.Seminar_id LIKE '". $this->sem_id . "' "
+                            . "seminar_user.Seminar_id IN (". $this->id . ") "
                             . "AND (username LIKE :input OR Vorname LIKE :input "
                             . "OR CONCAT(Vorname,' ',Nachname) LIKE :input "
                             . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
@@ -260,6 +261,7 @@ class UrlaubskalenderController extends StudipController
 
         $this->render_action('new');
     }
+
  
     /**
      *  This action adds a holiday entry
@@ -305,7 +307,7 @@ class UrlaubskalenderController extends StudipController
                             . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
                             . "LEFT JOIN seminar_user ON (auth_user_md5.user_id = seminar_user.user_id) "
                             . "WHERE "
-                            . "seminar_user.Seminar_id LIKE '". $this->id . "' "
+                            . "seminar_user.Seminar_id LIKE '". $this->sem_id . "' "
                             . "AND (username LIKE :input OR Vorname LIKE :input "
                             . "OR CONCAT(Vorname,' ',Nachname) LIKE :input "
                             . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
