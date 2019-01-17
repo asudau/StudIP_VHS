@@ -39,45 +39,6 @@
                 </div>
                 <!--  CONTENT ELEMENT, uid:73/textpic [end] -->
                 
-                <!--  CONTENT ELEMENT, uid:73/textpic [begin] -->
-                <div id="c73" class="csc-default csc-space-after-25">
-                <!--  Image block: [begin] -->
-                    <div class="csc-textpic-text" align='center'>
-                <!--  Text: [begin] -->
-                    <img src="<?= $plugin->getPluginURL().'/assets/images/bbb.jpeg' ?>" alt="" border="0" width="50%">
-                    <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>plugins.php/meetingplugin/index?cid=b8d02f67fca5aac0efa01fb1782166d1" title="Hier kommt ihr direkt zum Meeting-reiter in unserer Internen Veranstaltung, dort braucht ihr nur noch den VK-Raum anklicken und seid dabei!" class="internal-link">Abkürzung zur eL4 Videokonferenz in BigBlueButton</a></h2>
-                    </div>
-                    <!--  Image block: [end] -->
-                </div>
-                <!--  CONTENT ELEMENT, uid:73/textpic [end] -->
-
-                
-
-<!--                   CONTENT ELEMENT, uid:75/textpic [begin] 
-                <div id="c75" class="csc-default csc-space-after-25">
-                  Image block: [begin] 
-                    <div class="csc-textpic-text">
-                  Text: [begin] 
-                    <img src="<?=$plugin->getPluginURL().'/assets/images/question-mark.jpg' ?>" alt="" border="0" width="100%">
-                    <h2 class="intranet"><a href="" title="" class="internal-link">Rund um meine Kurse</a></h2>
-                    
-                    <section class="contentbox themen">
-                        <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Leitfaden für neue DozentInnen (PDF)</a>
-                    </section>
-                    <section class="contentbox themen">
-                        <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Formular xyz (DOC)</a>
-                    </section>
-                    <section class="contentbox themen">
-                        <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Mein Kurs in Studip (PDF) </a>
-                    </section>
-                    
-
-                    <hr>
-                      Text: [end] 
-                    </div>
-                      Image block: [end] 
-                </div>
-                  CONTENT ELEMENT, uid:75/textpic [end] -->
                 
                 
                 <? foreach ($folderwithfiles_array as $course_id => $folderwithfiles) : ?>
@@ -118,22 +79,6 @@
 			<div class="haupt">
 	       
                 
-    <!--  eL4 Kooperation Logo [begin] -->
-		<div class="intranet_news csc-default csc-space-after-25">
-		<!--  Image block: [begin] -->
-			<div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight"><div class="csc-textpic-text">
-		<!--  Text: [begin] -->
-            <a href='http://el4.me' target='_blank' title='Zur eL4 Homepage'> 
-                <img src="<?=$plugin->getPluginURL().'/assets/images/el4_vhs_jpg.jpg' ?>" alt="" border="0" width="100%">
-            </a>
-			
-		<!--  Text: [end] -->
-			</div></div>
-		<!--  Image block: [end] -->
-			</div>
-	<!--  CONTENT ELEMENT [end] -->            
-                
-                
     <!-- News -->
     <? foreach ($newsTemplates as $course_id => $template) : ?>
 	<!--  CONTENT ELEMENT, uid:434/textpic [begin] -->
@@ -161,26 +106,10 @@
 	<!--  CONTENT ELEMENT, uid:434/textpic [end] -->
     <? endforeach ?>
 	
-    <div class="intranet_news csc-default csc-space-after-25">
-		<!--  Image block: [begin] -->
-			<div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight" style='margin-left: 20px'><div class="csc-textpic-text">
-		<!--  Text: [begin] -->
-        <a href='<?=$plugin->getPluginURL().'/assets/images/Intranet eL4.png' ?>' target='_blank'><img src="<?=$plugin->getPluginURL().'/assets/images/Intranet eL4.png' ?>" alt="" height="200px" width="200px"  style="border:1px solid black"></a>
-        <a href='<?=$plugin->getPluginURL().'/assets/images/Intranet Osnabrueck.png' ?>' target='_blank'><img src="<?=$plugin->getPluginURL().'/assets/images/Intranet Osnabrueck.png' ?>" alt="" height="200px" width="200px"  style="border:1px solid black"></a>
-        <a href='<?=$plugin->getPluginURL().'/assets/images/Intranet Ammerland.png' ?>' target='_blank'><img src="<?=$plugin->getPluginURL().'/assets/images/Intranet Ammerland.png' ?>" alt="" height="200px" width="200px"  style="border:1px solid black"></a>
-        <h2 class="intranet">
-                    <a href="" title="" class="internal-link">3 Screenshots verschiedener Intranet Startseiten, einfach drauflicken!</a>
-
-            </h2>
-		<!--  Text: [end] -->
-			</div></div>
-		<!--  Image block: [end] -->
-			</div>
-    
-    <img src="<?=$plugin->getPluginURL().'/assets/images/cookies.jpg' ?>" alt="" border="0" width="100%">
+  
     
     
-    <? if (false && count($courses_upcoming) >0 ){ ?>
+    <? if (count($courses_upcoming) >0 ){ ?>
 	<!--  CONTENT ELEMENT, uid:13/textpic [begin] -->
 		<div id="c13" class="csc-default csc-space-after-25">
 		<!--  Image block: [begin] -->

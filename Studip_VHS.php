@@ -40,7 +40,8 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
             'index_el4',
             'kacheln',
             'mitarbeiter',
-            'index_wesermarsch');
+            'index_wesermarsch',
+            'index_allgemein');
             
         
         $this->course = Course::findCurrent();
