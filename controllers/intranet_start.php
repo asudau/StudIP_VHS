@@ -111,7 +111,7 @@ class IntranetStartController extends StudipController {
 
                     $db = \DBManager::get();
                     $stmt = $db->prepare("SELECT * FROM `dokumente` WHERE `range_id` = :range_id
-                        ORDER BY `name`");
+                        ORDER BY `priority`,`name`");
                     $stmt->bindParam(":range_id", $folder['folder_id']);
                     $stmt->execute();
                     $response = $stmt->fetchAll(\PDO::FETCH_ASSOC);
