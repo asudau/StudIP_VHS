@@ -67,7 +67,7 @@ class SeminarController extends StudipController {
         }
         * 
         */
-    }
+        }
         
         $description = Request::get('description');
         
@@ -139,6 +139,14 @@ class SeminarController extends StudipController {
         
         $this->render_action($this->style);
 
+    }
+    
+    public function not_started_action($course_id)
+    {
+        //$course = Course::findCurrent()->id;
+        
+       
+      
     }
     
     public function settings_action()
