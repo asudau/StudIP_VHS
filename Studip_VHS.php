@@ -90,11 +90,29 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
 
     public function getTabNavigation($course_id)
     {
-        $course = Course::findCurrent()->id;
+        $localEntries = DataFieldEntry::getDataFieldEntries($course_id);
+        
+        $datafield_begin =  DataField::findOneBySQL('name = \'course begin\'');
+        $this->datafield_id_begin = $datafield_begin->datafield_id;
+        
+        //Kurs hat noch nicht begonnen
+        //TODO Navigation deaktivieren und Fehler werfen in den anderen Actions
+        if (!$GLOBALS['perm']->have_studip_perm('tutor', $course_id) && $localEntries[$this->datafield_id_begin]->value > time()){
+            $navigation = new Navigation(_('Übersicht'));
+            $navigation->setImage(Icon::create('seminar', 'info_alt'));
+            $navigation->setActiveImage(Icon::create('seminar', 'info'));
+            $navigation->setURL(PluginEngine::getURL($this, [], 'seminar/not_started'));
+        
+            return array(
+                'overview_vhs' => $navigation
+            );
+        }
+        
         $datafield =  DataField::findOneBySQL('name = \'Overview style\'');
-        $this->datafield_id = $datafield->datafield_id;
-        $localEntries = DataFieldEntry::getDataFieldEntries(Course::findCurrent()->id);
-        $this->style = $localEntries[$this->datafield_id]->value;
+        $this->datafield_id_overview = $datafield->datafield_id;
+        
+        
+        $this->style = $localEntries[$this->datafield_id_overview]->value;
 
         if($this->style == 'standard'){ //todo: oder keine angabe
             $core_overview = CoreOverview::getTabNavigation($course_id);
