@@ -1,5 +1,6 @@
 <?php
 require_once 'app/controllers/news.php';
+require_once 'app/controllers/calendar/single.php';
 
 
 class IntranetStartController extends StudipController {
@@ -30,7 +31,7 @@ class IntranetStartController extends StudipController {
     {
         $this->intranets = $this->plugin->getIntranetIDsForUser();
         
-
+        $this->calendar_controller = new Calendar_CalendarController();
 
         //get seminars ($inst_id)
         $this->intranet_courses = IntranetConfig::find($inst_id)->getRelatedCourses();        
@@ -111,7 +112,7 @@ class IntranetStartController extends StudipController {
 
                     $db = \DBManager::get();
                     $stmt = $db->prepare("SELECT * FROM `dokumente` WHERE `range_id` = :range_id
-                        ORDER BY `name`");
+                        ORDER BY `priority`, `name`");
                     $stmt->bindParam(":range_id", $folder['folder_id']);
                     $stmt->execute();
                     $response = $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -162,6 +163,44 @@ class IntranetStartController extends StudipController {
     
     public function infos_action(){
         
+    }
+    
+    
+    function insertCoursebegin_action($id = ''){
+        
+          //speichern
+        if ($_POST['submit']){
+            $this->event = new EventData($id);
+            $this->event->author_id = $GLOBALS['user']->id;
+            $this->event->start = strtotime($_POST['start_date']);
+            $this->event->end = $this->event->start;
+            $this->event->summary = studip_utf8decode($_POST['summary']);
+            $this->event->description = $_POST['description'];
+            $this->event->class = 'PUBLIC';
+            $this->event->category_intern = '13';
+
+            $this->event->store();
+            
+             if (Request::isXhr()) {
+                    header('X-Dialog-Close: 1');
+                    exit;
+             } else $this->redirect($this->url_for('/start'));
+        
+        //bearbeiten
+        } else if ($id){
+            
+            $this->event = new EventData($id);
+        
+        // neu anlegen
+        } else {
+            $this->event = new EventData();
+            $this->event->event_id = $this->event->getNewId();
+            $this->event->start = time();
+            $this->event->summary = 'Kurstitel';
+            $this->event->description = 'http://';
+        }
+        //$this->setProperties($calendar_event, $component);
+        //$calendar_event->setRecurrence($component['RRULE']);
     }
     
     

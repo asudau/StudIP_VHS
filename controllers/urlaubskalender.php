@@ -15,7 +15,9 @@
  * @since    3.1
  */
 require_once 'app/controllers/news.php';
+//require_once 'app/controllers/calendar/single.php';
 require_once 'lib/webservices/api/studip_user.php';
+require_once 'app/models/calendar/SingleCalendar.php';
 
 class UrlaubskalenderController extends StudipController
 {
@@ -50,6 +52,14 @@ class UrlaubskalenderController extends StudipController
         PageLayout::setTabNavigation(NULL); // disable display of tabs
         PageLayout::setHelpKeyword("Basis.Startseite"); // set keyword for new help
         PageLayout::setTitle(_('Interner Kalender'));
+        
+        $this->atime = Request::int('atime', time());
+        $this->settings = $GLOBALS['user']->cfg->CALENDAR_SETTINGS;
+        if (!is_array($this->settings)) {
+            $this->settings = Calendar::getDefaultUserSettings();
+        }
+        
+        $this->date_template_engine = new Flexi_TemplateFactory($GLOBALS['STUDIP_BASE_PATH'] . '/app/views');
         
     }
 
@@ -149,12 +159,239 @@ class UrlaubskalenderController extends StudipController
 
     }
 
+     function insertDate_action($id = ''){
+        
+         if (Request::submitted('submit')){
+                $this->event = new EventData();
+                var_dump('sopecihern');
+                $this->event = new EventData($id);
+                $this->event->author_id = $GLOBALS['user']->id;
+                $this->event->start = strtotime($_POST['start_date']);
+                $this->event->end = $this->event->start;
+                $this->event->summary = studip_utf8decode($_POST['summary']);
+                $this->event->description = $_POST['description'];
+                $this->event->class = 'PUBLIC';
+                $this->event->category_intern = '13';
+
+                $this->event->store();
+             }
+//             if (Request::isXhr()) {
+//                    header('X-Dialog-Close: 1');
+//                    exit;
+//             } else $this->redirect($this->url_for('/intranet_start'));
+        
+        //bearbeiten
+        else if ($id){
+            $this->event = new EventData($id);
+             var_dump('laden');
+            
+        
+        // neu anlegen
+        } else {
+            $this->event = new EventData();
+            $this->event->start = time();
+            $this->event->summary = 'Kurstitel';
+            $this->event->description = 'http://';
+        }
+        //$this->setProperties($calendar_event, $component);
+        //$calendar_event->setRecurrence($component['RRULE']);
+    }
+    
+    public function week_action($range_id = null)
+    {
+        $this->range_id = $range_id ?: $this->range_id;
+        $timestamp = mktime(12, 0, 0, date('n', $this->atime),
+                date('j', $this->atime), date('Y', $this->atime));
+        $monday = $timestamp - 86400 * (strftime('%u', $timestamp) - 1);
+        $day_count = $this->settings['type_week'] == 'SHORT' ? 5 : 7;
+        for ($i = 0; $i < $day_count; $i++) {
+            
+            $this->calendars[$i] =
+                    SingleCalendar::getDayCalendar($this->range_id,//$this->range_id,
+                            $monday + $i * 86400, null, $this->restrictions);
+        }
+        
+        //PageLayout::setTitle($this->getTitle($this->calendars[0],  _('Wochenansicht')));
+
+        $this->last_view = 'week';
+        
+        $this->date_template_engine->render('calendar/single/week', ['calendars' => $this->calendars,
+            'controller' => $this]); //new Calendar_SingleController()]);
+        //$this->createSidebar('week', $this->calendars[0]);
+        //$this->createSidebarFilter();
+    }
+    
+    
+       public function edit_action($range_id = null, $event_id = null)
+    {
+        $this->range_id = $range_id ?: $this->range_id;
+        $this->calendar = new SingleCalendar($this->range_id);
+        $this->event = $this->calendar->getEvent($event_id);
+
+        if ($this->event->isNew()) {
+         //   $this->event = $this->calendar->getNewEvent();
+            if (Request::get('isdayevent')) {
+                $this->event->setStart(mktime(0, 0, 0, date('n', $this->atime),
+                        date('j', $this->atime), date('Y', $this->atime)));
+                $this->event->setEnd(mktime(23, 59, 59, date('n', $this->atime),
+                        date('j', $this->atime), date('Y', $this->atime)));
+            } else {
+                $this->event->setStart($this->atime);
+                $this->event->setEnd($this->atime + 3600);
+            }
+            $this->event->setAuthorId($GLOBALS['user']->id);
+            $this->event->setEditorId($GLOBALS['user']->id);
+            $this->event->setAccessibility('PRIVATE');
+//            if (!Request::isXhr()) {
+//                PageLayout::setTitle($this->getTitle($this->calendar, _('Neuer Termin')));
+//            }
+        } else {
+            // open read only events and course events not as form
+            // show information in dialog instead
+            if (!$this->event->havePermission(Event::PERMISSION_WRITABLE)
+                    || $this->event instanceof CourseEvent) {
+                if (!$this->event instanceof CourseEvent && $this->event->attendees->count() > 1) {
+                    if ($this->event->group_status) {
+                        $this->redirect($this->url_for('calendar/single/edit_status/' . implode('/',
+                            array($this->range_id, $this->event->event_id))));
+                    } else {
+                        $this->redirect($this->url_for('calendar/single/event/' . implode('/',
+                            array($this->range_id, $this->event->event_id))));
+                    }
+                } else {
+                    $this->redirect($this->url_for('calendar/single/event/' . implode('/',
+                            array($this->range_id, $this->event->event_id))));
+                }
+                return null;
+            }
+//            if (!Request::isXhr()) {
+//                PageLayout::setTitle($this->getTitle($this->calendar, _('Termin bearbeiten')));
+//            }
+        }
+
+        if (Config::get()->CALENDAR_GROUP_ENABLE
+                && $this->calendar->getRange() == Calendar::RANGE_USER) {
+
+            if (Config::get()->CALENDAR_GRANT_ALL_INSERT) {
+                $search_obj = SQLSearch::get("SELECT DISTINCT auth_user_md5.user_id, "
+                    . "{$GLOBALS['_fullname_sql']['full_rev_username']} as fullname, "
+                    . "auth_user_md5.perms, auth_user_md5.username "
+                    . "FROM auth_user_md5 "
+                    . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
+                    . 'WHERE auth_user_md5.user_id <> ' . DBManager::get()->quote($GLOBALS['user']->id)
+                    . ' AND (username LIKE :input OR Vorname LIKE :input '
+                    . "OR CONCAT(Vorname,' ',Nachname) LIKE :input "
+                    . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
+                    . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input "
+                    . ") ORDER BY fullname ASC",
+                    _('Person suchen'), 'user_id');
+            } else {
+                $search_obj = SQLSearch::get("SELECT DISTINCT auth_user_md5.user_id, "
+                    . "{$GLOBALS['_fullname_sql']['full_rev_username']} as fullname, "
+                    . "auth_user_md5.perms, auth_user_md5.username "
+                    . "FROM calendar_user "
+                    . "LEFT JOIN auth_user_md5 ON calendar_user.owner_id = auth_user_md5.user_id "
+                    . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
+                    . 'WHERE calendar_user.user_id = '
+                    . DBManager::get()->quote($GLOBALS['user']->id)
+                    . ' AND calendar_user.permission > ' . Event::PERMISSION_READABLE
+                    . ' AND auth_user_md5.user_id <> ' . DBManager::get()->quote($GLOBALS['user']->id)
+                    . ' AND (username LIKE :input OR Vorname LIKE :input '
+                    . "OR CONCAT(Vorname,' ',Nachname) LIKE :input "
+                    . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
+                    . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input "
+                    . ") ORDER BY fullname ASC",
+                    _('Person suchen'), 'user_id');
+            }
+
+            // SEMBBS
+            // Eintrag von Terminen bereits ab PERMISSION_READABLE
+            /*
+            $search_obj = new SQLSearch('SELECT DISTINCT auth_user_md5.user_id, '
+                . $GLOBALS['_fullname_sql']['full_rev'] . ' as fullname, username, perms '
+                . 'FROM calendar_user '
+                . 'LEFT JOIN auth_user_md5 ON calendar_user.owner_id = auth_user_md5.user_id '
+                . 'LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) '
+                . 'WHERE calendar_user.user_id = '
+                . DBManager::get()->quote($GLOBALS['user']->id)
+                . ' AND calendar_user.permission >= ' . Event::PERMISSION_READABLE
+                . ' AND (username LIKE :input OR Vorname LIKE :input '
+                . "OR CONCAT(Vorname,' ',Nachname) LIKE :input "
+                . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
+                . 'OR Nachname LIKE :input OR '
+                . $GLOBALS['_fullname_sql']['full_rev'] . ' LIKE :input '
+                . ') ORDER BY fullname ASC',
+                _('Nutzer suchen'), 'user_id');
+            // SEMBBS
+             *
+             */
+
+
+            $this->quick_search = QuickSearch::get('user_id', $search_obj)
+                    ->fireJSFunctionOnSelect('STUDIP.Messages.add_adressee')
+                    ->withButton();
+
+      //      $default_selected_user = array($this->calendar->getRangeId());
+            $this->mps = MultiPersonSearch::get('add_adressees')
+                ->setLinkText(_('Mehrere Teilnehmer hinzufügen'))
+       //         ->setDefaultSelectedUser($default_selected_user)
+                ->setTitle(_('Mehrere Teilnehmer hinzufügen'))
+                ->setExecuteURL($this->url_for($this->base . 'edit'))
+                ->setJSFunctionOnSubmit('STUDIP.Messages.add_adressees')
+                ->setSearchObject($search_obj);
+            $owners = SimpleORMapCollection::createFromArray(
+                    CalendarUser::findByUser_id($this->calendar->getRangeId()))
+                    ->pluck('owner_id');
+            foreach (Calendar::getGroups($GLOBALS['user']->id) as $group) {
+                $this->mps->addQuickfilter(
+                    $group->name,
+                    $group->members->filter(
+                        function ($member) use ($owners) {
+                            if (in_array($member->user_id, $owners)) {
+                                return $member;
+                            }
+                        })->pluck('user_id')
+                );
+            }
+        }
+
+        $stored = false;
+        if (Request::submitted('store')) {
+            $stored = $this->storeEventData($this->event, $this->calendar);
+        }
+
+        if ($stored !== false) {
+            if ($stored === 0) {
+                if (Request::isXhr()) {
+                    header('X-Dialog-Close: 1');
+                    exit;
+                } else {
+                    PageLayout::postMessage(MessageBox::success(_('Der Termin wurde nicht geändert.')));
+                    $this->relocate('calendar/single/' . $this->last_view, array('atime' => $this->atime));
+                }
+            } else {
+                PageLayout::postMessage(MessageBox::success(_('Der Termin wurde gespeichert.')));
+                $this->relocate('calendar/single/' . $this->last_view, array('atime' => $this->atime));
+            }
+        }
+
+//        $this->createSidebar('edit', $this->calendar);
+//        $this->createSidebarFilter();
+        
+        $this->template = $this->date_template_engine->render('calendar/single/edit', ['event' => $this->event,
+            'calendar' => $this->calendar,
+            'controller' => $this]);
+    }
+
+
+    
+    
     /**
      *  This action adds a holiday entry
      *
      * @return void
      */
-    public function edit_action($id = '')
+    public function myedit_action($id = '')
     {
         PageLayout::setTitle(_('Neuen Urlaubstermin eintragen'));
 
