@@ -40,6 +40,36 @@
                 </div>
                 <!--  CONTENT ELEMENT, uid:73/textpic [end] -->
 
+                
+                 <? foreach ($newsTemplates as $course_id => $template) : ?>
+                    <!--  CONTENT ELEMENT, uid:434/textpic [begin] -->
+                        <div class="intranet_news csc-default csc-space-after-25">
+                        <!--  Image block: [begin] -->
+                            <div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight"><div class="csc-textpic-text">
+                        <!--  Text: [begin] -->
+                            <img src="<?=CourseAvatar::getAvatar($course_id)->getURl('original') ?>" alt="" border="0" width="100%" max-height='171px'>
+                            <h2 class="intranet">
+                                <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
+                                    <a href="" title="Opens internal link in current window" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
+                                    <? if ($GLOBALS['perm']->have_studip_perm('dozent', $course_id)){ ?>
+                                    <a href="<?=URLHelper::getLink("dispatch.php/news/edit_news/new/" . $course_id) ?>" rel="get_dialog">
+                                        <?= Icon::create('add', 'clickable')?>             
+                                    </a>
+                                    <? } ?>
+                                </div>
+                            </h2>
+
+                            <?= $this->render_partial($template, compact('widget')) ?>
+
+                            <hr>
+                        <!--  Text: [end] -->
+                            </div></div>
+                        <!--  Image block: [end] -->
+                            </div>
+                        <!--  CONTENT ELEMENT, uid:434/textpic [end] -->
+                <? endforeach ?>
+        
+        
                    <!--  CONTENT ELEMENT, uid:75/textpic [begin] -->
                 <div id="c75" class="csc-default csc-space-after-25">
 <!--                  Image block: [begin] -->
