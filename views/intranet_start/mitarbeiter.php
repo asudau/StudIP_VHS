@@ -71,10 +71,10 @@
         
         
                    <!--  CONTENT ELEMENT, uid:75/textpic [begin] -->
-                <div id="c75" class="csc-default csc-space-after-25">
-<!--                  Image block: [begin] -->
+<!--                <div id="c75" class="csc-default csc-space-after-25">
+                  Image block: [begin] 
                     <div class="csc-textpic-text">
-<!--                  Text: [begin] -->
+                  Text: [begin] 
                     <img src="<?=$plugin->getPluginURL().'/assets/images/question-mark.jpg' ?>" alt="" border="0" width="100%">
                     <h2 class="intranet"><a href="" title="" class="internal-link">Gebäudemanagement</a></h2>
                     
@@ -90,7 +90,7 @@
                     
                     <hr>
                     </div>                
-                </div>
+                </div>-->
                     <!-- CONTENT ELEMENT, uid:75/textpic [end] -->
                 
                 <!-- Dateien -->
