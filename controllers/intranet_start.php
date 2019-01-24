@@ -37,14 +37,21 @@ class IntranetStartController extends StudipController {
         foreach($this->intranet_courses as $course){
             $config = IntranetSeminar::find([$course->id, $inst_id]);
             if ($config && $config->show_news){
-                $this->newsTemplates[$course->id] = $this->getNewsTemplateForSeminar($course->id);
-                $this->newsCaptions[$course->id] = $config->news_caption;
+                if (!$config->news_sidebar){
+                    $this->newsTemplates[$course->id] = $this->getNewsTemplateForSeminar($course->id);
+                    $this->newsCaptions[$course->id] = $config->news_caption;
+                    $this->newsPosition[$course->id] = $config->news_position ? $config->news_position : 0;
+                } else {
+                    $this->sidebarNewsTemplates[$course->id] = $this->getNewsTemplateForSeminar($course->id);
+                    $this->newsCaptions[$course->id] = $config->news_caption;
+                }
             }
             //falls Nutzer in einer der Veranstaltungen Admin ist darf er ein bisschen mehr
             if ($GLOBALS['perm']->have_studip_perm('dozent', $course->id)){
                  $this->admin = true;
             }
         }
+        asort($this->newsPosition);
 
         //get permission of currentUser (autor/dozent) //ammerland Spezial
         

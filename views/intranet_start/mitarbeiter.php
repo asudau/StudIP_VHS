@@ -41,7 +41,7 @@
                 <!--  CONTENT ELEMENT, uid:73/textpic [end] -->
 
                 
-                 <? foreach ($newsTemplates as $course_id => $template) : ?>
+                 <? foreach ($sidebarNewsTemplates as $course_id => $template) : ?>
                     <!--  CONTENT ELEMENT, uid:434/textpic [begin] -->
                         <div class="intranet_news csc-default csc-space-after-25">
                         <!--  Image block: [begin] -->
@@ -165,8 +165,9 @@
 	       
                 
     <!-- News -->
-    <? foreach ($newsTemplates as $course_id => $template) : ?>
-	<!--  CONTENT ELEMENT, uid:434/textpic [begin] -->
+    <? foreach ($newsPosition as $course_id => $position) : ?>
+        <? $template = $newsTemplates[$course_id]; ?>
+        <!--  CONTENT ELEMENT, uid:434/textpic [begin] -->
 		<div class="intranet_news csc-default csc-space-after-25">
 		<!--  Image block: [begin] -->
 			<div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight"><div class="csc-textpic-text">
