@@ -107,12 +107,13 @@ class IntranetStartController extends StudipController {
                 $this->filesCaptions[$course->id] = $config->files_caption;
                 
                 $db = DBManager::get();
-                $stmt = $db->prepare("SELECT folder_id, name FROM folder WHERE seminar_id = :cid");
+                $stmt = $db->prepare("SELECT folder_id, name, range_id, seminar_id FROM folder WHERE seminar_id = :cid");
                 $stmt->bindParam(":cid", $course->id);
                 $stmt->execute();
                 $sem_folder = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 $folderwithfiles = array();
+                $parentfolder = array();
 
                 foreach ($sem_folder as $folder){
 
@@ -121,19 +122,20 @@ class IntranetStartController extends StudipController {
                         ORDER BY `priority`,`name`");
                     $stmt->bindParam(":range_id", $folder['folder_id']);
                     $stmt->execute();
-                    $response = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                    $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                    $files = array();
-
-                    foreach ($response as $item) {
-                        $files[] = $item;
+                    $folderwithfiles[$folder['folder_id']] = $files;
+                    if($folder['range_id'] != $folder['seminar_id']){
+                        $parentfolder[$folder['folder_id']] = $folder['range_id'];
                     }
-                    $folderwithfiles[$folder['name']] = $files;
 
                 }
                 $this->folderwithfiles_array[$course->id] = $folderwithfiles;
             }
         }
+        
+        //folder auf Unterebene
+        $this->parentfolder = $parentfolder;
 
 
          //get upcoming courses (studip dates of configured category)

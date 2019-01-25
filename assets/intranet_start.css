@@ -78,6 +78,10 @@ section.folder > li {
     list-style-type: none;
 }
 
+section > section.folder {
+    padding: 0 0 0 10px;
+}
+
  .mitte {
     font-size: 15px;
     font-family: Arial, Helvetica, sans-serif, verdana;
