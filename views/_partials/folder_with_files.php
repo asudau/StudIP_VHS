@@ -1,6 +1,7 @@
  <? foreach ($folderwithfiles as $folder => $files): ?>
     <? if ($parentfolder[$folder] == $parent) : ?>
         <section class="contentbox folder">
+            <div value='<?=var_dump($parent)?>' />
         <a class='folder_open' href=''><?= DocumentFolder::find($folder)->name ?></a>
         <? foreach (array_keys($parentfolder, $folder) as $subfolder): ?>
             <?= $this->render_partial('_partials/folder_with_files', 

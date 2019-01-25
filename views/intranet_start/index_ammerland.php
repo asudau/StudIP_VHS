@@ -85,15 +85,7 @@
                         <? } ?>
                         </div>
                     </h2>
-                    <? foreach ($folderwithfiles as $folder => $files): ?>
-                    <section class="contentbox folder">  
-                        <a class='folder_open' href=''><?= DocumentFolder::find($folder)->name ?></a>
-                        <? foreach ($files as $file): ?>
-                        <li class='file_download' style="display:none"> <a href='<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>sendfile.php?force_download=1&type=0&file_id=<?= $file['dokument_id']?>&file_name=<?= $file['filename'] ?>'><?= $file['name'] ?></a></li>
-                        
-                        <? endforeach ?>
-                        </section>
-                    <? endforeach ?>
+                   <?= $this->render_partial('_partials/folder_with_files', array('folderwithfiles' => $folderwithfiles, 'parentfolder' => $parentfolder, 'parent' => NULL)) ?>
                     <hr>
                 <!--  Text: [end] -->
                 </div>
