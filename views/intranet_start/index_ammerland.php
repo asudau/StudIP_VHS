@@ -89,7 +89,7 @@
                    <?= $this->render_partial('_partials/folder_with_files', array('folderwithfiles' => $folderwithfiles, 'parentfolder' => $parentfolder, 'parent' => NULL)) ?>
                     <hr>
                 <!--  Text: [end] -->
-                </div>
+                </div>  
                 <!--  Image block: [end] -->
                 </div>
                 <!--  CONTENT ELEMENT, uid:14/textpic [end] -->
