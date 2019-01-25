@@ -1,8 +1,7 @@
  <? foreach ($folderwithfiles as $folder => $files): ?>
     <? if ($parentfolder[$folder] == $parent) : ?>
         <section class="contentbox folder">
-            <div value='<?=var_dump(array_keys($parentfolder, $folder))?>' />
-        <a class='folder_open' href=''><?= DocumentFolder::find($folder)->name ?></a>
+        <a class='folder_open' href=''><?= Icon::create('folder-full', 'clickable')?> <?= DocumentFolder::find($folder)->name ?></a>
         <? if(array_keys($parentfolder, $folder)) : ?>
             <? foreach (array_keys($parentfolder, $folder) as $subfolder): ?>
                 <?= $this->render_partial('_partials/folder_with_files', 

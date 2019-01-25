@@ -125,7 +125,7 @@ class IntranetStartController extends StudipController {
                     $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     $folderwithfiles[$folder['folder_id']] = $files;
-                    if($folder['range_id'] != $folder['seminar_id']){
+                    if(DocumentFolder::find($folder['range_id'])){
                         $parentfolder[$folder['folder_id']] = $folder['range_id'];
                     }
 
