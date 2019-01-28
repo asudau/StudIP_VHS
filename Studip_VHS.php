@@ -111,7 +111,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         $navigation->setURL(PluginEngine::getURL($this, array('style' => $this->style), 'seminar'));
         
         return array(
-            'overview_vhs' => $navigation
+            'main' => $navigation
         );
     }
 

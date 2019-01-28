@@ -48,13 +48,13 @@ class SeminarController extends StudipController {
             $this->style = 'full';
         }
          
-        if (!Navigation::hasItem("/course/overview_vhs")) {
+        if (!Navigation::hasItem("/course/main")) {
        
             $navigation = new Navigation(_('Übersicht'));
             $navigation->setImage(Icon::create('seminar', 'info_alt'));
             $navigation->setActiveImage(Icon::create('seminar', 'info'));
             $navigation->setURL(PluginEngine::getURL($this, array('style' => $this->style), 'seminar'));
-            Navigation::getItem("/course")->addSubNavigation('overview_vhs', $navigation);
+            Navigation::getItem("/course")->addSubNavigation('main', $navigation);
        /** 
         
         //Keine Übersichtsseite. Anstatt eines Fehler wird der Nutzer zum ersten
