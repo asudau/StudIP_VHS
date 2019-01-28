@@ -257,5 +257,6 @@ $(".folder_open").click(function (e) {
     e.preventDefault();
     e.stopPropagation();
     $(this).siblings('.file_download').toggle();
+    $(this).siblings('.folder').toggle();
  });
 </script>

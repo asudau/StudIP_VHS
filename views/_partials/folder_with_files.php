@@ -1,6 +1,6 @@
  <? foreach ($folderwithfiles as $folder => $files): ?>
     <? if ($parentfolder[$folder] == $parent) : ?>
-        <section class="contentbox folder">
+        <section class="contentbox folder" <?= $parent ? 'style="display:none"' : '' ?>>
         <a class='folder_open' href=''><?= Icon::create('folder-full', 'clickable')?> <?= DocumentFolder::find($folder)->name ?></a>
         <? if(array_keys($parentfolder, $folder)) : ?>
             <? foreach (array_keys($parentfolder, $folder) as $subfolder): ?>
