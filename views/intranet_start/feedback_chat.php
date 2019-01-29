@@ -1,4 +1,4 @@
-<? if ($access) : ?>
+<? if (!$access) : ?>
 <form name="write_message" action="<?=$this->controller->url_for('intranet_start/send_feedback')?>" method="post" style="margin-left: auto; margin-right: auto;">
      
     <div>
@@ -8,7 +8,7 @@
         </label>
     </div>
      Oder: 
-     <a target='_blank' href='https://ammerland.elan-ev.de/plugins.php/blubber/streams/forum?cid=<?=$seminar_id?>'>
+     <a target='_blank' href='<?= URLHelper::getLink("/plugins.php/blubber/streams/forum?cid=" . $this->seminar_id) ?>'>
         Um den gesamten Chatverlauf zu sehen, klicken Sie hier
      </a>
 
