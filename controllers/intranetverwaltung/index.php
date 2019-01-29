@@ -33,8 +33,6 @@ class Intranetverwaltung_IndexController extends StudipController {
             $this->inst_config[$inst->id] = IntranetConfig::find($inst->id)->template;
         }
         
-        
-        
         if ($this->intranet_inst){
             $sidebar = Sidebar::Get();
 
