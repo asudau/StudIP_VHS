@@ -127,7 +127,18 @@ h1.csc-firstHeader{
     height: 125px;
 }
 
-h1 {
+div.intranet-kachel{
+    border-radius: 10px;
+    border-style: solid;
+    border-color: #5d6a92;
+    border-width: 1px;
+    background-color: #eee;
+}
+div.intranet-kachel:hover {
+    background-color: #ddd;
+}
+
+h1.intranet {
     color: #062c5b;
     font-size: 22px;
     font-weight: bold;
