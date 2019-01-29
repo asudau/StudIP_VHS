@@ -152,9 +152,28 @@
 				</tbody></table>
 				
 			</div>
-			<div class="haupt">
-	       
-                
+	<div class="haupt">
+
+        <div style='width: 400px; margin:auto'>
+            <table cellspacing="0" cellpadding="0" border="0">
+                <tbody><tr>
+                    <td class="dsR4"><div class="zentriert">
+                        <a data-dialog="title=Feedback geben;width=300px; height=200px;" href="<?=$this->controller->url_for('intranet_start/feedback_chat')?>" title="Feedback"><?= Icon::create('chat2', 'clickable', ['size' => 100])?></a>
+                    </div>
+                    </td>
+                    <td class="dsR4"><div class="zentriert">
+                        <a data-dialog href="<?=$this->controller->url_for('intranet_start/feedback_form')?>" title="Störungsmeldung" ><?= Icon::create('exclaim-circle-full', 'clickable', ['size' => 100])?></a>
+                    </div>
+                                </td>
+                    <td class="dsR4"><div class="zentriert">
+                        <a href="https://www.kvhs-ammerland.de/fileadmin/user_upload/Programmheft/6_Dozentenfortbildungen.pdf" target='_blank' title="Zu den Dozentenfortbildungen auf unserer Homepage" target='_blank'><?= Icon::create('doctoral_cap', 'clickable', ['size' => 100])?></a>
+                    </div>
+                    </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     <!-- News -->
     <? foreach ($newsPosition as $course_id => $position) : ?>
         <? $template = $newsTemplates[$course_id]; ?>

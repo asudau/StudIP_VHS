@@ -15,23 +15,17 @@ class IntranetStartController extends StudipController {
     public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
-
-        if (Request::isXhr()) {
-            $this->set_layout(null);
-            $this->set_content_type('text/html;Charset=windows-1252');
-        }
         
         PageLayout::addStylesheet($this->plugin->getPluginURL().'/assets/intranet_start.css');
         PageLayout::setTitle(_("Meine Startseite"));
-        //$this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
     }
 
-    public function index_action($inst_id)
+    public function index_action($inst_id = null)
     {
         $this->intranets = $this->plugin->getIntranetIDsForUser();
-        
-
-
+        if ($inst_id == null){
+            $inst_id = $this->intranets[0];
+        }
         //get seminars ($inst_id)
         $this->intranet_courses = IntranetConfig::find($inst_id)->getRelatedCourses();        
         foreach($this->intranet_courses as $course){
@@ -173,6 +167,105 @@ class IntranetStartController extends StudipController {
         
     }
     
+    public function feedback_form_action(){
+        if (Request::get('message_body')){
+            $mailtext = Request::get('message_body');
+            $empfaenger = 'asudau@uos.de';//$contact_mail;//$contact_mail; //Mailadresse
+            //$absender   = "asudau@uos.de";
+            $betreff    = 'Betreff: ' . Request::get('message_body');
+
+            $mail = new StudipMail();
+            $success = $mail->addRecipient($empfaenger)
+                //->addRecipient('elmar.ludwig@uos.de', 'Elmar Ludwig', 'Cc')
+                 ->setReplyToEmail('')
+                 ->setSenderEmail('')
+                 ->setSenderName('Störungsmeldung StudIP Intranet für Dozenten')
+                 ->setSubject($betreff)
+                 ->setBodyHtml($mailtext)
+                 ->setBodyHtml(strip_tags($mailtext))  
+                 ->send();
+            $this->response->add_header('X-Dialog-Close', '1');
+            $this->render_nothing();
+        } if ($success){
+            $message = MessageBox::success(_('Meldung wurde versendet!'));
+            PageLayout::postMessage($message);
+        }
+    }
+    
+    public function send_form_action(){
+        if (strlen(Request::get('message_body')) > 0){
+            $mailtext = Request::get('message_body');
+            $empfaenger = 'asudau@uos.de';//$contact_mail;//$contact_mail; //Mailadresse
+            //$absender   = "asudau@uos.de";
+            $betreff    = 'Betreff: ' . Request::get('message_body');
+
+            $mail = new StudipMail();
+            $success = $mail->addRecipient($empfaenger)
+                //->addRecipient('elmar.ludwig@uos.de', 'Elmar Ludwig', 'Cc')
+                 ->setReplyToEmail('')
+                 ->setSenderEmail('')
+                 ->setSenderName('Störungsmeldung StudIP Intranet für Dozenten')
+                 ->setSubject($betreff)
+                 ->setBodyHtml($mailtext)
+                 ->setBodyHtml(strip_tags($mailtext))  
+                 ->send();
+            
+        } if ($success){
+            $message = MessageBox::success(_('Meldung wurde versendet!'));
+            PageLayout::postMessage($message);
+        }
+        $this->response->add_header('X-Dialog-Close', '1');
+        $this->redirect('intranet_start/index');
+    }
+    
+    public function feedback_chat_action(){
+        $this->seminar_id = '2dac34217342bd706ac114d57dd0b3ec';
+        if (!$GLOBALS['perm']->have_studip_perm('autor', $this->seminar_id)){
+            $this->access = false;
+            $message = MessageBox::error(_('Sie haben auf diese Funktion keinen Zugriff'));
+            PageLayout::postMessage($message);
+            //$this->response->add_header('X-Dialog-Close', '1');
+        }
+    }
+    
+    public function send_feedback_action(){
+        if (strlen(Request::get('content')) > 0){
+            $this->seminar_id = '2dac34217342bd706ac114d57dd0b3ec';
+
+            $thread = new BlubberPosting();
+            $thread['seminar_id'] = $this->seminar_id;
+            $thread['context_type'] = 'course';
+            $thread['parent_id'] = 0;
+            $thread['author_host'] = $_SERVER['REMOTE_ADDR'];
+            $thread['user_id'] = $GLOBALS['user']->id;
+            //throw new AccessDeniedException("No permission to write posting.");
+
+            $content = studip_utf8decode(Request::get("content"));
+
+            if (strpos($content, "\n") !== false) {
+                $thread['name'] = substr($content, 0, strpos($content, "\n"));
+                $thread['description'] = $content;
+            } else {
+                if (strlen($content) > 255) {
+                    $thread['name'] = "";
+                } else {
+                    $thread['name'] = $content;
+                }
+                $thread['description'] = $content;
+            }
+            if ($thread->store()) {
+                $message = MessageBox::success(_('Feedback wurde veröffentlicht! <a target=\'_blank\' href=\'http://localhost/wesermarsch3.4/public/plugins.php/blubber/streams/forum?cid=' . $this->seminar_id .'\'>Direkt zum Chat </a>'));
+                PageLayout::postMessage($message);
+            } else {
+               $message = MessageBox::error(_('Da ist was schief gegangen. Versuchen Sie es  <a target=\'_blank\' href=\'http://localhost/wesermarsch3.4/public/plugins.php/blubber/streams/forum?cid=' . $this->seminar_id .'\'>hier </a>'));
+                PageLayout::postMessage($message);
+            }
+
+        } 
+        $this->response->add_header('X-Dialog-Close', '1');
+        $this->redirect('intranet_start/index');
+    }
+
     
     // customized #url_for for plugins
     public function url_for($to)

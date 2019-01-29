@@ -81,8 +81,6 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
     public function initialize ()
     {
         PageLayout::addStylesheet($this->getPluginURL().'/assets/settings_sortable.css');
-        PageLayout::addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js');
-        PageLayout::addScript('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js');
         PageLayout::addScript($this->getPluginURL().'/assets/scripts/settings_sortable.js');
         //PageLayout::addScript($this->getPluginURL().'/assets/scripts/replace_tab_navigation.js');
         
