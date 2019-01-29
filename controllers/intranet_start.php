@@ -99,6 +99,7 @@ class IntranetStartController extends StudipController {
             $config = IntranetSeminar::find([$course->id, $inst_id]);
             if ($config && $config->use_files){
                 $this->filesCaptions[$course->id] = $config->files_caption;
+                $this->filesPosition[$course->id] = $config->files_position ? $config->files_position : 0;
                 
                 $db = DBManager::get();
                 $stmt = $db->prepare("SELECT folder_id, name, range_id, seminar_id FROM folder WHERE seminar_id = :cid");
@@ -127,16 +128,14 @@ class IntranetStartController extends StudipController {
                 $this->folderwithfiles_array[$course->id] = $folderwithfiles;
             }
         }
+        asort($this->filesPosition);
         
         //folder auf Unterebene
         $this->parentfolder = $parentfolder;
 
-
          //get upcoming courses (studip dates of configured category)
         $result = EventData::findBySQL("category_intern = '13' AND start > '" . time() . "' ORDER BY start ASC");
         $this->courses_upcoming = $result;
-        
-        
         
         $this->template = IntranetConfig::find($inst_id)->template;
         $this->render_action($this->template);

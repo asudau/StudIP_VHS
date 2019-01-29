@@ -93,8 +93,9 @@
                 </div>-->
                     <!-- CONTENT ELEMENT, uid:75/textpic [end] -->
                 
-                <!-- Dateien -->
-                 <? foreach ($folderwithfiles_array as $course_id => $folderwithfiles) : ?>
+            <!-- Dateien -->
+            <? foreach ($filesPosition as $course_id => $position) : ?>
+                <? $folderwithfiles = $folderwithfiles_array[$course_id]; ?> 
                 <!--  CONTENT ELEMENT, uid:14/textpic [begin] -->
                 <div id="c14" class="csc-default csc-space-after-25">
                 <!--  Image block: [begin] -->
@@ -123,7 +124,7 @@
                 <!--  Image block: [end] -->
                 </div>
                 <!--  CONTENT ELEMENT, uid:14/textpic [end] -->
-                <? endforeach ?>
+            <? endforeach ?>
      
                 
   
