@@ -101,7 +101,11 @@
                 <div class="csc-textpic-text">
                 
                 <!--  Text: [begin] -->
+                <? if ($course_id == '85acad3a9c121d7e4c11a9935772af80') : ?>
+                    <img src="<?= $plugin->getPluginURL().'/assets/images/question-mark-small2.jpg' ?>" alt="" border="0" width="100%">
+                <? else: ?>
                     <img src="<?= $plugin->getPluginURL().'/assets/images/unterlagen1.png' ?>" alt="" border="0" width="100%">
+                <? endif ?>
                     <h2 class="intranet"> 
                         <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
                         <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>folder.php?cid=<?=$course_id?>&cmd=tree" title="Direkt in den Dateibereich wechseln" class="internal-link"><?=$filesCaptions[$course_id]?></a>
