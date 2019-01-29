@@ -1,4 +1,4 @@
-<? if (!$access) : ?>
+<? if ($access) : ?>
 <form name="write_message" action="<?=$this->controller->url_for('intranet_start/send_feedback')?>" method="post" style="margin-left: auto; margin-right: auto;">
      
     <div>
