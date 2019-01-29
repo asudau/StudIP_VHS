@@ -8,7 +8,7 @@
         </label>
     </div>
      Oder: 
-     <a target='_blank' href='<?= URLHelper::getLink("/plugins.php/blubber/streams/forum?cid=" . $this->seminar_id) ?>'>
+     <a href='<?= URLHelper::getLink("/plugins.php/blubber/streams/forum?cid=" . $this->seminar_id) ?>'>
         Um den gesamten Chatverlauf zu sehen, klicken Sie hier
      </a>
 
