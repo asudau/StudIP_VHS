@@ -63,7 +63,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         if($perm->have_perm('root')){
             $navigation = new Navigation('Intranetverwaltung', PluginEngine::getURL($this, array(), 'intranetverwaltung/index'));
             $navigation->addSubNavigation('index', new Navigation('Übersicht', PluginEngine::getURL($this, array(), 'intranetverwaltung/index')));
-            $navigation->addSubNavigation('settings', new Navigation('Einstellungen', PluginEngine::getURL($this, array(), 'settings')));
+            $navigation->addSubNavigation('view_intranets', new Navigation('Intranet-Ansicht', PluginEngine::getURL($this, array(), 'intranet_start/index/')));
             Navigation::addItem('/admin/intranetverwaltung', $navigation);
         } 
 
@@ -155,16 +155,20 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         }
     }
 	
-    public function getIntranetIDsForUser(){
+    public function getIntranetIDsForUser($admin = false){
         $user = User::findCurrent();
         $datafield_id_inst = md5('Eigener Intranetbereich');
         $intranets = array();
-        foreach($user->institute_memberships as $membership){
-            $entries = DataFieldEntry::getDataFieldEntries($membership->institut_id);
-            if ($entries[$datafield_id_inst]->value){
-                $intranets[] = $membership->institut_id;
+        if (!admin){
+            foreach($user->institute_memberships as $membership){
+                $entries = DataFieldEntry::getDataFieldEntries($membership->institut_id);
+                if ($entries[$datafield_id_inst]->value){
+                    $intranets[] = $membership->institut_id;
+                }
             }
-        }
+        } else {
+            
+        } 
         return $intranets;
     }
     

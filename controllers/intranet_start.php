@@ -22,7 +22,11 @@ class IntranetStartController extends StudipController {
 
     public function index_action($inst_id = null)
     {
-        $this->intranets = $this->plugin->getIntranetIDsForUser();
+        if ($GLOBALS['perm']->have_perm('admin')){
+            $this->intranets = IntranetConfig::getInstitutesWithIntranet(true);
+        } else {
+            $this->intranets = $this->plugin->getIntranetIDsForUser();
+        }
         if ($inst_id == null){
             $inst_id = $this->intranets[0];
         }
