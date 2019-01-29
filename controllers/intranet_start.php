@@ -253,10 +253,10 @@ class IntranetStartController extends StudipController {
                 $thread['description'] = $content;
             }
             if ($thread->store()) {
-                $message = MessageBox::success(_('Feedback wurde veröffentlicht! <a target=\'_blank\' href=\'http://localhost/wesermarsch3.4/public/plugins.php/blubber/streams/forum?cid=' . $this->seminar_id .'\'>Direkt zum Chat </a>'));
+                $message = MessageBox::success(_('Feedback wurde veröffentlicht! <a target=\'_blank\' href=\'https://ammerland.elan-ev.de/plugins.php/blubber/streams/forum?cid=' . $this->seminar_id .'\'>Direkt zum Chat </a>'));
                 PageLayout::postMessage($message);
             } else {
-               $message = MessageBox::error(_('Da ist was schief gegangen. Versuchen Sie es  <a target=\'_blank\' href=\'http://localhost/wesermarsch3.4/public/plugins.php/blubber/streams/forum?cid=' . $this->seminar_id .'\'>hier </a>'));
+               $message = MessageBox::error(_('Da ist was schief gegangen. Versuchen Sie es  <a target=\'_blank\' href=\'https://ammerland.elan-ev.de/plugins.php/blubber/streams/forum?cid=' . $this->seminar_id .'\'>hier </a>'));
                 PageLayout::postMessage($message);
             }
 

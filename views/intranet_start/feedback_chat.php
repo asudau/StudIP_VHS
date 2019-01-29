@@ -8,7 +8,7 @@
         </label>
     </div>
      Oder: 
-     <a target='_blank' href='http://localhost/wesermarsch3.4/public/plugins.php/blubber/streams/forum?cid=<?=$seminar_id?>'>
+     <a target='_blank' href='https://ammerland.elan-ev.de/plugins.php/blubber/streams/forum?cid=<?=$seminar_id?>'>
         Um den gesamten Chatverlauf zu sehen, klicken Sie hier
      </a>
 
