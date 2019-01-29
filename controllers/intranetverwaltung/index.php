@@ -26,15 +26,11 @@ class Intranetverwaltung_IndexController extends StudipController {
     public function index_action($intranet_id = NULL)
     {
         $this->intranet_inst = Institute::find($intranet_id);
-        $datafield_id_inst = md5('Eigener Intranetbereich');
-        $datafield_id_sem = md5('Intranet-Veranstaltung');
-        $this->institutes_with_intranet = array();
+        $this->institutes_with_intranet = IntranetConfig::getInstitutesWithIntranet();
         $this->inst_config = array();
         
-        $institute_fields = DatafieldEntryModel::findBySQL('datafield_id = \'' . $datafield_id_inst . '\' AND content = 1');
-        foreach ($institute_fields as $field){
-            array_push($this->institutes_with_intranet, Institute::find($field->range_id)); 
-            $this->inst_config[$field->range_id] = IntranetConfig::find($field->range_id)->template;
+        foreach ($this->institutes_with_intranet as $inst){
+            $this->inst_config[$inst->id] = IntranetConfig::find($inst->id)->template;
         }
         
         

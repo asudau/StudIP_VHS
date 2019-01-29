@@ -49,4 +49,17 @@ class IntranetConfig extends SimpleORMap
     private function getDatafieldIdSem(){
         return md5('Intranet-Veranstaltung');
     }
+    
+    public static function getInstitutesWithIntranet(){
+        $datafield_id_inst = md5('Eigener Intranetbereich');
+        //$datafield_id_sem = md5('Intranet-Veranstaltung');
+        $institutes_with_intranet = array();
+        
+        $institute_fields = DatafieldEntryModel::findBySQL('datafield_id = \'' . $datafield_id_inst . '\' AND content = 1');
+        foreach ($institute_fields as $field){
+            array_push($institutes_with_intranet, Institute::find($field->range_id)); 
+        }
+        return $institutes_with_intranet;
+    }
+    
 }
