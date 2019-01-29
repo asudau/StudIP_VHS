@@ -224,7 +224,7 @@ class IntranetStartController extends StudipController {
             $this->access = false;
             $message = MessageBox::error(_('Sie haben auf diese Funktion keinen Zugriff'));
             PageLayout::postMessage($message);
-        } else $this->access = true
+        } else $this->access = true;
     }
     
     public function send_feedback_action(){
