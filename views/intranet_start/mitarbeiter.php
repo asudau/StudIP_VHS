@@ -174,7 +174,7 @@
                     </div>
                                 </td>
                     <td class="dsR4"><div class="zentriert intranet-kachel">
-                        <a href="https://www.kvhs-ammerland.de/fileadmin/user_upload/Programmheft/6_Dozentenfortbildungen.pdf" target='_blank' title="Zu den Dozentenfortbildungen auf unserer Homepage" target='_blank'>
+                        <a href="https://kvhs-ammerland.de/index.php?id=69&kathaupt=1&katid=81&katvaterid=6&katname=Dozentenfortbildung" target='_blank' title="Zu den Dozentenfortbildungen auf unserer Homepage" target='_blank'>
                             <?= Icon::create('doctoral_cap', 'clickable', ['size' => 100])?>
                         <br>
                             Fortbildungen
