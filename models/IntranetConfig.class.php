@@ -38,13 +38,6 @@ class IntranetConfig extends SimpleORMap
         }
         return $sem_for_instid;
     }
-//    $sem_id = $this->id;
-//    $query = "SELECT institut_id FROM seminar_inst WHERE seminar_id = :sem_id
-//                  UNION
-//                  SELECT Institut_id FROM seminare WHERE Seminar_id = :sem_id";
-//        $statement = DBManager::get()->prepare($query);
-//        $statement->execute(compact('sem_id'));
-//        return $statement->fetchAll(PDO::FETCH_COLUMN);
     
     private function getDatafieldIdSem(){
         return md5('Intranet-Veranstaltung');
@@ -75,6 +68,26 @@ class IntranetConfig extends SimpleORMap
             }
         }
         return $intranets;
+    }
+    
+    public static function addUserToIntranetCourses($user_id, $intranet_id, $status){
+        $courses = IntranetConfig::find($intranet_id)->getRelatedCourses();
+        $query = "INSERT IGNORE INTO seminar_user (Seminar_id, user_id, status, position, gruppe, visible, mkdate)
+                      VALUES (?, ?, ?, ?, ?, ?, UNIX_TIMESTAMP())";
+        
+        foreach($courses as $course){
+            $statement = DBManager::get()->prepare($query);
+            $statement->execute(array(
+                $course->id,
+                $user_id,
+                $status,
+                0,
+                1,
+                in_array($status, words('tutor dozent')) ? 'yes' : 'unknown',
+            ));
+            
+            StudipLog::log('SEM_USER_ADD', $course->id, $user_id, $status, 'Wurde in die Veranstaltung eingetragen');
+        }
     }
     
 }

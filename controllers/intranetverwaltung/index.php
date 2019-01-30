@@ -71,8 +71,6 @@ class Intranetverwaltung_IndexController extends StudipController {
         ->setTitle(_('Personen in die Einrichtung eintragen'))
         ->setExecuteURL($this->url_for('intranetverwaltung/index/add_user/' . $intranet_id . '/admin'))
         ->setSearchObject($search_obj)
-//        ->setAdditionalHTML('<p><strong>' . _('Nur bei Zuordnung eines Admins:') .' </strong> <label>Benachrichtigung der <input name="additional[]" value="admins" type="checkbox">' . _('Admins') .'</label>
-//                             <label><input name="additional[]" value="dozenten" type="checkbox">' . _('Dozenten') . '</label></p>')
         ->render();
         
         $sidebar = Sidebar::Get();
@@ -82,18 +80,10 @@ class Intranetverwaltung_IndexController extends StudipController {
         $edit->addElement(new WidgetElement($mp_dozenten));
         $sidebar->addWidget($edit);
         
-//        $navcreate = new ActionsWidget();
-//        $navcreate->addLink(_('Nutzer hinzufügen'),
-//                              $this->url_for('intranetverwaltung/index/add_user'),
-//                              Icon::create('seminar+add', 'clickable'))->asDialog('size=big'); 
-//        $sidebar->addWidget($navcreate);
-        
         $this->inst = Institute::find($intranet_id);
         $this->members = $this->inst->members;
         
-        
     }
-    
     
     public function add_sem_action(){
         
@@ -114,10 +104,12 @@ class Intranetverwaltung_IndexController extends StudipController {
                 $statement->execute(array($u_id, $intranet_id, $status));
 
                 PageLayout::postMessage(MessageBox::info(sprintf(_("%s wurde in die Einrichtung aufgenommen."), User::find($u_id)->username))); 
+                
+                IntranetConfig::addUserToIntranetCourses($u_id, $intranet_id, $status);
             }
             
         }
-        $this->redirect($this->url_for('/intranetverwaltung/members/' . $intranet_id));
+        $this->redirect($this->url_for('/intranetverwaltung/index/members/' . $intranet_id));
     }
     
     public function editseminar_action($sem_id, $inst_id){
@@ -130,9 +122,9 @@ class Intranetverwaltung_IndexController extends StudipController {
     public function saveseminar_action($sem_id,  $inst_id){
         $entry = IntranetSeminar::find([$sem_id, $inst_id]);
         if (!$entry){
-        $entry = new IntranetSeminar([$sem_id, $inst_id]);
-//             $entry->seminar_id = $sem_id;
-//             $entry->institut_id = $inst_id;           
+            $entry = new IntranetSeminar([$sem_id, $inst_id]);
+//          $entry->seminar_id = $sem_id;
+//          $entry->institut_id = $inst_id;           
         }
         $entry->show_news = Request::get('show_news') ? true : false;
         $entry->news_caption = Request::get('news_caption');
@@ -201,6 +193,5 @@ class Intranetverwaltung_IndexController extends StudipController {
 
         return PluginEngine::getURL($this->dispatcher->plugin, $params, join('/', $args));
     }
-
     
 }
