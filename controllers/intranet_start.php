@@ -25,7 +25,7 @@ class IntranetStartController extends StudipController {
         if ($GLOBALS['perm']->have_perm('admin')){
             $this->intranets = IntranetConfig::getInstitutesWithIntranet(true);
         } else {
-            $this->intranets = $this->plugin->getIntranetIDsForUser();
+            $this->intranets = IntranetConfig::getIntranetIDsForUser(User::findCurrent());
         }
         if ($inst_id == null){
             $inst_id = $this->intranets[0];

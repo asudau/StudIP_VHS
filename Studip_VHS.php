@@ -1,6 +1,7 @@
 <?php
 require_once 'lib/bootstrap.php';
 require_once __DIR__ . '/models/SeminarTab.class.php';
+require_once __DIR__ . '/models/IntranetConfig.class.php';
 
 /**
  * Uebersicht_VHS.class.php
@@ -53,8 +54,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         }
         
         //setup intranet navigation and forward if just logged in
-        //TOTO: auslagern
-        $intranets = $this->getIntranetIDsForUser();
+        $intranets = IntranetConfig::getIntranetIDsForUser(User::findCurrent());
         
         if (Navigation::hasItem('/start') && $intranets){
             Navigation::getItem('/start')->setURL(PluginEngine::getLink($this, array(), 'intranet_start/index/' . $intranets[0]) );
@@ -153,23 +153,6 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
                 include_once __DIR__ . $class . '.php';
             });
         }
-    }
-	
-    public function getIntranetIDsForUser($admin = false){
-        $user = User::findCurrent();
-        $datafield_id_inst = md5('Eigener Intranetbereich');
-        $intranets = array();
-        if (!$admin){
-            foreach($user->institute_memberships as $membership){
-                $entries = DataFieldEntry::getDataFieldEntries($membership->institut_id);
-                if ($entries[$datafield_id_inst]->value){
-                    $intranets[] = $membership->institut_id;
-                }
-            }
-        } else {
-            
-        } 
-        return $intranets;
     }
     
     private function setupStudIPNavigation(){
