@@ -1,3 +1,48 @@
+
+select {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #c5c7ca;
+    color: #3c434e;
+    padding: 5px;
+        padding-right: 5px;
+    vertical-align: middle;
+    width: 100%;
+    -webkit-transition: all .3s ease-out;
+    -moz-transition: all .3s ease-out;
+    -o-transition: all .3s ease-out;
+    transition: all .3s ease-out;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    font-size: 1em;
+    vertical-align: baseline;
+    border: 1px solid #c5c7ca;
+    border-radius: 0;
+    padding: 1px 8px 1px 8px;
+    position: relative;
+    white-space: nowrap;
+}
+select {
+    padding-right: 20px;
+    background-image: url(../assets/images/arr_1down.svg);
+    -webkit-background-size: 10px 10px;
+    -moz-background-size: 10px 10px;
+    -o-background-size: 10px 10px;
+    background-size: 10px 10px;
+    background-position: right 4px center;
+    background-repeat: no-repeat;
+    height: 30px;
+    line-height: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /*
 Style für die Intranet-Startseiten, ursprünglich basierend auf den Intranetentwürfen der kvhs Ammerland
 */
@@ -31,6 +76,10 @@ section.folder a:hover {
 section.folder > li {
     margin-left: 30px;
     list-style-type: none;
+}
+
+section > section.folder {
+    padding: 5px 0 0 10px;
 }
 
  .mitte {
@@ -78,7 +127,18 @@ h1.csc-firstHeader{
     height: 125px;
 }
 
-h1 {
+div.intranet-kachel{
+    border-radius: 10px;
+    border-style: solid;
+    border-color: #5d6a92;
+    border-width: 1px;
+    background-color: #eee;
+}
+div.intranet-kachel:hover {
+    background-color: #ddd;
+}
+
+h1.intranet {
     color: #062c5b;
     font-size: 22px;
     font-weight: bold;
@@ -97,7 +157,7 @@ h4.intranet{
     padding-left: 5px;
 }
 
-h4, h2.box_header {
+h4.intranet, h2.box_header {
     color: white;
     font-size: 17px;
     font-weight: bold;

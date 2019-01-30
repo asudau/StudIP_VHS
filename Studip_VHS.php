@@ -1,6 +1,7 @@
 <?php
 require_once 'lib/bootstrap.php';
 require_once __DIR__ . '/models/SeminarTab.class.php';
+require_once __DIR__ . '/models/IntranetConfig.class.php';
 
 /**
  * Uebersicht_VHS.class.php
@@ -50,26 +51,26 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
 		
 		if ($this->course)
 		{
+
             if(!$this->course_available($this->course_id) && $referer==str_replace("seminar_main.php","",$referer) && $referer==str_replace("/studip_vhs/seminar","",$referer) ){
                 PageLayout::postMessage(MessageBox::error(_('Dieser Kurs ist noch nicht gestartet.')));
                 header('Location: '. $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'dispatch.php/my_courses?cid=' , false, 303);
                 exit();
             }
-            $this->setupStudIPNavigation($this->course_id);	
+            $this->setupStudIPNavigation($this->course_id);
         }
-        
 
         //Adminbereich für Intranetverwaltung
         if($perm->have_perm('root')){
             $navigation = new Navigation('Intranetverwaltung', PluginEngine::getURL($this, array(), 'intranetverwaltung/index'));
             $navigation->addSubNavigation('index', new Navigation('Übersicht', PluginEngine::getURL($this, array(), 'intranetverwaltung/index')));
-            $navigation->addSubNavigation('settings', new Navigation('Einstellungen', PluginEngine::getURL($this, array(), 'settings')));
+            $navigation->addSubNavigation('view_intranets', new Navigation('Intranet-Ansicht', PluginEngine::getURL($this, array(), 'intranet_start/index/')));
             Navigation::addItem('/admin/intranetverwaltung', $navigation);
         } 
    
         //setup intranet navigation and forward if just logged in
         //TODO: auslagern
-        $intranets = $this->getIntranetIDsForUser();
+        $intranets = IntranetConfig::getIntranetIDsForUser(User::findCurrent());
         
         if (Navigation::hasItem('/start') && $intranets){
             Navigation::getItem('/start')->setURL(PluginEngine::getLink($this, array(), 'intranet_start/index/' . $intranets[0]) );
@@ -86,8 +87,6 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
     public function initialize ()
     {
         PageLayout::addStylesheet($this->getPluginURL().'/assets/settings_sortable.css');
-        PageLayout::addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js');
-        PageLayout::addScript('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js');
         PageLayout::addScript($this->getPluginURL().'/assets/scripts/settings_sortable.js');
         //PageLayout::addScript($this->getPluginURL().'/assets/scripts/replace_tab_navigation.js');
         
@@ -134,7 +133,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         $navigation->setURL(PluginEngine::getURL($this, array('style' => $this->style), 'seminar'));
         
         return array(
-            'overview_vhs' => $navigation
+            'main' => $navigation
         );
     }
 
@@ -178,19 +177,6 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
                 include_once __DIR__ . $class . '.php';
             });
         }
-    }
-	
-    public function getIntranetIDsForUser(){
-        $user = User::findCurrent();
-        $datafield_id_inst = md5('Eigener Intranetbereich');
-        $intranets = array();
-        foreach($user->institute_memberships as $membership){
-            $entries = DataFieldEntry::getDataFieldEntries($membership->institut_id);
-            if ($entries[$datafield_id_inst]->value){
-                $intranets[] = $membership->institut_id;
-            }
-        }
-        return $intranets;
     }
     
     private function setupStudIPNavigation($course_id){

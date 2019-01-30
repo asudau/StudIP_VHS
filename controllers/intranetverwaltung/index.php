@@ -25,41 +25,99 @@ class Intranetverwaltung_IndexController extends StudipController {
 
     public function index_action($intranet_id = NULL)
     {
-        $this->intranet_inst = Institute::find($intranet_id);
-        $datafield_id_inst = md5('Eigener Intranetbereich');
-        $datafield_id_sem = md5('Intranet-Veranstaltung');
-        $this->institutes_with_intranet = array();
-        $this->inst_config = array();
+        Navigation::activateItem('admin/intranetverwaltung/index');
+        $this->setup_navigation($intranet_id);
         
-        $institute_fields = DatafieldEntryModel::findBySQL('datafield_id = \'' . $datafield_id_inst . '\' AND content = 1');
-        foreach ($institute_fields as $field){
-            array_push($this->institutes_with_intranet, Institute::find($field->range_id)); 
-            $this->inst_config[$field->range_id] = IntranetConfig::find($field->range_id)->template;
-        }
+//        $navcreate = new ActionsWidget();
+//        $navcreate->addLink(_('Veranstaltung hinzufügen'),
+//                              $this->url_for('intranetverwaltung/index/add_sem'),
+//                              Icon::create('seminar+add', 'clickable'))->asDialog('size=big'); 
+//        $sidebar->addWidget($navcreate);
         
-        
-        
-        if ($this->intranet_inst){
-            $sidebar = Sidebar::Get();
-
-            $navcreate = new ActionsWidget();
-            $navcreate->addLink(_('Veranstaltung hinzufügen'),
-                                  $this->url_for('intranetverwaltung/index/add_sem'),
-                                  Icon::create('seminar+add', 'clickable'))->asDialog('size=big'); 
-            $sidebar->addWidget($navcreate);
-            
-            if (IntranetConfig::find($intranet_id)){
-                $this->intranet_courses = IntranetConfig::find($intranet_id)->getRelatedCourses();
-            }
-        }
-        
-       
-      
-
     }
+    
+    public function members_action($intranet_id){
+        
+        $this->setup_navigation($intranet_id);
+        Navigation::activateItem('admin/intranetverwaltung/members');
+        
+        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, {$GLOBALS['_fullname_sql']['full_rev']} as fullname, username, perms "
+                        . "FROM auth_user_md5 "
+                        . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
+                        . "WHERE "
+                        . "(username LIKE :input OR Vorname LIKE :input "
+                        . "OR CONCAT(Vorname,' ',Nachname) LIKE :input "
+                        . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
+                        . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input) "
+                        . "AND visible != 'never' "
+                        . " ORDER BY fullname ASC",
+                        _("Nutzer suchen"), "user_id");
+
+        $defaultSelectedUser = new SimpleCollection(InstituteMember::findByInstituteAndStatus($intranet_id, words('autor tutor dozent admin')));
+        URLHelper::setBaseURL($GLOBALS['ABSOLUTE_URI_STUDIP']);
+        $mp = MultiPersonSearch::get("intranet_member_add" . $intranet_id)
+        ->setLinkText(_("Mitglieder hinzufügen"))
+        ->setDefaultSelectedUser($defaultSelectedUser->pluck('user_id'))
+        ->setTitle(_('Personen in die Einrichtung eintragen'))
+        ->setExecuteURL($this->url_for('intranetverwaltung/index/add_user/' . $intranet_id . '/autor'))
+        ->setSearchObject($search_obj)
+//        ->setAdditionalHTML('<p><strong>' . _('Nur bei Zuordnung eines Admins:') .' </strong> <label>Benachrichtigung der <input name="additional[]" value="admins" type="checkbox">' . _('Admins') .'</label>
+//                             <label><input name="additional[]" value="dozenten" type="checkbox">' . _('Dozenten') . '</label></p>')
+        ->render();
+        
+        $mp_dozenten = MultiPersonSearch::get("intranet_admin_add" . $intranet_id)
+        ->setLinkText(_("Intranet-Admins hinzufügen"))
+        ->setDefaultSelectedUser($defaultSelectedUser->pluck('user_id'))
+        ->setTitle(_('Personen in die Einrichtung eintragen'))
+        ->setExecuteURL($this->url_for('intranetverwaltung/index/add_user/' . $intranet_id . '/admin'))
+        ->setSearchObject($search_obj)
+//        ->setAdditionalHTML('<p><strong>' . _('Nur bei Zuordnung eines Admins:') .' </strong> <label>Benachrichtigung der <input name="additional[]" value="admins" type="checkbox">' . _('Admins') .'</label>
+//                             <label><input name="additional[]" value="dozenten" type="checkbox">' . _('Dozenten') . '</label></p>')
+        ->render();
+        
+        $sidebar = Sidebar::Get();
+        $edit = new ActionsWidget();
+        $edit->setTitle(_('Nutzer verwalten'));
+        $edit->addElement(new WidgetElement($mp));
+        $edit->addElement(new WidgetElement($mp_dozenten));
+        $sidebar->addWidget($edit);
+        
+//        $navcreate = new ActionsWidget();
+//        $navcreate->addLink(_('Nutzer hinzufügen'),
+//                              $this->url_for('intranetverwaltung/index/add_user'),
+//                              Icon::create('seminar+add', 'clickable'))->asDialog('size=big'); 
+//        $sidebar->addWidget($navcreate);
+        
+        $this->inst = Institute::find($intranet_id);
+        $this->members = $this->inst->members;
+        
+        
+    }
+    
     
     public function add_sem_action(){
         
+    }
+    
+    public function add_user_action($intranet_id, $status){
+        $this->mp = MultiPersonSearch::load("intranet_member_add" . $intranet_id);
+        //$additionalCheckboxes = $this->mp->getAdditionalOptionArray();
+
+        if (count($this->mp->getAddedUsers()) !== 0) {
+            foreach ($this->mp->getAddedUsers() as $u_id) {
+                log_event('INST_USER_ADD', $intranet_id ,$u_id, $status);
+
+                // als autor aufnehmen
+                $query = "INSERT IGNORE INTO user_inst (user_id, Institut_id, inst_perms)
+                          VALUES (?, ?, ?)";
+                $statement = DBManager::get()->prepare($query);
+                $statement->execute(array($u_id, $intranet_id, $status));
+
+                PageLayout::postMessage(MessageBox::info(sprintf(_("%s wurde in die Einrichtung aufgenommen."), User::find($u_id)->username))); 
+            }
+            
+        }
+        $this->redirect($this->url_for('/intranetverwaltung/members/' . $intranet_id));
     }
     
     public function editseminar_action($sem_id, $inst_id){
@@ -104,6 +162,26 @@ class Intranetverwaltung_IndexController extends StudipController {
        
         PageLayout::postMessage(MessageBox::success('Einstellung gespeichert'));
         $this->redirect($this->url_for('intranetverwaltung/index/index/' . $inst_id));
+    }
+    
+    private function setup_navigation($intranet_id){
+        $this->intranet_inst = Institute::find($intranet_id);
+        $this->institutes_with_intranet = IntranetConfig::getInstitutesWithIntranet();
+        $this->inst_config = array();
+        
+        foreach ($this->institutes_with_intranet as $inst){
+            $this->inst_config[$inst->id] = IntranetConfig::find($inst->id)->template;
+        }
+        
+        if ($this->intranet_inst){
+            
+            $navigation = Navigation::getItem('/admin/intranetverwaltung');
+            $navigation->addSubNavigation('members', new Navigation('Nutzer verwalten', $this->url_for('intranetverwaltung/index/members/'. $intranet_id)));
+            
+            if (IntranetConfig::find($intranet_id)){
+                $this->intranet_courses = IntranetConfig::find($intranet_id)->getRelatedCourses();
+            }
+        }
     }
     
        // customized #url_for for plugins

@@ -48,13 +48,13 @@ class SeminarController extends StudipController {
             $this->style = 'full';
         }
          
-        if (!Navigation::hasItem("/course/overview_vhs")) {
+        if (!Navigation::hasItem("/course/main")) {
        
             $navigation = new Navigation(_('Übersicht'));
             $navigation->setImage(Icon::create('seminar', 'info_alt'));
             $navigation->setActiveImage(Icon::create('seminar', 'info'));
             $navigation->setURL(PluginEngine::getURL($this, array('style' => $this->style), 'seminar'));
-            Navigation::getItem("/course")->addSubNavigation('overview_vhs', $navigation);
+            Navigation::getItem("/course")->addSubNavigation('main', $navigation);
        /** 
         
         //Keine Übersichtsseite. Anstatt eines Fehler wird der Nutzer zum ersten
@@ -93,16 +93,18 @@ class SeminarController extends StudipController {
         // Fetch news
         $this->news = StudipNews::GetNewsByRange($this->course_id, !$this->show_all_news, true);	
 
-        // Load evaluations
-        $eval_db = new EvaluationDB();
-        $this->evaluations = StudipEvaluation::findMany($eval_db->getEvaluationIDs($this->course_id, EVAL_STATE_ACTIVE));
-        $show_votes[] = 'active';
-        // Check if we got expired
-        if (Request::get('show_expired')) {
-            $show_votes[] = 'stopvis';
-            if ($this->admin) {
-                $this->evaluations = array_merge($this->evaluations, StudipEvaluation::findMany($eval_db->getEvaluationIDs($this->course_id, EVAL_STATE_STOPPED)));
-                $show_votes[] = 'stopinvis';
+        if($GLOBALS['auth']->auth['uid'] != 'nobody'){
+            // Load evaluations
+            $eval_db = new EvaluationDB();
+            $this->evaluations = StudipEvaluation::findMany($eval_db->getEvaluationIDs($this->course_id, EVAL_STATE_ACTIVE));
+            $show_votes[] = 'active';
+            // Check if we got expired
+            if (Request::get('show_expired')) {
+                $show_votes[] = 'stopvis';
+                if ($this->admin) {
+                    $this->evaluations = array_merge($this->evaluations, StudipEvaluation::findMany($eval_db->getEvaluationIDs($this->course_id, EVAL_STATE_STOPPED)));
+                    $show_votes[] = 'stopinvis';
+                }
             }
         }
 

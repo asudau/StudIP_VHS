@@ -40,8 +40,8 @@
                 </div>
                 <!--  CONTENT ELEMENT, uid:73/textpic [end] -->
 
-                
-                 <? foreach ($newsTemplates as $course_id => $template) : ?>
+
+                 <? foreach ($sidebarNewsTemplates as $course_id => $template) : ?>
                     <!--  CONTENT ELEMENT, uid:434/textpic [begin] -->
                         <div class="intranet_news csc-default csc-space-after-25">
                         <!--  Image block: [begin] -->
@@ -71,10 +71,10 @@
         
         
                    <!--  CONTENT ELEMENT, uid:75/textpic [begin] -->
-                <div id="c75" class="csc-default csc-space-after-25">
-<!--                  Image block: [begin] -->
+<!--                <div id="c75" class="csc-default csc-space-after-25">
+                  Image block: [begin] 
                     <div class="csc-textpic-text">
-<!--                  Text: [begin] -->
+                  Text: [begin] 
                     <img src="<?=$plugin->getPluginURL().'/assets/images/question-mark.jpg' ?>" alt="" border="0" width="100%">
                     <h2 class="intranet"><a href="" title="" class="internal-link">Gebäudemanagement</a></h2>
                     
@@ -90,18 +90,23 @@
                     
                     <hr>
                     </div>                
-                </div>
+                </div>-->
                     <!-- CONTENT ELEMENT, uid:75/textpic [end] -->
                 
-                <!-- Dateien -->
-                 <? foreach ($folderwithfiles_array as $course_id => $folderwithfiles) : ?>
+            <!-- Dateien -->
+            <? foreach ($filesPosition as $course_id => $position) : ?>
+                <? $folderwithfiles = $folderwithfiles_array[$course_id]; ?> 
                 <!--  CONTENT ELEMENT, uid:14/textpic [begin] -->
                 <div id="c14" class="csc-default csc-space-after-25">
                 <!--  Image block: [begin] -->
                 <div class="csc-textpic-text">
                 
                 <!--  Text: [begin] -->
+                <? if ($course_id == '85acad3a9c121d7e4c11a9935772af80') : ?>
+                    <img src="<?= $plugin->getPluginURL().'/assets/images/question-mark-small2.jpg' ?>" alt="" border="0" width="100%">
+                <? else: ?>
                     <img src="<?= $plugin->getPluginURL().'/assets/images/unterlagen1.png' ?>" alt="" border="0" width="100%">
+                <? endif ?>
                     <h2 class="intranet"> 
                         <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
                         <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>folder.php?cid=<?=$course_id?>&cmd=tree" title="Direkt in den Dateibereich wechseln" class="internal-link"><?=$filesCaptions[$course_id]?></a>
@@ -112,23 +117,14 @@
                         <? } ?>
                         </div>
                     </h2>
-                     
-                     <? foreach ($folderwithfiles as $folder => $files): ?>
-                    <section class="contentbox folder">
-                        <a class='folder_open' href=''><?= $folder ?></a>
-                        <? foreach ($files as $file): ?>
-                        <li class='file_download' style="display:none"> <a href='<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>sendfile.php?force_download=1&type=0&file_id=<?= $file['dokument_id']?>&file_name=<?= $file['filename'] ?>'><?= $file['name'] ?></a></li>
-                        
-                        <? endforeach ?>
-                        </section>
-                    <? endforeach ?>
+                        <?= $this->render_partial('_partials/folder_with_files', array('folderwithfiles' => $folderwithfiles, 'parentfolder' => $parentfolder, 'parent' => NULL)) ?>
                     <hr>
                 <!--  Text: [end] -->
                 </div>
                 <!--  Image block: [end] -->
                 </div>
                 <!--  CONTENT ELEMENT, uid:14/textpic [end] -->
-                <? endforeach ?>
+            <? endforeach ?>
      
                 
   
@@ -161,12 +157,44 @@
 				</tbody></table>
 				
 			</div>
-			<div class="haupt">
-	       
-                
+	<div class="haupt">
+
+        <div style='width: 100%; margin:auto; padding-bottom: 10px'>
+            <table cellspacing="0" cellpadding="0" border="0">
+                <tbody><tr>
+                    <td class="dsR4"><div class="zentriert intranet-kachel">
+                        <a data-dialog="title=Feedback geben;width=300px; height=200px;" href="<?=$this->controller->url_for('intranet_start/feedback_chat')?>" title="Feedback">
+                            <?= Icon::create('chat2', 'clickable', ['size' => 100])?>
+                        <br>
+                            Feedback
+                        </a>
+                    </div>
+                    </td>
+                    <td class="dsR4"><div class="zentriert intranet-kachel">
+                        <a data-dialog href="<?=$this->controller->url_for('intranet_start/feedback_form')?>" title="Störungsmeldung" >
+                            <?= Icon::create('exclaim-circle-full', 'clickable', ['size' => 100])?>
+                            <br>
+                            Störungsmeldung
+                        </a>
+                    </div>
+                                </td>
+                    <td class="dsR4"><div class="zentriert intranet-kachel">
+                        <a href="https://kvhs-ammerland.de/index.php?id=69&kathaupt=1&katid=81&katvaterid=6&katname=Dozentenfortbildung" target='_blank' title="Zu den Dozentenfortbildungen auf unserer Homepage" target='_blank'>
+                            <?= Icon::create('doctoral_cap', 'clickable', ['size' => 100])?>
+                        <br>
+                            Fortbildungen
+                        </a>
+                    </div>
+                    </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     <!-- News -->
-    <? foreach ($newsTemplates as $course_id => $template) : ?>
-	<!--  CONTENT ELEMENT, uid:434/textpic [begin] -->
+    <? foreach ($newsPosition as $course_id => $position) : ?>
+        <? $template = $newsTemplates[$course_id]; ?>
+        <!--  CONTENT ELEMENT, uid:434/textpic [begin] -->
 		<div class="intranet_news csc-default csc-space-after-25">
 		<!--  Image block: [begin] -->
 			<div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight"><div class="csc-textpic-text">
@@ -295,5 +323,6 @@ $(".folder_open").click(function (e) {
     e.preventDefault();
     e.stopPropagation();
     $(this).siblings('.file_download').toggle();
+    $(this).siblings('.folder').toggle();
  });
 </script>
