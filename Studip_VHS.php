@@ -159,7 +159,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         $user = User::findCurrent();
         $datafield_id_inst = md5('Eigener Intranetbereich');
         $intranets = array();
-        if (!admin){
+        if (!$admin){
             foreach($user->institute_memberships as $membership){
                 $entries = DataFieldEntry::getDataFieldEntries($membership->institut_id);
                 if ($entries[$datafield_id_inst]->value){
