@@ -39,6 +39,27 @@ class IntranetConfig extends SimpleORMap
         return $sem_for_instid;
     }
     
+    public function addCourseToIntranet($seminar_id){
+        if (!DatafieldEntryModel::findBySQL('datafield_id = \'' . $this->getDatafieldIdSem() . '\' AND range_id = \'' . $seminar_id . '\'')){
+//            $entry = new DatafieldEntryModel(); //funktioniert nicht..
+//            $entry->datafield_id = $this->getDatafieldIdSem();
+//            $entry->range_id = $seminar_id;
+//            $entry->content = '1';
+//            $entry->store();
+            $query = "INSERT IGNORE INTO datafields_entries (datafield_id, range_id, content, mkdate, chdate)
+                      VALUES (?, ?, ?, ?, ?)";
+            $statement = DBManager::get()->prepare($query);
+            $statement->execute(array($this->getDatafieldIdSem(), $seminar_id, 1, time(), time()));
+        }
+        if (!in_array($this->Institut_id, Seminar::getInstitutes($seminar_id))){
+            $query = "INSERT INTO seminar_inst (seminar_id, Institut_id)
+                          VALUES (?, ?)";
+                $statement = DBManager::get()->prepare($query);
+                $statement->execute(array($seminar_id, $this->Institut_id));
+        }
+    }
+    
+    
     private function getDatafieldIdSem(){
         return md5('Intranet-Veranstaltung');
     }
@@ -88,6 +109,20 @@ class IntranetConfig extends SimpleORMap
             
             StudipLog::log('SEM_USER_ADD', $course->id, $user_id, $status, 'Wurde in die Veranstaltung eingetragen');
         }
+    }
+    
+    public function CourseMembershipsOfUser($intranet_id, $user_id){
+        $courses = IntranetConfig::find($intranet_id)->getRelatedCourses();
+        $memberships = 0;
+        foreach ($courses as $course){
+            $query = "SELECT * FROM seminar_user WHERE Seminar_id LIKE :sem_id AND user_id LIKE :user_id";
+            $statement = DBManager::get()->prepare($query);
+            $statement->execute(array(':sem_id' => $course->id, ':user_id' => $user_id));
+            if ($statement->fetch()[0]){
+                $memberships++;
+            }
+        }
+        return $memberships;
     }
     
 }
