@@ -145,10 +145,7 @@ class SeminarController extends StudipController {
     
     public function not_started_action($course_id)
     {
-        //$course = Course::findCurrent()->id;
-        
-       
-      
+        $this->coursebegin = Studip_VHS::getCourseBegin(Course::findCurrent()->id)? : Course::findCurrent()->dates[0]->date;
     }
     
     public function settings_action()
@@ -164,11 +161,13 @@ class SeminarController extends StudipController {
 
         Sidebar::get()->addWidget($actions);
         
-        $course = Course::findCurrent()->id;
+        $course_id = Course::findCurrent()->id;
         $localEntries = DataFieldEntry::getDataFieldEntries(Course::findCurrent()->id);
         $this->tabs = $this->get_tabs();
         
         $this->style = $localEntries[$this->datafield_id]->value;
+        
+        $this->coursebegin = $this->plugin->getCourseBegin($course_id);
        
     }
     
@@ -183,7 +182,9 @@ class SeminarController extends StudipController {
         
         $this->course->beschreibung = $description;
         $this->course->store();
-        
+
+        $date = DateTime::createFromFormat('Y-m-d', Request::get('start_date'));
+        $this->plugin->setCourseBegin(Course::findCurrent()->id, $date->getTimestamp());
 
         $tab_count = intval(Request::get('tab_num'));
         $tab_position = array();

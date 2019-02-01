@@ -243,6 +243,8 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         Navigation::addItem('/course', $navigation);
      }
      
+     
+     //für Autoren sind KUrse die noch nciht begonnen haben nicht zugänglich
      private function course_available($course_id){
         $localEntries = DataFieldEntry::getDataFieldEntries($course_id);
         
@@ -250,9 +252,36 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         $this->datafield_id_begin = $datafield_begin->datafield_id;
         
         //falls Kurs noch nciht gestartet und Nutzer autor -> noch kein Zugriff
-        if ((!$GLOBALS['perm']->have_studip_perm('tutor', $course_id) || $localEntries[$this->datafield_id_begin]->value > time())){
+        if ((!$GLOBALS['perm']->have_studip_perm('tutor', $course_id) && $localEntries[$this->datafield_id_begin]->value > time())){
             return false;
         }else return true;
+     }
+     
+     public static function getCourseBegin($course_id){
+        $localEntries = DataFieldEntry::getDataFieldEntries($course_id);
+        
+        $datafield_begin =  DataField::findOneBySQL('name = \'course begin\'');
+        $datafield_id_begin = $datafield_begin->datafield_id;
+        if ($localEntries[$datafield_id_begin]->value){
+            $begin = $localEntries[$datafield_id_begin]->value;
+        } else if (Course::find($course_id)->dates[0]){
+            $begin = Course::find($course_id)->dates[0]->date;
+        } else {
+            $begin = Course::find($course_id)->mkdate;
+        }
+        
+        return $begin;
+     }
+     
+     public static function setCourseBegin($course_id, $date){
+         
+        $datafield_begin =  DataField::findOneBySQL('name = \'course begin\'');
+        $datafield_id_begin = $datafield_begin->datafield_id;
+        $query = "INSERT IGNORE INTO datafields_entries (datafield_id, range_id, content, mkdate, chdate)
+                      VALUES (?, ?, :content, ?, ?) ON DUPLICATE KEY UPDATE content=:content";
+        $statement = DBManager::get()->prepare($query);
+        return $statement->execute(array($datafield_id_begin, $course_id, time(), time(), ':content' => $date));
+
      }
     
 }

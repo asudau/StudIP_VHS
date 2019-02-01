@@ -22,8 +22,14 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
     <?= CSRFProtection::tokenTag() ?>
     <input id="open_variable" type="hidden" name="open" value="<?= $flash['open'] ?>">
     
+     <fieldset <?= isset($flash['open']) && $flash['open'] != 'begin_course' ? 'class="collapsed"' : ''?> data-open="begin_course">
+        <legend><?= sprintf(_('Kursfreigabe für %s'),  get_title_for_status('autor', 2)) ?></legend>
+            <label for="start_date"><?= sprintf(_('Kurs für %s freigeben ab'), get_title_for_status('autor', 2)) ?></label>
+             <input style='width:120px; max-width:120px' type='date' name ='start_date' value='<?= date('Y-m-d', $coursebegin) ?>'>
+    </fieldset>
     
-    <fieldset <?= isset($flash['open']) && $flash['open'] != 'bd_basicsettings' ? 'class="collapsed"' : ''?> data-open="bd_basicsettings">
+    
+    <fieldset <?= !isset($flash['open']) || $flash['open'] != 'bd_basicsettings' ? 'class="collapsed"' : ''?> data-open="bd_basicsettings">
         <legend><?= _('Aufbau der Übersichtsseite wählen') ?></legend>
         <table>
             <tr>
