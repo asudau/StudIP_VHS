@@ -20,7 +20,7 @@ class AddCourseDatafield extends Migration
                 `object_class`, `edit_perms`, `view_perms`, `priority`,
                 `mkdate`, `chdate`, `type`, `typeparam`, `is_required`, `description`)
             VALUES (md5('Hide Course Navigation'), 'Hide Course Navigation', 1,
-                NULL, 3, 3, '0', NULL, NULL, 1, '', '0', 'Veranstaltungsreiter Ausblenden')"
+                NULL, 4, 5, '0', NULL, NULL, 1, '', '0', 'Veranstaltungsreiter Ausblenden')"
         );
 
         $stm->execute();
@@ -31,7 +31,7 @@ class AddCourseDatafield extends Migration
                 `object_class`, `edit_perms`, `view_perms`, `priority`,
                 `mkdate`, `chdate`, `type`, `typeparam`, `is_required`, `description`)
             VALUES (md5('Overview style'), 'Overview style', 1,
-                NULL, 3, 3, '0', NULL, NULL, 3, '', '0', 'Design für Übersichtsseite')"
+                NULL, 4, 5, '0', NULL, NULL, 3, '', '0', 'Design für Übersichtsseite')"
         );
       
         $stm->execute();
