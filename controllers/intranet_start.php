@@ -191,8 +191,8 @@ class IntranetStartController extends StudipController {
             $mail = new StudipMail();
             $success = $mail->addRecipient($empfaenger)
                 //->addRecipient('elmar.ludwig@uos.de', 'Elmar Ludwig', 'Cc')
-                 ->setReplyToEmail('')
-                 ->setSenderEmail('')
+                 ->setReplyToEmail( User::findCurrent()->email)
+                 ->setSenderEmail( User::findCurrent()->email)
                  ->setSenderName('Intranet für Dozenten')
                  ->setSubject($betreff)
                  ->setBodyHtml($mailtext)
@@ -203,7 +203,7 @@ class IntranetStartController extends StudipController {
             $message = MessageBox::success(_('Meldung wurde versendet!'));
             PageLayout::postMessage($message);
         } else {
-            $message = MessageBox::success(_('Meldung wurde versendet!'));
+            $message = MessageBox::success(_('eMail wurde versendet!'));
             PageLayout::postMessage($message);
         }
         $this->response->add_header('X-Dialog-Close', '1');
