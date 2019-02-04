@@ -263,7 +263,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         $datafield_begin =  DataField::findOneBySQL('name = \'course begin\'');
         $datafield_id_begin = $datafield_begin->datafield_id;
         if ($localEntries[$datafield_id_begin]->value){
-            $begin = $localEntries[$datafield_id_begin]->value;
+            $begin = $localEntries[$datafield_id_begin]->value - 4000;
         } else if (Course::find($course_id)->dates[0]){
             $begin = Course::find($course_id)->dates[0]->date;
         } else {
