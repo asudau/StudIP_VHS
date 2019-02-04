@@ -184,7 +184,8 @@ class IntranetStartController extends StudipController {
     public function send_form_action(){
         if (Request::get('message_body')){
             $mailtext = Request::get('message_body');
-            $empfaenger = 'asudau@uos.de';//$contact_mail;//$contact_mail; //Mailadresse
+            //TODO Kontaktadresse konfigurierbar
+            $empfaenger = 'kvhs@ammerland.de';//$contact_mail;//$contact_mail; //Mailadresse
             //$absender   = "asudau@uos.de";
             $betreff    = 'Betreff: ' . Request::get('message_subject');
 
