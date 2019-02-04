@@ -182,7 +182,7 @@ class IntranetStartController extends StudipController {
     }
     
     public function send_form_action(){
-        if (strlen(Request::get('message_body')) > 0){
+        if (Request::get('message_body')){
             $mailtext = Request::get('message_body');
             $empfaenger = 'asudau@uos.de';//$contact_mail;//$contact_mail; //Mailadresse
             //$absender   = "asudau@uos.de";
@@ -193,13 +193,16 @@ class IntranetStartController extends StudipController {
                 //->addRecipient('elmar.ludwig@uos.de', 'Elmar Ludwig', 'Cc')
                  ->setReplyToEmail('')
                  ->setSenderEmail('')
-                 ->setSenderName('Störungsmeldung StudIP Intranet für Dozenten')
+                 ->setSenderName('Intranet für Dozenten')
                  ->setSubject($betreff)
                  ->setBodyHtml($mailtext)
                  ->setBodyHtml(strip_tags($mailtext))  
                  ->send();
             
         } if ($success){
+            $message = MessageBox::success(_('Meldung wurde versendet!'));
+            PageLayout::postMessage($message);
+        } else {
             $message = MessageBox::success(_('Meldung wurde versendet!'));
             PageLayout::postMessage($message);
         }
