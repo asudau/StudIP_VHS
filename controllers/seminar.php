@@ -91,18 +91,18 @@ class SeminarController extends StudipController {
         
         ###full_layout###
         // Fetch news
-        $this->news = StudipNews::GetNewsByRange($this->course_id, !$this->show_all_news, true);	
+        $this->news = StudipNews::GetNewsByRange($this->course->id, !$this->show_all_news, true);	
 
         if($GLOBALS['auth']->auth['uid'] != 'nobody'){
             // Load evaluations
             $eval_db = new EvaluationDB();
-            $this->evaluations = StudipEvaluation::findMany($eval_db->getEvaluationIDs($this->course_id, EVAL_STATE_ACTIVE));
+            $this->evaluations = StudipEvaluation::findMany($eval_db->getEvaluationIDs($this->course->id, EVAL_STATE_ACTIVE));
             $show_votes[] = 'active';
             // Check if we got expired
             if (Request::get('show_expired')) {
                 $show_votes[] = 'stopvis';
                 if ($this->admin) {
-                    $this->evaluations = array_merge($this->evaluations, StudipEvaluation::findMany($eval_db->getEvaluationIDs($this->course_id, EVAL_STATE_STOPPED)));
+                    $this->evaluations = array_merge($this->evaluations, StudipEvaluation::findMany($eval_db->getEvaluationIDs($this->course->id, EVAL_STATE_STOPPED)));
                     $show_votes[] = 'stopinvis';
                 }
             }
