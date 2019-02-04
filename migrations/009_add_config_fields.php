@@ -24,6 +24,7 @@ class AddConfigFields extends Migration
         $db->exec('ALTER TABLE `intranet_seminar_config` ADD COLUMN news_position INT AFTER news_caption');
         $db->exec('ALTER TABLE `intranet_seminar_config` ADD COLUMN news_sidebar BOOLEAN AFTER news_position');
         $db->exec('ALTER TABLE `intranet_seminar_config` ADD COLUMN files_position INT AFTER files_caption');
+        SimpleORMap::expireTableScheme();
     }
 
     /**
@@ -35,5 +36,6 @@ class AddConfigFields extends Migration
         $db->exec('ALTER TABLE `intranet_seminar_config` DROP COLUMN news_position');
         $db->exec('ALTER TABLE `intranet_seminar_config` DROP COLUMN news_sidebar');
         $db->exec('ALTER TABLE `intranet_seminar_config` DROP COLUMN files_position');
+        SimpleORMap::expireTableScheme();
     }
 }

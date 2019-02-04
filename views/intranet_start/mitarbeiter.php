@@ -40,7 +40,7 @@
                 </div>
                 <!--  CONTENT ELEMENT, uid:73/textpic [end] -->
 
-                
+
                  <? foreach ($sidebarNewsTemplates as $course_id => $template) : ?>
                     <!--  CONTENT ELEMENT, uid:434/textpic [begin] -->
                         <div class="intranet_news csc-default csc-space-after-25">
@@ -254,16 +254,21 @@
     
     
     
-    <? if (false && count($courses_upcoming) >0 ){ ?>
+    <? if (true || count($courses_upcoming) > 0 ){ ?>
 	<!--  CONTENT ELEMENT, uid:13/textpic [begin] -->
 		<div id="c13" class="csc-default csc-space-after-25">
 		<!--  Image block: [begin] -->
 			<div class="csc-textpic-text">
 		<!--  Text: [begin] -->
             <img src="<?=$plugin->getPluginURL().'/assets/images/Kursstart.png' ?>" alt="" border="0" width="100%">
-			<h2 class="intranet"> <a href="index.php?id=21" title="Opens internal link in current window" class="internal-link">Kurse, die demnächst starten</a>
-                <? if ($admin){ ?>
-                    <a style="margin-left: 58%;" href="<?= $this->controller->url_for('start/insertCoursebegin')?>" rel="get_dialog">
+			<h2 class="intranet"> <a href="<?= $this->controller->url_for('urlaubskalender/week/97543add4c36b0502bc8dd58a3cf7bd9') ?>" title="Opens internal link in current window" class="internal-link">Kurse, die demnächst starten</a>
+               <a style="margin-left: 58%;" href="<?= $GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/calendar/single/edit/97543add4c36b0502bc8dd58a3cf7bd9" rel="get_dialog">
+                        <?= Icon::create('add', 'clickable')?>             
+                </a>
+                
+                
+                <? if (false && $admin){ ?>
+                    <a style="margin-left: 58%;" href="<?= $this->controller->url_for('urlaubskalender/edit/97543add4c36b0502bc8dd58a3cf7bd9')?>" rel="get_dialog">
                         <?= Icon::create('add', 'clickable')?>             
                     </a>
                  <? } ?>        
@@ -272,7 +277,7 @@
                     <section class="contentbox">
                         
                         <? if ($admin){ ?>
-                            <a href="<?= $this->controller->url_for('start/insertCoursebegin/' . $course['event_id'])?>" rel="get_dialog">
+                            <a href="<?= $this->controller->url_for('urlaubskalender/edit/' . $course['event_id'])?>" rel="get_dialog">
                             <img src="/assets/images/icons/blue/edit.svg" alt="edit" class="icon-role-clickable icon-shape-add" width="16" height="16">            
                             </a>
                         <? } ?>   
