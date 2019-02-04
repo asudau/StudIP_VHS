@@ -47,7 +47,8 @@
                         <!--  Image block: [begin] -->
                             <div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight"><div class="csc-textpic-text">
                         <!--  Text: [begin] -->
-                            <img src="<?=CourseAvatar::getAvatar($course_id)->getURl('original') ?>" alt="" border="0" width="100%" max-height='171px'>
+                            <? $avatar = CourseAvatar::getAvatar($course_id); ?>
+                            <img src="<?= ($avatar->is_customized) ? $avatar->getCustomAvatarURl('original') : $plugin->getPluginURL().'/assets/images/Projektbereich.png' ?>" alt="" border="0" width="100%" max-height='171px'>
                             <h2 class="intranet">
                                 <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
                                     <a href="" title="Opens internal link in current window" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
@@ -199,7 +200,8 @@
 		<!--  Image block: [begin] -->
 			<div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight"><div class="csc-textpic-text">
 		<!--  Text: [begin] -->
-            <img src="<?=CourseAvatar::getAvatar($course_id)->getURl('original') ?>" alt="" border="0" width="100%" max-height='171px'>
+            <? $avatar = CourseAvatar::getAvatar($course_id); ?>
+            <img src="<?= ($avatar->is_customized) ? $avatar->getCustomAvatarURl('original') : $plugin->getPluginURL().'/assets/images/Projektbereich.png' ?>" alt="" border="0" width="100%" max-height='171px'>
 			<h2 class="intranet">
                 <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
                     <a href="" title="Opens internal link in current window" class="internal-link"><?= $newsCaptions[$course_id] ?></a>

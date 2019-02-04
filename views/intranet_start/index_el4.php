@@ -18,7 +18,8 @@
                 <!--  Image block: [begin] -->
                     <div class="csc-textpic-text">
                 <!--  Text: [begin] -->
-                    <img src="<?= $plugin->getPluginURL().'/assets/images/Kursstart.png' ?>" alt="" border="0" width="100%">
+                    <? $avatar = CourseAvatar::getAvatar($course_id); ?>
+                    <img src="<?= ($avatar->is_customized) ? $avatar->getCustomAvatarURl('original') : $plugin->getPluginURL().'/assets/images/Projektbereich.png' ?>" alt="" border="0" width="100%">
                     <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/my_courses" title="Zur ausführlichen Übersicht" class="internal-link">Meine Gruppen/Mein Arbeitsbereich</a></h2>
                     <? foreach ($courses as $course){ ?>
                     <section class="contentbox course">

@@ -77,8 +77,9 @@ fo<? if (sizeof($intranets) >1) : ?>
 		<!--  Image block: [begin] -->
 			<div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight"><div class="csc-textpic-text">
 		<!--  Text: [begin] -->
-            <img src="<?=$plugin->getPluginURL().'/assets/images/Projektbereich.png' ?>" alt="" border="0" width="100%">
-			<h2 class="intranet">
+            <? $avatar = CourseAvatar::getAvatar($course_id); ?>
+            <img src="<?= ($avatar->is_customized) ? $avatar->getCustomAvatarURl('original') : $plugin->getPluginURL().'/assets/images/Projektbereich.png' ?>" alt="" border="0" width="100%">
+            <h2 class="intranet">
                     <a href="" title="" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
                     <? if ($mitarbeiter_admin){ ?>
                     <a style="margin-left: 68%;" href="<?=URLHelper::getLink("dispatch.php/news/edit_news/new/" . $course_id) ?>" rel="get_dialog">
