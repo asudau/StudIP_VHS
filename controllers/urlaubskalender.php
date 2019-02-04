@@ -30,6 +30,7 @@ class UrlaubskalenderController extends StudipController
         PageLayout::addScript($this->plugin->getPluginURL().'/assets/scripts/locale_de.js');
         PageLayout::addScript($this->plugin->getPluginURL().'/assets/scripts/dhtmlxscheduler_timeline.js');
         
+        //TODO Kalender-ID konfigurieren (Veranstaltung) hieran hängen auch die Admins
         $this->sem_id = 'b8d02f67fca5aac0efa01fb1782166d1';
     }
     
@@ -73,7 +74,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_admin = $perm->have_studip_perm('dozent', $this->sem_id);
 
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/luggage-klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL().'/assets/images/luggage-klein.jpg');
         $sidebar->setTitle(_("Urlaubskalender"));
     
         $views = new ViewsWidget();
@@ -162,7 +163,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_admin = $perm->have_studip_perm('tutor', $this->sem_id);
         
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/luggage-klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL().'/assets/images/luggage-klein.jpg');
         $sidebar->setTitle(_("Urlaubskalender"));
 
             
@@ -217,7 +218,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_admin = $perm->have_studip_perm('tutor', $this->id);
 
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/luggage-klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL().'/assets/images/luggage-klein.jpg');
         $sidebar->setTitle(_("Urlaubskalender"));
 
 
@@ -276,7 +277,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_hilfskraft = $perm->have_studip_perm('tutor', $this->sem_id);
         
          $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/klee_klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL().'/assets/images/klee_klein.jpg');
         $sidebar->setTitle(_("Geburtstage"));
 
             
@@ -337,7 +338,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_hilfskraft = $perm->have_studip_perm('tutor', $this->sem_id);
         
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/klee_klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL().'/assets/images/klee_klein.jpg');
         $sidebar->setTitle(_("Geburtstage"));
 
             
@@ -393,7 +394,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_admin = $perm->have_studip_perm('dozent', $this->sem_id);
         
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/luggage-klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL().'/assets/images/luggage-klein.jpg');
         $sidebar->setTitle(_("Urlaubskalender"));
 
             
@@ -441,7 +442,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_hilfskraft = $perm->have_studip_perm('tutor', $this->sem_id);
         
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/klee_klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL().'/assets/images/klee_klein.jpg');
         $sidebar->setTitle(_("Geburtstage"));
 
             
@@ -585,7 +586,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_hilfskraft = $perm->have_studip_perm('tutor', $this->sem_id);
 
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/klee_klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL().'/assets/images/klee_klein.jpg');
         $sidebar->setTitle(_("Geburtstage"));
 
             
