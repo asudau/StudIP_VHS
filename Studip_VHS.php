@@ -252,7 +252,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         $this->datafield_id_begin = $datafield_begin->datafield_id;
         
         //falls Kurs noch nciht gestartet und Nutzer autor -> noch kein Zugriff
-        if ((!$GLOBALS['perm']->have_studip_perm('tutor', $course_id) && $localEntries[$this->datafield_id_begin]->value > time())){
+        if ((!$GLOBALS['perm']->have_studip_perm('tutor', $course_id) && self::getCourseBegin($course_id) > time())){
             return false;
         }else return true;
      }
