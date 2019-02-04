@@ -203,7 +203,7 @@ class IntranetStartController extends StudipController {
             $message = MessageBox::success(_('Meldung wurde versendet!'));
             PageLayout::postMessage($message);
         } else {
-            $message = MessageBox::success(_('eMail wurde versendet!'));
+            $message = MessageBox::error(_('Da ist was schief gegangen, Ihre Mail konnte nicht versendet werden.'));
             PageLayout::postMessage($message);
         }
         $this->response->add_header('X-Dialog-Close', '1');
@@ -211,6 +211,7 @@ class IntranetStartController extends StudipController {
     }
     
     public function feedback_chat_action(){
+        //TODO - In Intranet Veranstaltung für Chat wählen
         $this->seminar_id = '2dac34217342bd706ac114d57dd0b3ec';
         if (!$GLOBALS['perm']->have_studip_perm('autor', $this->seminar_id)){
             $this->access = false;
