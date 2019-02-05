@@ -1,5 +1,6 @@
 <?php
 require_once 'app/controllers/news.php';
+require_once 'app/controllers/course/overview.php';
 
 
 class SeminarController extends StudipController {
@@ -47,6 +48,30 @@ class SeminarController extends StudipController {
         if(!$this->style){
             $this->style = 'full';
         }
+        
+        if ($GLOBALS['perm']->have_studip_perm('tutor', $this->course->id)){
+            $actions = new ActionsWidget();
+            $actions->setTitle(_('Aktionen'));
+
+            $actions->addLink(
+            'Kurs gestalten',
+            $this->url_for('seminar/settings'),'icons/16/blue/edit.png'); 
+
+            Sidebar::get()->addWidget($actions);
+            
+            if($this->style == 'full'){
+                $sidebar = Sidebar::Get();
+                $navcreate = new LinksWidget();
+                $navcreate->setTitle('Weitere Aktionen');
+                $navcreate->addLink(_('Ankündigung erstellen'),
+                               URLHelper::getLink("dispatch.php/news/edit_news/new/" . $this->course->id),
+                              Icon::create('news+add', 'clickable'), ['rel' => 'get_dialog']); 
+                $sidebar->addWidget($navcreate);
+            }
+        }
+        
+        
+       
          
         if (!Navigation::hasItem("/course/main")) {
        
@@ -73,26 +98,19 @@ class SeminarController extends StudipController {
         
         PageLayout::addStylesheet($this->plugin->getPluginURL().'/assets/style_' . $this->style . '.css');
          
-        global $perm;
-        if ($perm->have_studip_perm('dozent', $this->course->id)){
-            $actions = new ActionsWidget();
-            $actions->setTitle(_('Aktionen'));
-
-            $actions->addLink(
-            'Kurs gestalten',
-            $this->url_for('seminar/settings'),'icons/16/blue/edit.png'); 
-
-            Sidebar::get()->addWidget($actions);
-        }
-        
         ### grid-layout###
         $this->tabs = Navigation::getItem('/course');
        
         
         ###full_layout###
         // Fetch news
-        $this->news = StudipNews::GetNewsByRange($this->course->id, !$this->show_all_news, true);	
-
+        //$this->news = StudipNews::GetNewsByRange($this->course->id, !$this->show_all_news, true);	
+        $controller = new PluginController(new StudipDispatcher());
+        $response = $controller->relay('news/display/' . $this->course->id);
+        //$response = Course_OverviewController::relay($GLOBALS['STUDIP_BASE_URL'] . 'news/display/' . $this->course_id);
+        $this->news = $response->body;
+        
+        
         if($GLOBALS['auth']->auth['uid'] != 'nobody'){
             // Load evaluations
             $eval_db = new EvaluationDB();
