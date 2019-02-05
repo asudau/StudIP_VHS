@@ -1,4 +1,4 @@
-fo<? if (sizeof($intranets) >1) : ?>
+<? if (sizeof($intranets) >1) : ?>
     <?= $this->render_partial('_partials/intranet_selector', array('intranets' => $intranets)) ?>
 <? endif ?>
 
