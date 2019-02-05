@@ -50,7 +50,7 @@
                 <!--  Text: [begin] -->
                     <img src="<?= $plugin->getPluginURL().'/assets/images/unterlagen1.png' ?>" alt="" border="0" width="100%">
                     <h2 class="intranet"> <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>folder.php?cid=b8d02f67fca5aac0efa01fb1782166d1&cmd=tree" title="Direkt in den Dateibereich wechseln" class="internal-link"><?=$filesCaptions[$course_id]?></a>
-                    <? if ($mitarbeiter_admin){ ?>
+                    <? if ($GLOBALS['perm']->have_studip_perm('dozent', $course_id)){ ?>
                             <a style="margin-left: 68%;" href="<?=$edit_link_files?>">
                                 <?= Icon::create('add', 'clickable')?>           
                             </a>
@@ -81,7 +81,7 @@
             <img src="<?= ($avatar->is_customized()) ? $avatar->getCustomAvatarURl('original') : $plugin->getPluginURL().'/assets/images/Projektbereich.png' ?>" alt="" border="0" width="100%">
             <h2 class="intranet">
                     <a href="" title="" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
-                    <? if ($mitarbeiter_admin){ ?>
+                    <? if ($GLOBALS['perm']->have_studip_perm('dozent', $course_id)){ ?>
                     <a style="margin-left: 68%;" href="<?=URLHelper::getLink("dispatch.php/news/edit_news/new/" . $course_id) ?>" rel="get_dialog">
                         <?= Icon::create('add', 'clickable')?>             
                     </a>
