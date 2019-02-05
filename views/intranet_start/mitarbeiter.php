@@ -256,7 +256,7 @@
     
     
     
-    <? if (true || count($courses_upcoming) > 0 ){ ?>
+    <? if (false && count($courses_upcoming) > 0 ){ ?>
 	<!--  CONTENT ELEMENT, uid:13/textpic [begin] -->
 		<div id="c13" class="csc-default csc-space-after-25">
 		<!--  Image block: [begin] -->
