@@ -41,7 +41,7 @@
                 
                 
                 
-                <? foreach ($folderwithfiles_array as $course_id => $folderwithfiles) : ?>
+               <? foreach ($folderwithfiles_array as $course_id => $folderwithfiles) : ?>
                 <!--  CONTENT ELEMENT, uid:14/textpic [begin] -->
                 <div id="c14" class="csc-default csc-space-after-25">
                 <!--  Image block: [begin] -->
@@ -49,17 +49,20 @@
                 
                 <!--  Text: [begin] -->
                     <img src="<?= $plugin->getPluginURL().'/assets/images/unterlagen1.png' ?>" alt="" border="0" width="100%">
-                    <h2 class="intranet"> <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>folder.php?cid=b8d02f67fca5aac0efa01fb1782166d1&cmd=tree" title="Direkt in den Dateibereich wechseln" class="internal-link"><?=$filesCaptions[$course_id]?></a>
-                    <? if ($GLOBALS['perm']->have_studip_perm('dozent', $course_id)){ ?>
-                            <a style="margin-left: 68%;" href="<?=$edit_link_files?>">
+                    <h2 class="intranet"> 
+                        <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
+                        <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>folder.php?cid=<?=$course_id?>&cmd=tree" title="Direkt in den Dateibereich wechseln" class="internal-link"><?=$filesCaptions[$course_id]?></a>
+                        <? if ($GLOBALS['perm']->have_studip_perm('dozent', $course_id)){ ?>
+                            <a href="<?=$edit_link_files?>">
                                 <?= Icon::create('add', 'clickable')?>           
                             </a>
-                    <? } ?>
+                        <? } ?>
+                        </div>
                     </h2>
                         <?= $this->render_partial('_partials/folder_with_files', array('folderwithfiles' => $folderwithfiles, 'parentfolder' => $parentfolder, 'parent' => NULL)) ?>
                     <hr>
                 <!--  Text: [end] -->
-                </div>
+                </div>  
                 <!--  Image block: [end] -->
                 </div>
                 <!--  CONTENT ELEMENT, uid:14/textpic [end] -->
