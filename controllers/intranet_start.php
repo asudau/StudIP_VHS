@@ -183,11 +183,11 @@ class IntranetStartController extends StudipController {
     
     public function send_form_action(){
         if (Request::get('message_body')){
-            $mailtext = studip_utf8decode(Request::get('message_body'));
+            $mailtext = Studip\Markup::purifyHtml(Request::get('message_body'));
             //TODO Kontaktadresse konfigurierbar
             $empfaenger = 'kvhs@ammerland.de';//$contact_mail;//$contact_mail; //Mailadresse
             //$absender   = "asudau@uos.de";
-            $betreff    = 'Betreff: ' . studip_utf8decode(Request::get('message_subject'));
+            $betreff    = 'Betreff: ' . Studip\Markup::purifyHtml(Request::get('message_subject'));
 
             $mail = new StudipMail();
             $success = $mail->addRecipient($empfaenger)
@@ -233,7 +233,7 @@ class IntranetStartController extends StudipController {
             $thread['user_id'] = $GLOBALS['user']->id;
             //throw new AccessDeniedException("No permission to write posting.");
 
-            $content = Request::get("content");
+            $content =  Studip\Markup::purifyHtml(Request::get("content"));
 
             if (strpos($content, "\n") !== false) {
                 $thread['name'] = substr($content, 0, strpos($content, "\n"));
