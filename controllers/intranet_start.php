@@ -233,7 +233,7 @@ class IntranetStartController extends StudipController {
             $thread['user_id'] = $GLOBALS['user']->id;
             //throw new AccessDeniedException("No permission to write posting.");
 
-            $content = studip_utf8decode(Request::get("content"));
+            $content = htmlReady(Request::get("content"));
 
             if (strpos($content, "\n") !== false) {
                 $thread['name'] = substr($content, 0, strpos($content, "\n"));
