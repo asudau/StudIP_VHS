@@ -183,11 +183,11 @@ class IntranetStartController extends StudipController {
     
     public function send_form_action(){
         if (Request::get('message_body')){
-            $mailtext = Request::get('message_body');
+            $mailtext = studip_utf8decode(Request::get('message_body'));
             //TODO Kontaktadresse konfigurierbar
             $empfaenger = 'kvhs@ammerland.de';//$contact_mail;//$contact_mail; //Mailadresse
             //$absender   = "asudau@uos.de";
-            $betreff    = 'Betreff: ' . Request::get('message_subject');
+            $betreff    = 'Betreff: ' . studip_utf8decode(Request::get('message_subject'));
 
             $mail = new StudipMail();
             $success = $mail->addRecipient($empfaenger)
