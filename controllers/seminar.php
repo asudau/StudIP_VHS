@@ -60,15 +60,15 @@ class SeminarController extends StudipController {
 
             Sidebar::get()->addWidget($actions);
             
-            if($this->style == 'full'){
-                $sidebar = Sidebar::Get();
-                $navcreate = new LinksWidget();
-                $navcreate->setTitle('Weitere Aktionen');
-                $navcreate->addLink(_('Ankündigung erstellen'),
-                               URLHelper::getLink("dispatch.php/news/edit_news/new/" . $this->course->id),
-                              Icon::create('news+add', 'clickable'), ['rel' => 'get_dialog']); 
-                $sidebar->addWidget($navcreate);
-            }
+//            if($this->style == 'full'){
+//                $sidebar = Sidebar::Get();
+//                $navcreate = new LinksWidget();
+//                $navcreate->setTitle('Weitere Aktionen');
+//                $navcreate->addLink(_('Ankündigung erstellen'),
+//                               URLHelper::getLink("dispatch.php/news/edit_news/new/" . $this->course->id),
+//                              Icon::create('news+add', 'clickable'), ['rel' => 'get_dialog']); 
+//                $sidebar->addWidget($navcreate);
+//            }
         }
         
         
