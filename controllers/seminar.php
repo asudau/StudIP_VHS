@@ -104,11 +104,6 @@ class SeminarController extends StudipController {
         
         ###full_layout###
         // Fetch news
-        //$this->news = StudipNews::GetNewsByRange($this->course->id, !$this->show_all_news, true);	
-        $controller = new PluginController(new StudipDispatcher());
-        $response = $controller->relay('news/display/' . $this->course->id);
-        //$response = Course_OverviewController::relay($GLOBALS['STUDIP_BASE_URL'] . 'news/display/' . $this->course_id);
-        $this->news = $response->body;
         
         $dispatcher = new StudipDispatcher();
         $controller = new NewsController($dispatcher);
