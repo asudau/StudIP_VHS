@@ -110,6 +110,22 @@ class SeminarController extends StudipController {
         //$response = Course_OverviewController::relay($GLOBALS['STUDIP_BASE_URL'] . 'news/display/' . $this->course_id);
         $this->news = $response->body;
         
+        $dispatcher = new StudipDispatcher();
+        $controller = new NewsController($dispatcher);
+        $response = $controller->relay('news/display/' . $this->course->id);
+        //$response = $controller->relay('news/display/9fc5dd6a84acf0ad76d2de71b473b341'); //localhost
+        $this->internnewstemplate = $GLOBALS['template_factory']->open('shared/string');
+        $this->internnewstemplate->content = $response->body;
+        
+        if (StudipNews::CountUnread() > 0) {
+            $navigation = new Navigation('', PluginEngine::getLink($this, array(), 'read_all'));
+            $navigation->setImage(Icon::create('refresh', 'clickable', ["title" => _('Alle als gelesen markieren')]));
+            $icons[] = $navigation;
+        }
+
+        $this->internnewstemplate->icons = $icons;
+        $this->news =  $this->internnewstemplate;
+        
         
         if($GLOBALS['auth']->auth['uid'] != 'nobody'){
             // Load evaluations

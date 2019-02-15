@@ -64,39 +64,9 @@ if(strcmp($datesTemplate, "Die Zeiten der Veranstaltung stehen nicht fest.") !==
     ?>
         <br>
      
-  <?if ($perm || $news): ?>
-<section class="contentbox">
-    <header>
-        <h1>
-            <?= Assets::img('icons/16/black/news.png') ?>
-
-            <?= _('Ankündigungen') ?>
-        </h1>
-           </header>
-    <? foreach ($news as $new): ?>
-    <? $is_new = ($new['chdate'] >= object_get_visit($new->id, 'news', false, false))
-            && ($new['user_id'] != $GLOBALS['user']->id); ?>
-    <article class="<?= ContentBoxHelper::classes($new->id, $is_new) ?>" id="<?= $new->id ?>" data-visiturl="<?=URLHelper::getScriptLink('dispatch.php/news/visit')?>">
-        <header>
-            <h1>
-                <?= Assets::img('icons/16/grey/news.png'); ?>
-                <a href="<?= ContentBoxHelper::href($new->id, array('contentbox_type' => 'news')) ?>">
-                    <?= htmlReady($new['topic']); ?>
-                </a>
-            </h1>
-                   </header>
-        <section>
-            <?= formatReady($new['body']) ?>
-
-        </section>
-            </article>
-    <? endforeach; ?>
-   </section>
- <br>
-
-
-
-<?endif;?>
+    <?if ($perm || $news): ?>
+        <?= $this->render_partial($news, compact('widget')) ?>
+    <?endif;?>
     	
 
 
