@@ -1,5 +1,6 @@
 <?php
 require_once 'app/controllers/news.php';
+require_once 'app/controllers/questionnaire.php';
 require_once 'app/controllers/course/overview.php';
 
 
@@ -101,14 +102,11 @@ class SeminarController extends StudipController {
         ### grid-layout###
         $this->tabs = Navigation::getItem('/course');
        
-        
         ###full_layout###
         // Fetch news
-        
         $dispatcher = new StudipDispatcher();
         $controller = new NewsController($dispatcher);
         $response = $controller->relay('news/display/' . $this->course->id);
-        //$response = $controller->relay('news/display/9fc5dd6a84acf0ad76d2de71b473b341'); //localhost
         $this->internnewstemplate = $GLOBALS['template_factory']->open('shared/string');
         $this->internnewstemplate->content = $response->body;
         
@@ -120,6 +118,27 @@ class SeminarController extends StudipController {
 
         $this->internnewstemplate->icons = $icons;
         $this->news =  $this->internnewstemplate;
+        
+        
+        ###full_layout###
+        // Fetch frageboegen
+        $dispatcher = new StudipDispatcher();
+        $controller = new QuestionnaireController($dispatcher);
+        $response = $controller->relay('questionnaire/widget/' . $this->course->id);
+        $this->questionnairetemplate = $GLOBALS['template_factory']->open('shared/string');
+        $this->questionnairetemplate->content = $response->body;
+        
+        if (StudipNews::CountUnread() > 0) {
+            $navigation = new Navigation('', PluginEngine::getLink($this, array(), 'read_all'));
+            $navigation->setImage(Icon::create('refresh', 'clickable', ["title" => _('Alle als gelesen markieren')]));
+            $icons[] = $navigation;
+        }
+
+        $this->questionnairetemplate->icons = $icons;
+        $this->questionnaires =  $this->questionnairetemplate;
+        
+        
+        
         
         
         if($GLOBALS['auth']->auth['uid'] != 'nobody'){
@@ -152,7 +171,6 @@ class SeminarController extends StudipController {
             }
         }
         **/
-         
 
         $this->description = $this->course->__get('Beschreibung');
 

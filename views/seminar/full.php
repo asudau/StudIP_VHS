@@ -68,7 +68,11 @@ if(strcmp($datesTemplate, "Die Zeiten der Veranstaltung stehen nicht fest.") !==
         <?= $this->render_partial($news, compact('widget')) ?>
     <?endif;?>
     	
-
+    <?if ($perm || $questionnaires): ?>
+        <?= $this->render_partial($questionnaires, compact('widget')) ?>
+    <?endif;?>
+    	
+    
 
 <? echo $documents; ?>
        
