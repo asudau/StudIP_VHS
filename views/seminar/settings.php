@@ -25,7 +25,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
      <fieldset <?= isset($flash['open']) && $flash['open'] != 'begin_course' ? 'class="collapsed"' : ''?> data-open="begin_course">
         <legend><?= sprintf(_('Kursfreigabe für %s'),  get_title_for_status('autor', 2)) ?></legend>
             <label for="start_date"><?= sprintf(_('Kurs für %s freigeben ab'), get_title_for_status('autor', 2)) ?></label>
-             <input style='width:120px; max-width:120px' type='date' name ='start_date' value='<?= date('Y-m-d', $coursebegin) ?>'>
+             <input style='width:140px; max-width:140px' type='date' name ='start_date' value='<?= date('Y-m-d', $coursebegin) ?>'>
     </fieldset>
     
     
