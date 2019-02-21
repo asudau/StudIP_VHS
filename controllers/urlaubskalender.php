@@ -618,5 +618,42 @@ class UrlaubskalenderController extends StudipController
         }
 
     }
+    
+    function insertDate_action($id = ''){
+        
+         if (Request::submitted('submit')){
+                $this->event = new EventData();
+                var_dump('sopecihern');
+                $this->event = new EventData($id);
+                $this->event->author_id = $GLOBALS['user']->id;
+                $this->event->start = strtotime($_POST['start_date']);
+                $this->event->end = $this->event->start;
+                $this->event->summary = studip_utf8decode($_POST['summary']);
+                $this->event->description = $_POST['description'];
+                $this->event->class = 'PUBLIC';
+                $this->event->category_intern = '13';
+                $this->event->store();
+             }
+//             if (Request::isXhr()) {
+//                    header('X-Dialog-Close: 1');
+//                    exit;
+//             } else $this->redirect($this->url_for('/intranet_start'));
+        
+        //bearbeiten
+        else if ($id){
+            $this->event = new EventData($id);
+             var_dump('laden');
+            
+        
+        // neu anlegen
+        } else {
+            $this->event = new EventData();
+            $this->event->start = time();
+            $this->event->summary = 'Kurstitel';
+            $this->event->description = 'http://';
+        }
+        //$this->setProperties($calendar_event, $component);
+        //$calendar_event->setRecurrence($component['RRULE']);
+    }
   
 }

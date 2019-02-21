@@ -248,7 +248,7 @@
     
     
     
-    <? if (false && count($courses_upcoming) >0 ){ ?>
+    <? if (true && count($courses_upcoming) >0 ){ ?>
 	<!--  CONTENT ELEMENT, uid:13/textpic [begin] -->
 		<div id="c13" class="csc-default csc-space-after-25">
 		<!--  Image block: [begin] -->
@@ -257,7 +257,7 @@
             <img src="<?=$plugin->getPluginURL().'/assets/images/Kursstart.png' ?>" alt="" border="0" width="100%">
 			<h2 class="intranet"> <a href="index.php?id=21" title="Opens internal link in current window" class="internal-link">Kurse, die demnächst starten</a>
                 <? if ($admin){ ?>
-                    <a style="margin-left: 58%;" href="<?= $this->controller->url_for('start/insertCoursebegin')?>" rel="get_dialog">
+                    <a style="margin-left: 58%;" href="<?= $this->controller->url_for('urlaubskalender/insertDate')?>" rel="get_dialog">
                         <?= Icon::create('add', 'clickable')?>             
                     </a>
                  <? } ?>        
@@ -266,7 +266,7 @@
                     <section class="contentbox">
                         
                         <? if ($admin){ ?>
-                            <a href="<?= $this->controller->url_for('start/insertCoursebegin/' . $course['event_id'])?>" rel="get_dialog">
+                            <a href="<?= $this->controller->url_for('urlaubskalender/insertDate/' . $course['event_id'])?>" rel="get_dialog">
                             <img src="/assets/images/icons/blue/edit.svg" alt="edit" class="icon-role-clickable icon-shape-add" width="16" height="16">            
                             </a>
                         <? } ?>   
