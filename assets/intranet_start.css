@@ -99,6 +99,10 @@ section > section.folder {
     color: #5d6a92;
 }
 
+a.portal-boxenbutton {
+    color: #fff;
+}
+
 .rechts {
     width: 315px;
     height: auto;
