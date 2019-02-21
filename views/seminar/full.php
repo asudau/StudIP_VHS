@@ -54,10 +54,7 @@ if(strcmp($datesTemplate, "Die Zeiten der Veranstaltung stehen nicht fest.") !==
         } else if ($first_date = $sem->getFirstDate()) {
             echo '<section class=contentbox><header><h1>'._("Erster Termin").':</h1></header>';
             echo '<article>' .$first_date . '</article></section>';
-        } else {
-            echo '<section class=contentbox><header><h1>'._("Erster Termin").':</h1></header>';
-            echo '<article>' . _("Die Zeiten der Veranstaltung stehen nicht fest."). '</article></section>';
-        }
+        } 
 
     
 
