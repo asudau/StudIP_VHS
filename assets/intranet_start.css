@@ -49,6 +49,9 @@ section.folder > li {
 .mitte a, a:link, a:visited {
     color: #5d6a92;
 }
+.portal-boxen a, a:link, a:visited {
+    color: #fff;
+}
 
 .rechts {
     width: 315px;
