@@ -4622,7 +4622,7 @@ a.th {
         </div>
 
     <div class="columns small-12 medium-6 large-4 portal-boxenouter">
-        <div class="portal-boxeninner" style="background-image: url(http://localhost/studip3.4/public/plugins_packages/asudau@elan-ev.de/VHSViewPlugin/images/banner.jpg)" onclick="changeclass(this);">
+        <div class="portal-boxeninner" onclick="changeclass(this);">
 
             <div class="portal-boxenintro">
                 <h3 class="portal-boxenheadline">Bei Fragen und Wünschen rund um Stud.IP helfen wir Ihnen gerne weiter:</h3>
