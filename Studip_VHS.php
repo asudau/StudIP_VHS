@@ -40,6 +40,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
             'index_ammerland',
             'index_el4',
             'kacheln',
+            'kacheln_osnabrueck',
             'mitarbeiter',
             'index_wesermarsch',
             'index_allgemein');
