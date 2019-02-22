@@ -18,6 +18,7 @@ require_once 'app/controllers/news.php';
 //require_once 'app/controllers/calendar/single.php';
 require_once 'lib/webservices/api/studip_user.php';
 require_once 'app/models/calendar/SingleCalendar.php';
+require_once 'lib/models/EventData.class.php';
 
 class UrlaubskalenderController extends StudipController
 {
@@ -31,8 +32,9 @@ class UrlaubskalenderController extends StudipController
         PageLayout::addScript($this->plugin->getPluginURL().'/assets/scripts/dhtmlxscheduler.js');
         PageLayout::addScript($this->plugin->getPluginURL().'/assets/scripts/locale_de.js');
         PageLayout::addScript($this->plugin->getPluginURL().'/assets/scripts/dhtmlxscheduler_timeline.js');
-        
+        //ID der Veranstaltung welche als Grundlage für den Kalender verwendet werden soll
         $this->sem_id = 'b8d02f67fca5aac0efa01fb1782166d1';
+        $this->sem_id = '14ddc9353c17a5c8bf2ccfe1e4c82345';
     }
     
     
@@ -83,7 +85,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_admin = $perm->have_studip_perm('dozent', $this->sem_id);
 
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/luggage-klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/assets/images/luggage-klein.jpg");
         $sidebar->setTitle(_("Urlaubskalender"));
     
         $views = new ViewsWidget();
@@ -399,7 +401,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_admin = $perm->have_studip_perm('tutor', $this->sem_id);
         
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/luggage-klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL()."/assets/assets/images/luggage-klein.jpg");
         $sidebar->setTitle(_("Urlaubskalender"));
 
             
@@ -454,7 +456,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_admin = $perm->have_studip_perm('tutor', $this->id);
 
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/luggage-klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/luggage-klein.jpg");
         $sidebar->setTitle(_("Urlaubskalender"));
 
 
@@ -513,7 +515,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_hilfskraft = $perm->have_studip_perm('tutor', $this->sem_id);
         
          $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/klee_klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/klee_klein.jpg");
         $sidebar->setTitle(_("Geburtstage"));
 
             
@@ -574,7 +576,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_hilfskraft = $perm->have_studip_perm('tutor', $this->sem_id);
         
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/klee_klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/klee_klein.jpg");
         $sidebar->setTitle(_("Geburtstage"));
 
             
@@ -630,7 +632,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_admin = $perm->have_studip_perm('dozent', $this->sem_id);
         
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/luggage-klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/luggage-klein.jpg");
         $sidebar->setTitle(_("Urlaubskalender"));
 
             
@@ -678,7 +680,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_hilfskraft = $perm->have_studip_perm('tutor', $this->sem_id);
         
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/klee_klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/klee_klein.jpg");
         $sidebar->setTitle(_("Geburtstage"));
 
             
@@ -822,7 +824,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_hilfskraft = $perm->have_studip_perm('tutor', $this->sem_id);
 
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/klee_klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/klee_klein.jpg");
         $sidebar->setTitle(_("Geburtstage"));
 
             
@@ -853,6 +855,24 @@ class UrlaubskalenderController extends StudipController
 
         }
 
+    }
+    
+    function events_action($type = 'all'){
+        
+        
+        $calendar_events = CalendarEvent::findBySQL('range_id = :seminar_id', [':seminar_id' => $this->sem_id]);
+        foreach ($calendar_events as $calendar_event){
+            $this->events[] = EventData::findOneByEvent_id($calendar_event['event_id']);
+        }
+        
+        
+        
+        //the following sucks
+        //$this->calendar = new SingleCalendar($this->sem_id);
+        //$this->events = $this->calendar->getEvents()->events->toGroupedArray();
+          
+        //$this->setProperties($calendar_event, $component);
+        //$calendar_event->setRecurrence($component['RRULE']);
     }
   
 }
