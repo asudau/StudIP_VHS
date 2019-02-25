@@ -20,7 +20,7 @@
             <td><a href='<?= URLHelper::getLink('dispatch.php/profile', ['username' => $member->username]) ?>'><?= $member->username ?></a></td>
             <td><?= $member->vorname . ' ' . $member->nachname?></td>
             <td><?= $member->email ?></td>
-            <td><?= ($member->inst_perms == 'dozent')? 'Intranet-Administrator' : 'Intranet Mitglied' ?></td>
+            <td><?= ($member->inst_perms == 'dozent')? 'Dozent' : '' ?></td>
             <td>
                 <?= IntranetConfig::CourseMembershipsOfUser($inst->id, $member->user_id) ?> / <?= sizeof($inst_courses)?>
                 <? if (IntranetConfig::CourseMembershipsOfUser($inst->id, $member->user_id) < sizeof($inst_courses)) : ?>
