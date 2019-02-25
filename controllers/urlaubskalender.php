@@ -81,11 +81,12 @@ class UrlaubskalenderController extends StudipController
             $date = Request::option('jmp_date');
         }
         $this->date = date('Y-m-d',$date);
+        PageLayout::setTitle(_('Interner Urlaubskalender'));
         
         $this->mitarbeiter_admin = $perm->have_studip_perm('dozent', $this->sem_id);
 
         $sidebar = Sidebar::get();
-        $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/assets/images/luggage-klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/luggage-klein.jpg");
         $sidebar->setTitle(_("Urlaubskalender"));
     
         $views = new ViewsWidget();
@@ -94,14 +95,16 @@ class UrlaubskalenderController extends StudipController
                     ->setActive(true);
         $views->addLink(_('Zeitstrahl-Ansicht'),
                         $this->url_for('urlaubskalender/timeline'));
+//        $views->addLink(_('Wochenensicht gesamt'),
+//                        $GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/week?cid=" . $this->sem_id);
         $sidebar->addWidget($views);
             
         // Show action to add widget only if not all widgets have already been added.
         $actions = new ActionsWidget();
-
+                        
         $actions->addLink(_('Neuen Urlaubstermin eintragen'),
-                          $this->url_for('urlaubskalender/new'),
-                          Icon::create('add', 'clickable'));
+                $GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/edit/" . $this->sem_id,
+                          Icon::create('add', 'clickable'), ["rel" => "get_dialog", "dialog-title" => 'Termin anlegen']);
 
         $actions->addLink(_('Urlaubstermine bearbeiten'),
                           $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'edit')),
@@ -120,8 +123,8 @@ class UrlaubskalenderController extends StudipController
         
         Sidebar::get()->addWidget($filters);
         
-
-        $this->dates = IntranetDate::findBySQL("type = 'urlaub'");
+        $this->dates = $this->events_of_type(13);
+        //$this->dates = IntranetDate::findBySQL("type = 'urlaub'");
 
         // Root may set initial positions
         if ($GLOBALS['perm']->have_perm('root')) {
@@ -142,14 +145,15 @@ class UrlaubskalenderController extends StudipController
     function timeline_action($action = false, $widgetId = null)
     {
         //alle Einträge der Tabelle
-        $this->dates = IntranetDate::findBySQL('1=1');
+        //$this->dates = IntranetDate::findBySQL('1=1');
+        $this->dates = $this->events_of_type(13);
         
         //für die Darstellung in der Timeline braucht man Integer keys für die Labels
         $this->keys = array();
         $cnt = 0;
         foreach($this->dates as $date){
-            if (!array_key_exists($date->getValue('user_id') ,$this->keys)){
-                $this->keys[$date->getValue('user_id')] = $cnt;
+            if (!array_key_exists($date->summary ,$this->keys)){
+                $this->keys[$date->summary] = $cnt;
                 $cnt++;
             }
         }
@@ -847,8 +851,8 @@ class UrlaubskalenderController extends StudipController
         $sidebar->addWidget($actions);
 
 
-        $this->dates = IntranetDate::findBySQL("type = 'birthday'");
-
+        //$this->dates = IntranetDate::findBySQL("type = 'birthday'");
+        $this->dates = $this->events_of_type(11);
 
         // Root may set initial positions
         if ($GLOBALS['perm']->have_perm('root')) {
@@ -859,11 +863,45 @@ class UrlaubskalenderController extends StudipController
     
     function events_action($type = 'all'){
         
+        $this->events[] = $this->events_of_type();
         
-        $calendar_events = CalendarEvent::findBySQL('range_id = :seminar_id', [':seminar_id' => $this->sem_id]);
-        foreach ($calendar_events as $calendar_event){
-            $this->events[] = EventData::findOneByEvent_id($calendar_event['event_id']);
+        
+        
+        //the following sucks
+        //$this->calendar = new SingleCalendar($this->sem_id);
+        //$this->events = $this->calendar->getEvents()->events->toGroupedArray();
+          
+        //$this->setProperties($calendar_event, $component);
+        //$calendar_event->setRecurrence($component['RRULE']);
+    }
+    
+    
+    private function events_of_type($type = 'all', $begin_time = null){
+        
+        if (!$begin_time){
+            $begin_time = time();
         }
+        
+        $begin_date = new DateTime();
+        $begin_date->setTimestamp($begin_time);
+        $end_date = new DateTime();
+        $end_date->setTimestamp(3333333333);
+        
+        $calendar_events = CalendarEvent::getEventsByInterval($this->sem_id, $begin_date, $end_date);
+            
+        if ($type == 'all'){
+            foreach ($calendar_events as $calendar_event){
+                $events[] = EventData::findOneByEvent_id($calendar_event['event_id']);
+            }
+        } else {
+            foreach ($calendar_events as $calendar_event){
+                $data = EventData::findOneByEvent_id($calendar_event['event_id']);
+                if ($data->category_intern == $type){
+                    $events[] = $data;
+                }
+            }
+        }
+        return $events;
         
         
         

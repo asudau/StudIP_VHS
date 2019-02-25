@@ -33,14 +33,19 @@
     
     var events = [
        
-    <?    
+     <?    
+    $i = 1;         
     if($dates){
-        foreach($dates as $d){
-            echo "{id:".$d->getValue('id') . ", text:\"" . \Studip_User::find_by_user_id($d->getValue('user_id'))->fullname . ($d->getValue('notice') ? (" (" . $d->getValue('notice') . ")") : "") . "\",start_date:\"" . date("m/d/Y", strtotime($d->getValue('begin'))) . "\",end_date:\"" . date("m/d/Y", strtotime($d->getValue('end') . " + 1 day")) . "\", color:\"". $controller->color_by_crossfoot($d->getValue('id')) . "\"}," ;
+        foreach($dates as $event){
+            echo "  {id:". $i . ", "
+                    . "text:\"" . $event['summary'] . ($event['description'] ? (" (" . $event['description'] . ")") : "") . "\", "
+                    . " start_date:\"" . date("m/d/Y", $event['start']) . "\", "
+                    . " end_date:\"" . date("m/d/Y", $event['end'] + 86400) . "\", "
+                    . " color:\"". $controller->color_by_crossfoot($i) . "\"}," ;
+        $i++;
         }
     }
     ?>    
- 
     ];
 
     scheduler.parse(events, "json");//takes the name and format of the data source

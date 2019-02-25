@@ -72,7 +72,7 @@
     <?    
     if($dates){
         foreach($dates as $d){
-            echo "{start_date:\"" . date("m/d/Y", strtotime($d->getValue('begin'))) . "\",end_date:\"" . date("m/d/Y", strtotime($d->getValue('end') . " + 1 day")) . "\", text:\"" . $d->getValue('notice') . "\", section_id:". $keys[$d->getValue('user_id')] . ", color:\"". $controller->color_by_crossfoot($d->getValue('id')) . "\"}," ;
+            echo "{start_date:\"" . date("m/d/Y", strtotime($d->getValue('start'))) . "\",end_date:\"" . date("m/d/Y", strtotime($d->getValue('end') . " + 1 day")) . "\", text:\"" . $d->getValue('summary') . "\", section_id:". $keys[$d->getValue('summary')] . ", color:\"". $controller->color_by_crossfoot($d->getValue('id')) . "\"}," ;
         }
     }
     ?>    
