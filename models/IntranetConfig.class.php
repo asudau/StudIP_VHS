@@ -91,23 +91,27 @@ class IntranetConfig extends SimpleORMap
         return $intranets;
     }
     
-    public static function addUserToIntranetCourses($user_id, $intranet_id, $status){
+     public static function addUserToIntranetCourses($user_id, $intranet_id, $status) {
         $courses = IntranetConfig::find($intranet_id)->getRelatedCourses();
         $query = "INSERT IGNORE INTO seminar_user (Seminar_id, user_id, status, position, gruppe, visible, mkdate)
                       VALUES (?, ?, ?, ?, ?, ?, UNIX_TIMESTAMP())";
-        
-        foreach($courses as $course){
-            $statement = DBManager::get()->prepare($query);
-            $statement->execute(array(
-                $course->id,
-                $user_id,
-                $status,
-                0,
-                1,
-                in_array($status, words('tutor dozent')) ? 'yes' : 'unknown',
-            ));
-            
-            StudipLog::log('SEM_USER_ADD', $course->id, $user_id, $status, 'Wurde in die Veranstaltung eingetragen');
+
+        foreach ($courses as $course) {
+            $sem_config = IntranetSeminar::find([$course->id, $intranet_id]);
+            if ($sem_config && $sem_config->add_instuser_as){
+                $status = $sem_config->add_instuser_as;
+                $statement = DBManager::get()->prepare($query);
+                $statement->execute(array(
+                    $course->id,
+                    $user_id,
+                    $status,
+                    0,
+                    1,
+                    in_array($status, words('tutor dozent')) ? 'yes' : 'unknown',
+                ));
+
+                StudipLog::log('SEM_USER_ADD', $course->id, $user_id, $status, 'Wurde in die Veranstaltung eingetragen');
+            }
         }
     }
     
