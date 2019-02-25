@@ -145,8 +145,8 @@ class IntranetStartController extends StudipController {
         $this->parentfolder = $parentfolder;
 
          //get upcoming courses (studip dates of configured category)
-        $result = EventData::findBySQL("category_intern = '13' AND start > '" . time() . "' ORDER BY start ASC");
-        $this->courses_upcoming = $result;
+        //$result = EventData::findBySQL("category_intern = '13' AND start > '" . time() . "' ORDER BY start ASC");
+        //$this->courses_upcoming = $result;
         
         $this->template = IntranetConfig::find($inst_id)->template;
         $this->render_action($this->template);

@@ -93,6 +93,12 @@ class IntranetConfig extends SimpleORMap
     
      public static function addUserToIntranetCourses($user_id, $intranet_id, $status) {
         $courses = IntranetConfig::find($intranet_id)->getRelatedCourses();
+        
+        //in Veranstaltungen gibt es nichts höheres als Dozenten
+        if($status == 'admin'){
+            $status = 'dozent';
+        }
+        
         $query = "INSERT IGNORE INTO seminar_user (Seminar_id, user_id, status, position, gruppe, visible, mkdate)
                       VALUES (?, ?, ?, ?, ?, ?, UNIX_TIMESTAMP())";
 

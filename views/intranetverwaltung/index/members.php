@@ -9,7 +9,7 @@
         <th data-sort="text"><span>eMail</span></th>
         <th data-sort="text"><span>Status</span></th>
         <th data-sort="text"><span>Zuordnung <br/> Intranetveranstaltungen</span></th> 
-        <th><span>Aktionen</span></th>
+        <!--<th><span>Aktionen</span></th>-->
     </tr>
     </thead>
     
@@ -27,9 +27,9 @@
                     <a title='In fehlende Veranstaltungen eintragen' href = <?= $controller->url_for('/intranetverwaltung/index/add_missing_course_assignments/'. $inst->id . '/' . $member->user_id )?>>&nbsp; <?=Icon::create('door-enter', 'clickable')?>
                 <? endif ?>
             </td>
-            <td>
+<!--            <td>
                 <a title='(Nochmal) Einladen' href = <?= $controller->url_for('index/send_register_invitation/' . $member->user_id )?>> <?=Icon::create('mail', 'clickable')?>
-            </td>
+            </td>-->
         </tr>
     <?php endforeach ?>
         
