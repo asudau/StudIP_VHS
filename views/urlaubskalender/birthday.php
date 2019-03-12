@@ -9,8 +9,8 @@
         <? if($dates) : ?>
             <? foreach($dates as $event): ?>
             <tr>
+                <td><?= date("d.m.Y", $event['start']) ?> </td>
                 <td><?= $event['summary']?></td>
-                <td><?= date("m/d/Y", $event['start']) ?> </td>
             </tr>
             <? endforeach ?>
         <? endif ?>

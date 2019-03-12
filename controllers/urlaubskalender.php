@@ -420,8 +420,8 @@ class UrlaubskalenderController extends StudipController
             $actions = new ActionsWidget();
 
             $actions->addLink(_('Neuen Urlaubstermin eintragen'),
-                              $this->url_for('urlaubskalender/new'),
-                              Icon::create('add', 'clickable'));
+                              $GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/edit/" . $this->sem_id,
+                          Icon::create('add', 'clickable'), ["rel" => "get_dialog", "dialog-title" => 'Termin anlegen']);
             
             $actions->addLink(_('Urlaubstermine bearbeiten'),
                               $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'new')),
@@ -432,7 +432,7 @@ class UrlaubskalenderController extends StudipController
         
         $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen');
 
-        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname, username, perms "
+        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname "
                             . "FROM auth_user_md5 "
                             . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
                             . "LEFT JOIN seminar_user ON (auth_user_md5.user_id = seminar_user.user_id) "
@@ -444,8 +444,7 @@ class UrlaubskalenderController extends StudipController
                             . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input) "
                             . " ORDER BY fullname ASC",
                 _('Nutzer suchen'), 'user_id');
-        $this->quick_search = QuickSearch::get('user_id', $search_obj)
-                    ->fireJSFunctionOnSelect('select_user');   
+        $this->quick_search = QuickSearch::get('user_id', $search_obj);   
         
     
     }
@@ -475,8 +474,8 @@ class UrlaubskalenderController extends StudipController
             $actions = new ActionsWidget();
 
             $actions->addLink(_('Neuen Urlaubstermin eintragen'),
-                              $this->url_for('urlaubskalender/new'),
-                              Icon::create('add', 'clickable'));
+                              $GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/edit/" . $this->sem_id,
+                          Icon::create('add', 'clickable'), ["rel" => "get_dialog", "dialog-title" => 'Termin anlegen']);
 
             $actions->addLink(_('Urlaubstermine bearbeiten'),
                               $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'edit')),
@@ -486,7 +485,7 @@ class UrlaubskalenderController extends StudipController
 
         $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen' . $this->id);
 
-        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname, username, perms "
+        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname "
                             . "FROM auth_user_md5 "
                             . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
                             . "LEFT JOIN seminar_user ON (auth_user_md5.user_id = seminar_user.user_id) "
@@ -498,8 +497,7 @@ class UrlaubskalenderController extends StudipController
                             . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input) "
                             . " ORDER BY fullname ASC",
                 _('Nutzer suchen'), 'user_id');
-        $this->quick_search = QuickSearch::get('user_id', $search_obj)
-                    ->fireJSFunctionOnSelect('select_user');
+        $this->quick_search = QuickSearch::get('user_id', $search_obj);
 
 
         $this->render_action('new');
@@ -533,11 +531,11 @@ class UrlaubskalenderController extends StudipController
 
             $actions->addLink(_('Neuen Geburtstag eintragen'),
                               $this->url_for('urlaubskalender/new_birthday'),
-                              Icon::create('add', 'clickable'));
+                              Icon::create('add', 'clickable'))->asDialog('size=medium'); 
             
             $actions->addLink(_('Geburtstag bearbeiten'),
                               $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_hilfskraft ? ('edituser_birthday/'.$GLOBALS['user']->id) : 'edit_birthday')),
-                              Icon::create('edit', 'clickable'));
+                              Icon::create('edit', 'clickable'))->asDialog('size=medium'); 
             
             $sidebar->addWidget($actions);
        
@@ -545,7 +543,7 @@ class UrlaubskalenderController extends StudipController
         
         $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen');
 
-        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname, username, perms "
+        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname "
                             . "FROM auth_user_md5 "
                             . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
                             . "LEFT JOIN seminar_user ON (auth_user_md5.user_id = seminar_user.user_id) "
@@ -557,8 +555,7 @@ class UrlaubskalenderController extends StudipController
                             . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input) "
                             . " ORDER BY fullname ASC",
                 _('Nutzer suchen'), 'user_id');
-        $this->quick_search = QuickSearch::get('user_id', $search_obj)
-                    ->fireJSFunctionOnSelect('select_user');
+        $this->quick_search = QuickSearch::get('user_id', $search_obj);
         
         $this->type = 'birthday';
         
@@ -594,18 +591,18 @@ class UrlaubskalenderController extends StudipController
 
             $actions->addLink(_('Neuen Geburtstag eintragen'),
                               $this->url_for('urlaubskalender/new_birthday'),
-                              Icon::create('add', 'clickable'));
+                              Icon::create('add', 'clickable'))->asDialog('size=medium'); 
             
             $actions->addLink(_('Geburtstag bearbeiten'),
                               $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_hilfskraft ? ('edituser_birthday/'.$GLOBALS['user']->id) : 'edit_birthday')),
-                              Icon::create('edit', 'clickable'));
+                              Icon::create('edit', 'clickable'))->asDialog('size=medium'); 
 
             $sidebar->addWidget($actions);
         
         
         $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen');
 
-        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname, username, perms "
+        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname "
                             . "FROM auth_user_md5 "
                             . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
                             . "LEFT JOIN seminar_user ON (auth_user_md5.user_id = seminar_user.user_id) "
@@ -617,8 +614,7 @@ class UrlaubskalenderController extends StudipController
                             . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input) "
                             . " ORDER BY fullname ASC",
                 _('Nutzer suchen'), 'user_id');
-        $this->quick_search = QuickSearch::get('user_id', $search_obj)
-                    ->fireJSFunctionOnSelect('select_user');   
+        $this->quick_search = QuickSearch::get('user_id', $search_obj);   
         
     
     }
@@ -843,11 +839,11 @@ class UrlaubskalenderController extends StudipController
 
         $actions->addLink(_('Neuen Geburtstag eintragen'),
                           $this->url_for('urlaubskalender/new_birthday'),
-                          Icon::create('add', 'clickable'));
+                          Icon::create('add', 'clickable'))->asDialog('size=medium'); 
 
         $actions->addLink(_('Geburtstag bearbeiten'),
                           $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_hilfskraft ? ('edituser_birthday/'.$GLOBALS['user']->id) : 'edit_birthday')),
-                          Icon::create('edit', 'clickable'));
+                          Icon::create('edit', 'clickable'))->asDialog('size=medium'); 
         $sidebar->addWidget($actions);
 
 

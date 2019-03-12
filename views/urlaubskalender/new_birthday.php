@@ -1,12 +1,8 @@
 <? use Studip\Button, Studip\LinkButton; ?>
 
-
-
-<?= LinkButton::createBack(_('Zurück'), $controller->url_for('urlaubskalender/birthday')) ?>
-<div id='mitarbeiter'>
     
     
-    <form action="<?= $controller->url_for('urlaubskalender/save/birthday') ?>" class="studip_form" method="POST">
+    <form action="<?= $controller->url_for('urlaubskalender/save/birthday') ?>" class="default" method="POST">
         <fieldset>
             <? if ($mitarbeiter_hilfskraft){ ?>
             <label for="student_search" class="caption">
@@ -28,18 +24,9 @@
             </div>
         </fieldset>
       
+        <footer data-dialog-button>
           <?= Button::createAccept(_('Speichern'), 'submit') ?>
           <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('urlaubskalender/birthday')) ?>
+        </footer>
     </form>
     
-
-</div>
-
-<script type="text/javascript">
-  
-    var select_user = function (user_id, fullname) {
-        document.getElementById("add_username").innerHTML = fullname;
-        jQuery('#user_id').val(user_id);
-        document.getElementById("holidays").style.display = "initial"; 
-    };                                    
-</script>
