@@ -51,6 +51,22 @@
                     <!--  Image block: [end] -->
                 </div>
                 <!--  CONTENT ELEMENT, uid:73/textpic [end] -->
+                
+                 <div class="intranet_news csc-default csc-space-after-25">
+		<!--  Image block: [begin] -->
+			<div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight" style='margin-left: 20px'><div class="csc-textpic-text">
+		<!--  Text: [begin] -->
+        <a href='<?=URLHelper::getLink("wiki.php", ['cid' => 'b8d02f67fca5aac0efa01fb1782166d1', 'keyword' => 'moodle-kurse']) ?>'>
+             <img src="<?=$plugin->getPluginURL().'/assets/images/moodle.jpeg' ?>" alt="" border="0" width="100%">
+        </a>
+        <h2 class="intranet">
+                    <a href='<?=URLHelper::getLink("wiki.php", ['cid' => 'b8d02f67fca5aac0efa01fb1782166d1', 'keyword' => 'moodle-kurse']) ?>' title="" class="internal-link">Übersicht: Moodle Inhalte in Stud.IP!</a>
+
+            </h2>
+		<!--  Text: [end] -->
+			</div></div>
+		<!--  Image block: [end] -->
+			</div>
 
                 
 
@@ -168,21 +184,6 @@
 			</div></div>
 		<!--  Image block: [end] -->
 			</div>
-    
-    <div class="intranet_news csc-default csc-space-after-25">
-		<!--  Image block: [begin] -->
-			<div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight" style='margin-left: 20px'><div class="csc-textpic-text">
-		<!--  Text: [begin] -->
-        <iframe href='<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>wiki.php?cid=b8d02f67fca5aac0efa01fb1782166d1&wiki_comments=icon&keyword=moodle-kurse'/> 
-        <h2 class="intranet">
-                    <a href="" title="" class="internal-link">3 Screenshots verschiedener Intranet Startseiten, einfach drauflicken!</a>
-
-            </h2>
-		<!--  Text: [end] -->
-			</div></div>
-		<!--  Image block: [end] -->
-			</div>
-    
     
     
     <img src="<?=$plugin->getPluginURL().'/assets/images/cookies.jpg' ?>" alt="" border="0" width="100%">
