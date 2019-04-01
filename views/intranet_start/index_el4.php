@@ -129,12 +129,12 @@
 			</div>
 	<!--  CONTENT ELEMENT [end] -->            
                 
-    <div class="intranet_news csc-default csc-space-after-25" style='width:85%; margin:auto'>
-        <div id="c83" class="csc-default" style='width: 33%; float:left'>
+    <div class="intranet_news csc-default csc-space-after-25" style='width:95%; margin:auto'>
+        <div id="c83" class="csc-default" style='width: 25%; float:left'>
                 <!--  Image block: [begin] -->
                     <div class="csc-textpic-text" align='center'>
                 <!--  Text: [begin] -->
-                    <img src="<?= $plugin->getPluginURL().'/assets/images/bbb.jpeg' ?>" alt="" border="0" width="50%">
+                    <img src="<?= $plugin->getPluginURL().'/assets/images/bbb.jpeg' ?>" alt="" border="0" width="65%">
                     <h2 class="intranet-inner"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>plugins.php/meetingplugin/index?cid=b8d02f67fca5aac0efa01fb1782166d1" title="Hier kommt ihr direkt zum Meeting-reiter in unserer Internen Veranstaltung, dort braucht ihr nur noch den VK-Raum anklicken und seid dabei!" class="internal-link">
                             Direkt zur eL4 Videokonferenz
                         </a>
@@ -142,34 +142,49 @@
                     </div>
                     <!--  Image block: [end] -->
         </div>
-        <div id="c84" class="csc-default" style='width: 33%; float:left'>
+        <div id="c84" class="csc-default" style='width: 25%; float:left'>
                 <!--  Image block: [begin] -->
                     <div class="csc-textpic-text" align='center'>
                 <!--  Text: [begin] -->
                     <?= Icon::create('glossary', 'clickable', ['size' => 90])?>
                     <h2 class="intranet-inner">
                         <a href="<?= $this->controller->url_for('intranet_start/folder/eb0d49fba9c83fd4bf4373aca82c8f3e') ?>" 
-                           title="Schnellzugriff auf Handbücher!" class="internal-link" data-dialog='size=400'>
+                           title="Schnellzugriff auf Handbücher" class="internal-link" data-dialog='size=400'>
                            Schnellzugriff Handbücher
                         </a>
                     </h2>
                     </div>
                     <!--  Image block: [end] -->
         </div>
-        <div id="c85" class="csc-default" style='width: 33%; float:left'>
+        <div id="c85" class="csc-default" style='width: 25%; float:left'>
                 <!--  Image block: [begin] -->
                     <div class="csc-textpic-text" align='center'>
                 <!--  Text: [begin] -->
                     <?= Icon::create('news', 'clickable', ['size' => 100, 'align' => 'center'])?>
                     <h2 class="intranet-inner">
                         <a href="<?= $this->controller->url_for('intranet_start/folder/52ed2ddd526b5848ff9d96f3ae5bbe93') ?>" 
-                           title="Schnellzugriff auf Protokollordner!" class="internal-link" data-dialog='size=400'>
+                           title="Schnellzugriff auf Protokollordner" class="internal-link" data-dialog='size=400'>
                             Schnellzugriff Protokolle
                         </a>
                     </h2>
                     </div>
                     <!--  Image block: [end] -->
         </div>
+        <div id="c85" class="csc-default" style='width: 25%; float:left'>
+                <!--  Image block: [begin] -->
+                    <div class="csc-textpic-text" align='center'>
+                <!--  Text: [begin] -->
+                    <?= Icon::create('file', 'clickable', ['size' => 100, 'align' => 'center'])?>
+                    <h2 class="intranet-inner">
+                        <a href="<?= $this->controller->url_for('intranet_start/semfolder/67ef6b9f0e60a5b03fc97287791cf1eb') ?>" 
+                           title="Tutorials für Dozierende" class="internal-link" data-dialog='size=400'>
+                            Tutorials für Dozierende </a>
+                    </h2>
+                    </div>
+                    <!--  Image block: [end] -->
+        </div>
+        
+        
     </div>    
     
     

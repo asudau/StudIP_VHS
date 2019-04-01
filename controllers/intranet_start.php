@@ -110,15 +110,10 @@ class IntranetStartController extends StudipController {
             if ($config && $config->use_files){
                 $this->filesCaptions[$course->id] = $config->files_caption;
                 $this->filesPosition[$course->id] = $config->files_position ? $config->files_position : 0;
-                
-                $db = DBManager::get();
-                $stmt = $db->prepare("SELECT folder_id, name, range_id, seminar_id FROM folder WHERE seminar_id = :cid");
-                $stmt->bindParam(":cid", $course->id);
-                $stmt->execute();
-                $sem_folder = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                $folderwithfiles = array();
-                $details = self::get_folderwithfiles_from_folder_ids($sem_folder);
+                $sem_folder = $this->get_folders_from_seminar_id($course->id);
+
+                $details = $this->get_folderwithfiles_from_folder_ids($sem_folder);
                 $this->folderwithfiles_array[$course->id] = $details['folderwithfiles'];
             }
         }
@@ -153,6 +148,15 @@ class IntranetStartController extends StudipController {
 
         $this->internnewstemplate->icons = $icons;
         return $this->internnewstemplate;
+    }
+    
+    public function get_folders_from_seminar_id($sem_id){
+        $db = DBManager::get();
+        $stmt = $db->prepare("SELECT folder_id, name, range_id, seminar_id FROM folder WHERE seminar_id = :cid");
+        $stmt->bindParam(":cid", $sem_id);
+        $stmt->execute();
+        $folders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $folders;  
     }
     
     public function get_folderwithfiles_from_folder_ids($folders) {
@@ -267,17 +271,25 @@ class IntranetStartController extends StudipController {
     
     public function folder_action($folder_id = null)
     {
-        
         $db = DBManager::get();
         $stmt = $db->prepare("SELECT folder_id, name, range_id, seminar_id FROM folder WHERE folder_id = :folder_id");
         $stmt->bindParam(":folder_id", $folder_id);
         $stmt->execute();
         $sem_folder = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $details = self::get_folderwithfiles_from_folder_ids($sem_folder);
+        $details = $this->get_folderwithfiles_from_folder_ids($sem_folder);
         $this->folderwithfiles = $details['folderwithfiles'];
         $this->parentfolder = $details['parentfolder'];
     }
+    
+    public function semfolder_action($sem_id = null){
+        $this->folder_ids = $this->get_folders_from_seminar_id($sem_id);
+        $details = $this->get_folderwithfiles_from_folder_ids($this->folder_ids );
+        $this->folderwithfiles = $details['folderwithfiles'];
+        $this->parentfolder = $details['parentfolder'];
+        $this->render_action('folder');
+    }
+    
     
     public function files_action($file_id = null)
     {
