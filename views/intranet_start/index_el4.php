@@ -177,7 +177,7 @@
                     <?= Icon::create('file', 'clickable', ['size' => 100, 'align' => 'center'])?>
                     <h2 class="intranet-inner">
                         <a href="<?= $this->controller->url_for('intranet_start/semfolder/67ef6b9f0e60a5b03fc97287791cf1eb') ?>" 
-                           title="Tutorials für Dozierende" class="internal-link" data-dialog='size=400'>
+                           title="Tutorials für Dozierende" class="internal-link" data-dialog='size=600'>
                             Tutorials für Dozierende </a>
                     </h2>
                     </div>
