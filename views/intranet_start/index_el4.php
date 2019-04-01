@@ -162,7 +162,7 @@
                 <!--  Text: [begin] -->
                     <?= Icon::create('news', 'clickable', ['size' => 100, 'align' => 'center'])?>
                     <h2 class="intranet-inner">
-                        <a href="<?= $this->controller->url_for('intranet_start/folder/a70264513f188a7996bd03d23201a043') ?>" 
+                        <a href="<?= $this->controller->url_for('intranet_start/folder/52ed2ddd526b5848ff9d96f3ae5bbe93') ?>" 
                            title="Schnellzugriff auf Protokollordner!" class="internal-link" data-dialog='size=400'>
                             Schnellzugriff Protokolle
                         </a>
