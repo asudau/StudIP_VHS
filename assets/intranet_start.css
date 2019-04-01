@@ -191,6 +191,15 @@ h2.intranet {
     border-bottom: none;
 }
 
+h2.intranet-inner {
+    padding: 10px 0px 10px 0px;
+    margin-top: -42px;
+    background-color: rgba(255,255,255,0.8);
+    width: 100%;
+    position: relative;
+    border-bottom: none;
+}
+
 section.schwarzesbrett-widget article header h1 a:before {
    content: none;
 }

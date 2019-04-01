@@ -11,7 +11,7 @@
             <? endforeach ?>
         <? endif ?>
         <? foreach ($files as $file): ?>
-            <li class='file_download' style="display:none"> <a href='<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>sendfile.php?force_download=1&type=0&file_id=<?= $file['dokument_id']?>&file_name=<?= $file['filename'] ?>'><?= $file['name'] ?></a></li>
+            <li class='file_download' style="display: <?=$display? : 'none' ?> "> <a href='<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>sendfile.php?force_download=1&type=0&file_id=<?= $file['dokument_id']?>&file_name=<?= $file['filename'] ?>'><?= $file['name'] ?></a></li>
 
         <? endforeach ?>
         </section>

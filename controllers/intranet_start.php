@@ -118,31 +118,14 @@ class IntranetStartController extends StudipController {
                 $sem_folder = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 $folderwithfiles = array();
-                $parentfolder = array();
-
-                foreach ($sem_folder as $folder){
-
-                    $db = \DBManager::get();
-                    $stmt = $db->prepare("SELECT * FROM `dokumente` WHERE `range_id` = :range_id
-                        ORDER BY `priority`, `name`");
-
-                    $stmt->bindParam(":range_id", $folder['folder_id']);
-                    $stmt->execute();
-                    $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                    $folderwithfiles[$folder['folder_id']] = $files;
-                    if(DocumentFolder::find($folder['range_id'])){
-                        $parentfolder[$folder['folder_id']] = $folder['range_id'];
-                    }
-
-                }
-                $this->folderwithfiles_array[$course->id] = $folderwithfiles;
+                $details = self::get_folderwithfiles_from_folder_ids($sem_folder);
+                $this->folderwithfiles_array[$course->id] = $details['folderwithfiles'];
             }
         }
         asort($this->filesPosition);
         
         //folder auf Unterebene
-        $this->parentfolder = $parentfolder;
+        $this->parentfolder = $details['parentfolder'];
 
          //get upcoming courses (studip dates of configured category)
         //$result = EventData::findBySQL("category_intern = '13' AND start > '" . time() . "' ORDER BY start ASC");
@@ -170,6 +153,29 @@ class IntranetStartController extends StudipController {
 
         $this->internnewstemplate->icons = $icons;
         return $this->internnewstemplate;
+    }
+    
+    public function get_folderwithfiles_from_folder_ids($folders) {
+            $folderwithfiles = array();
+            $parentfolder = array();
+
+            foreach ($folders as $folder){
+
+                $db = \DBManager::get();
+                $stmt = $db->prepare("SELECT * FROM `dokumente` WHERE `range_id` = :range_id
+                    ORDER BY `priority`, `name`");
+
+                $stmt->bindParam(":range_id", $folder['folder_id']);
+                $stmt->execute();
+                $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                $folderwithfiles[$folder['folder_id']] = $files;
+                if(DocumentFolder::find($folder['range_id'])){
+                    $parentfolder[$folder['folder_id']] = $folder['range_id'];
+                }
+
+            }
+            return ['folderwithfiles' => $folderwithfiles, 'parentfolder' => $parentfolder];
     }
     
     
@@ -257,6 +263,25 @@ class IntranetStartController extends StudipController {
         } 
         $this->response->add_header('X-Dialog-Close', '1');
         $this->redirect('intranet_start/index');
+    }
+    
+    public function folder_action($folder_id = null)
+    {
+        
+        $db = DBManager::get();
+        $stmt = $db->prepare("SELECT folder_id, name, range_id, seminar_id FROM folder WHERE folder_id = :folder_id");
+        $stmt->bindParam(":folder_id", $folder_id);
+        $stmt->execute();
+        $sem_folder = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $details = self::get_folderwithfiles_from_folder_ids($sem_folder);
+        $this->folderwithfiles = $details['folderwithfiles'];
+        $this->parentfolder = $details['parentfolder'];
+    }
+    
+    public function files_action($file_id = null)
+    {
+        
     }
 
     

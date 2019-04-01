@@ -40,33 +40,21 @@
                 </div>
                 <!--  CONTENT ELEMENT, uid:73/textpic [end] -->
                 
-                <!--  CONTENT ELEMENT, uid:73/textpic [begin] -->
-                <div id="c73" class="csc-default csc-space-after-25">
-                <!--  Image block: [begin] -->
-                    <div class="csc-textpic-text" align='center'>
-                <!--  Text: [begin] -->
-                    <img src="<?= $plugin->getPluginURL().'/assets/images/bbb.jpeg' ?>" alt="" border="0" width="50%">
-                    <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>plugins.php/meetingplugin/index?cid=b8d02f67fca5aac0efa01fb1782166d1" title="Hier kommt ihr direkt zum Meeting-reiter in unserer Internen Veranstaltung, dort braucht ihr nur noch den VK-Raum anklicken und seid dabei!" class="internal-link">Abkürzung zur eL4 Videokonferenz in BigBlueButton</a></h2>
-                    </div>
+                
+                <div class="intranet_news csc-default csc-space-after-25">
+                    <!--  Image block: [begin] -->
+                    <div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight" style='margin-left: 20px'><div class="csc-textpic-text">
+                        <!--  Text: [begin] -->
+                        <a href='<?=URLHelper::getLink("wiki.php", ['cid' => 'b8d02f67fca5aac0efa01fb1782166d1', 'keyword' => 'moodle-kurse']) ?>'>
+                             <img src="<?=$plugin->getPluginURL().'/assets/images/moodle.jpeg' ?>" alt="" border="0" width="100%">
+                        </a>
+                    <h2 class="intranet">
+                        <a href='<?=URLHelper::getLink("wiki.php", ['cid' => 'b8d02f67fca5aac0efa01fb1782166d1', 'keyword' => 'moodle-kurse']) ?>' title="" class="internal-link">Übersicht: Moodle Inhalte in Stud.IP!</a>
+                    </h2>
+                    <!--  Text: [end] -->
+                        </div></div>
                     <!--  Image block: [end] -->
                 </div>
-                <!--  CONTENT ELEMENT, uid:73/textpic [end] -->
-                
-                 <div class="intranet_news csc-default csc-space-after-25">
-		<!--  Image block: [begin] -->
-			<div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight" style='margin-left: 20px'><div class="csc-textpic-text">
-		<!--  Text: [begin] -->
-        <a href='<?=URLHelper::getLink("wiki.php", ['cid' => 'b8d02f67fca5aac0efa01fb1782166d1', 'keyword' => 'moodle-kurse']) ?>'>
-             <img src="<?=$plugin->getPluginURL().'/assets/images/moodle.jpeg' ?>" alt="" border="0" width="100%">
-        </a>
-        <h2 class="intranet">
-                    <a href='<?=URLHelper::getLink("wiki.php", ['cid' => 'b8d02f67fca5aac0efa01fb1782166d1', 'keyword' => 'moodle-kurse']) ?>' title="" class="internal-link">Übersicht: Moodle Inhalte in Stud.IP!</a>
-
-            </h2>
-		<!--  Text: [end] -->
-			</div></div>
-		<!--  Image block: [end] -->
-			</div>
 
                 
 
@@ -125,7 +113,7 @@
 			</div>
 			<div class="haupt">
 	       
-                
+                   
     <!--  eL4 Kooperation Logo [begin] -->
 		<div class="intranet_news csc-default csc-space-after-25">
 		<!--  Image block: [begin] -->
@@ -141,6 +129,52 @@
 			</div>
 	<!--  CONTENT ELEMENT [end] -->            
                 
+    <div class="intranet_news csc-default csc-space-after-25" style='width:85%; margin:auto'>
+        <div id="c83" class="csc-default" style='width: 33%; float:left'>
+                <!--  Image block: [begin] -->
+                    <div class="csc-textpic-text" align='center'>
+                <!--  Text: [begin] -->
+                    <img src="<?= $plugin->getPluginURL().'/assets/images/bbb.jpeg' ?>" alt="" border="0" width="50%">
+                    <h2 class="intranet-inner"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>plugins.php/meetingplugin/index?cid=b8d02f67fca5aac0efa01fb1782166d1" title="Hier kommt ihr direkt zum Meeting-reiter in unserer Internen Veranstaltung, dort braucht ihr nur noch den VK-Raum anklicken und seid dabei!" class="internal-link">
+                            Direkt zur eL4 Videokonferenz
+                        </a>
+                    </h2>
+                    </div>
+                    <!--  Image block: [end] -->
+        </div>
+        <div id="c84" class="csc-default" style='width: 33%; float:left'>
+                <!--  Image block: [begin] -->
+                    <div class="csc-textpic-text" align='center'>
+                <!--  Text: [begin] -->
+                    <?= Icon::create('glossary', 'clickable', ['size' => 90])?>
+                    <h2 class="intranet-inner">
+                        <a href="<?= $this->controller->url_for('intranet_start/folder/beac59c8e38d0b1dda3ccf93ec092692') ?>" 
+                           title="Schnellzugriff auf Handbücher!" class="internal-link" data-dialog='size=400'>
+                           Schnellzugriff Handbücher
+                        </a>
+                    </h2>
+                    </div>
+                    <!--  Image block: [end] -->
+        </div>
+        <div id="c85" class="csc-default" style='width: 33%; float:left'>
+                <!--  Image block: [begin] -->
+                    <div class="csc-textpic-text" align='center'>
+                <!--  Text: [begin] -->
+                    <?= Icon::create('news', 'clickable', ['size' => 100, 'align' => 'center'])?>
+                    <h2 class="intranet-inner">
+                        <a href="<?= $this->controller->url_for('intranet_start/folder/a70264513f188a7996bd03d23201a043') ?>" 
+                           title="Schnellzugriff auf Protokollordner!" class="internal-link" data-dialog='size=400'>
+                            Schnellzugriff Protokolle
+                        </a>
+                    </h2>
+                    </div>
+                    <!--  Image block: [end] -->
+        </div>
+    </div>    
+    
+    
+    <div style="clear:both; display:none"></div>
+    
                 
     <!-- News -->
     <? foreach ($newsTemplates as $course_id => $template) : ?>
