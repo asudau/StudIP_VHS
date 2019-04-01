@@ -148,7 +148,7 @@
                 <!--  Text: [begin] -->
                     <?= Icon::create('glossary', 'clickable', ['size' => 90])?>
                     <h2 class="intranet-inner">
-                        <a href="<?= $this->controller->url_for('intranet_start/folder/beac59c8e38d0b1dda3ccf93ec092692') ?>" 
+                        <a href="<?= $this->controller->url_for('intranet_start/folder/eb0d49fba9c83fd4bf4373aca82c8f3e') ?>" 
                            title="Schnellzugriff auf Handbücher!" class="internal-link" data-dialog='size=400'>
                            Schnellzugriff Handbücher
                         </a>
