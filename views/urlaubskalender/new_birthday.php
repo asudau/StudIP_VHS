@@ -2,18 +2,8 @@
 
     
     
-    <form action="<?= $controller->url_for('urlaubskalender/save/birthday') ?>" class="default" method="POST">
+    <form action="<?= $controller->url_for('urlaubskalender/save_birthday') ?>" class="default" method="POST">
         <fieldset>
-            <? if ($mitarbeiter_hilfskraft){ ?>
-            <label for="student_search" class="caption">
-                <?= _('MitarbeiterIn suchen')?>
-                <?= Icon::create('info-circle', 'info', array('title' => $help))?>
-            </label>
-
-                <?= $quick_search->render();
-            ?>
-            <? } ?>
-            <br>
             <h2 name="add_username" id="add_username"><?= (!$mitarbeiter_admin) ? $GLOBALS['user']->vorname . ' ' . $GLOBALS['user']->nachname : '' ?></h2>
             <input type="hidden" name="user_id" value="<?= (!$mitarbeiter_admin) ? $GLOBALS['user']->id : '' ?>" id="user_id"></input><br>
             <div id='holidays' style="<?= (!$mitarbeiter_admin) ? '' : 'display:none;' ?>">

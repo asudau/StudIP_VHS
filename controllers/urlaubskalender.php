@@ -712,48 +712,26 @@ class UrlaubskalenderController extends StudipController
     
     }
 
-    public function save_action($type, $id = NULL) {
+    public function save_birthday_action($id = NULL) {
         
-        if($this->entry = IntranetDate::find($id)){
-            
-            foreach($_POST as $key => $value){
-                if (is_array($value)){
-                    $value = implode(", ", $value);
-                }
-                
-                    try {
-                    $this->entry->setValue($key, $value);
-                    } catch (Exception $e){}
-                
-            }
-            $this->entry->chdate  = time();
-            $this->entry->store();
-            PageLayout::postMessage(MessageBox::success(_('Die Änderungen wurden gespeichert.')));
+        if($this->entry = EventData::find($id)){
+        
+        
         } else {
-            $this->entry = new IntranetDate();
-            foreach($_POST as $key => $value){
-                if (is_array($value)){
-                    $value = implode(", ", $value);
-                }
-                
-                    try {
-                    $this->entry->setValue($key, $value);
-                    } catch (Exception $e){}
-                
-            }
-            if($type == 'birthday'){
-                $this->entry->end  = $this->entry->begin;
-            }
-            $this->entry->type  = $type;
-            $this->entry->mkdate  = time();
-            $this->entry->chdate  = time();
-            $this->entry->store();
+            $entry = new EventData();
+            $entry->author_id = Request::get('user_id');
+            $entry->editor_id = Request::get('user_id');
+            $entry->start = Request::get('begin');
+            $entry->end = Request::get('begin');
+            $entry->rtype = 'YEARLY';
+            $entry->linterval = 1;
+            $entry->category_intern = 11;
+            $entry->store();
             PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gespeichert.')));
         }
-        if ($type == 'birthday') {
-            $this->redirect($this->url_for('/urlaubskalender/birthday'));
-        } else
-        $this->redirect($this->url_for('/urlaubskalender'));
+        
+        $this->redirect($this->url_for('/urlaubskalender/birthday'));
+   
         
     }
 
