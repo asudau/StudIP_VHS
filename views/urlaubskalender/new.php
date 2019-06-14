@@ -19,29 +19,17 @@
 ?>
 
 
-
-<?= LinkButton::createBack(_('Zurück'), $controller->url_for('urlaubskalender/')) ?>
 <div id='mitarbeiter'>
     
     
-    <form action="<?= $controller->url_for('urlaubskalender/save/urlaub') ?>" class="studip_form" method="POST">
+    <form action="<?= $controller->url_for('urlaubskalender/save_vacation') ?>" class="studip_form" method="POST">
         <fieldset>
-            <? if ($mitarbeiter_admin){ ?>
-            <label for="student_search" class="caption">
-                <?= _('MitarbeiterIn suchen')?>
-                <?= Icon::create('info-circle', 'info', array('title' => $help))?>
-            </label>
-
-                <?= $quick_search->render();
-            ?>
-            <? } ?>
-            <br>
             <h2 name="add_username" id="add_username"><?= (!$mitarbeiter_admin) ? $GLOBALS['user']->vorname . ' ' . $GLOBALS['user']->nachname : '' ?></h2>
             <input type="hidden" name="user_id" value="<?= (!$mitarbeiter_admin) ? $GLOBALS['user']->id : '' ?>" id="user_id"></input><br>
-            <div id='holidays' style="<?= (!$mitarbeiter_admin) ? '' : 'display:none;' ?>">
+            <div id='holidays' >
                 <label> Urlaubsbeginn: </label>
-                <input required type="text" id="beginn" name="begin" data-date-picker='{"<":"#ende"}' value=""></input><br>
-                <label> Urlaubsende:</label> <input id="ende" data-date-picker='{">":"#beginn"}' type="" name="end" value=""></input>
+                <input required type="text" id="begin" name="begin" data-date-picker='{"<":"#end"}' value=""></input><br>
+                <label> Urlaubsende:</label> <input id="end" data-date-picker='{">":"#begin"}' type="" name="end" value=""></input>
                 <label> Hinweis/Notiz:</label> <input type="" name="notice" value=""></input>
             </div>
         </fieldset>

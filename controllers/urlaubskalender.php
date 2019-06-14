@@ -103,7 +103,8 @@ class UrlaubskalenderController extends StudipController
         $actions = new ActionsWidget();
                         
         $actions->addLink(_('Neuen Urlaubstermin eintragen'),
-                $GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/edit/" . $this->sem_id,
+                    $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'new_vacation')),
+                    //$GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/edit/" . $this->sem_id,
                           Icon::create('add', 'clickable'), ["rel" => "get_dialog", "dialog-title" => 'Termin anlegen']);
 
         $actions->addLink(_('Urlaubstermine bearbeiten'),
@@ -420,7 +421,8 @@ class UrlaubskalenderController extends StudipController
             $actions = new ActionsWidget();
 
             $actions->addLink(_('Neuen Urlaubstermin eintragen'),
-                              $GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/edit/" . $this->sem_id,
+                            $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'new_vacation')),  
+                            //$GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/edit/" . $this->sem_id,
                           Icon::create('add', 'clickable'), ["rel" => "get_dialog", "dialog-title" => 'Termin anlegen']);
             
             $actions->addLink(_('Urlaubstermine bearbeiten'),
@@ -449,21 +451,21 @@ class UrlaubskalenderController extends StudipController
     
     }
     
-    
-    public function new_action($id = '')
+    //vacation
+    public function new_vacation_action($id = '')
     {
     
         PageLayout::setTitle(_('Neuen Urlaubstermin eintragen'));
-        $this->id = '568fce7262620700103ce1657cabc5e3';
+        //$this->id = '568fce7262620700103ce1657cabc5e3';
         global $perm;
-        $this->mitarbeiter_admin = $perm->have_studip_perm('tutor', $this->id);
+        $this->mitarbeiter_admin = $perm->have_studip_perm('tutor', $this->sem_id);
 
         $sidebar = Sidebar::get();
         $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/luggage-klein.jpg");
         $sidebar->setTitle(_("Urlaubskalender"));
 
 
-            $views = new ViewsWidget();
+        $views = new ViewsWidget();
         $views->addLink(_('Kalenderansicht'),
                         $this->url_for('urlaubskalender'));
         $views->addLink(_('Zeitstrahl-Ansicht'),
@@ -474,7 +476,8 @@ class UrlaubskalenderController extends StudipController
             $actions = new ActionsWidget();
 
             $actions->addLink(_('Neuen Urlaubstermin eintragen'),
-                              $GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/edit/" . $this->sem_id,
+                              $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'new_vacation')),
+                                //$GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/edit/" . $this->sem_id,
                           Icon::create('add', 'clickable'), ["rel" => "get_dialog", "dialog-title" => 'Termin anlegen']);
 
             $actions->addLink(_('Urlaubstermine bearbeiten'),
@@ -509,14 +512,21 @@ class UrlaubskalenderController extends StudipController
      *
      * @return void
      */
-    public function new_birthday_action($id = '')
+    public function new_birthday_action($user_id = '', $id = '')
     {
         PageLayout::setTitle(_('Neuen Geburtstag eintragen'));
+        
+        if ($id){
+            $this->date = EventData::find($id);
+        }
+        if ($user_id){
+            $this->user = User::find($user_id);
+        }
 
-         global $perm;
+        global $perm;
         $this->mitarbeiter_hilfskraft = $perm->have_studip_perm('tutor', $this->sem_id);
         
-         $sidebar = Sidebar::get();
+        $sidebar = Sidebar::get();
         $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/klee_klein.jpg");
         $sidebar->setTitle(_("Geburtstage"));
 
@@ -542,7 +552,7 @@ class UrlaubskalenderController extends StudipController
         
         
         $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen');
-
+      
         $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname "
                             . "FROM auth_user_md5 "
                             . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
@@ -555,9 +565,10 @@ class UrlaubskalenderController extends StudipController
                             . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input) "
                             . " ORDER BY fullname ASC",
                 _('Nutzer suchen'), 'user_id');
-        $this->quick_search = QuickSearch::get('user_id', $search_obj);
-        
-        $this->type = 'birthday';
+        //$this->quick_search = QuickSearch::get('user_id', $search_obj);
+        $this->quick_search = QuickSearch::get('user_id', $search_obj)
+                    ->fireJSFunctionOnSelect('birthday_select_user_id')
+                    ->withButton();
         
         $this->render_action('new_birthday');
         
@@ -676,7 +687,7 @@ class UrlaubskalenderController extends StudipController
     {
         PageLayout::setTitle(_('Geburtstag eintragen'));
 
-         global $perm;
+        global $perm;
         $this->mitarbeiter_hilfskraft = $perm->have_studip_perm('tutor', $this->sem_id);
         
         $sidebar = Sidebar::get();
@@ -714,23 +725,79 @@ class UrlaubskalenderController extends StudipController
 
     public function save_birthday_action($id = NULL) {
         
+        $date = DateTime::createFromFormat('d.m.Y', Request::get('begin'));
         if($this->entry = EventData::find($id)){
-        
+            $entry->author_id = Request::get('user_id');
+            $entry->editor_id = Request::get('user_id');
+            $entry->start = $date->getTimestamp();
+            $entry->end = $date->getTimestamp();
+            $entry->month = $date->format('m');
+            $entry->day = $date->format('d');
+            $entry->summary =  Request::get('notice');
+            $entry->store();
+            PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gespeichert.')));
         
         } else {
             $entry = new EventData();
             $entry->author_id = Request::get('user_id');
             $entry->editor_id = Request::get('user_id');
-            $entry->start = Request::get('begin');
-            $entry->end = Request::get('begin');
+            $entry->start = $date->getTimestamp();
+            $entry->end = $date->getTimestamp();
             $entry->rtype = 'YEARLY';
+            $entry->month = $date->format('m');
+            $entry->day = $date->format('d');
             $entry->linterval = 1;
             $entry->category_intern = 11;
+            $entry->summary =  Request::get('notice');
             $entry->store();
+            $event = new CalendarEvent();
+            $event->range_id = $this->sem_id;
+            $event->event_id = $entry->event_id;
+            $event->mkdate = time();
+            $event->chdate = time();
+            $event->store();
             PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gespeichert.')));
         }
         
         $this->redirect($this->url_for('/urlaubskalender/birthday'));
+
+    }
+    
+    public function save_vacation_action($id = NULL) {
+        
+        $begin_date = DateTime::createFromFormat('d.m.Y', Request::get('begin'));
+        $end_date = DateTime::createFromFormat('d.m.Y', Request::get('end'));
+        if($this->entry = EventData::find($id)){
+            $entry->author_id = Request::get('user_id');
+            $entry->editor_id = Request::get('user_id');
+            $entry->start = $begin_date->getTimestamp();
+            $entry->end = $end_date->getTimestamp();
+            $entry->rtype = 'SINGLE';
+            $entry->category_intern = 13;
+            $entry->summary =  Request::get('notice');
+            $entry->store();
+            PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gespeichert.')));
+        
+        } else {
+            $entry = new EventData();
+            $entry->author_id = Request::get('user_id');
+            $entry->editor_id = Request::get('user_id');
+            $entry->start = $begin_date->getTimestamp();
+            $entry->end = $end_date->getTimestamp();
+             $entry->rtype = 'SINGLE';
+            $entry->category_intern = 13;
+            $entry->summary =  Request::get('notice');
+            $entry->store();
+            $event = new CalendarEvent();
+            $event->range_id = $this->sem_id;
+            $event->event_id = $entry->event_id;
+            $event->mkdate = time();
+            $event->chdate = time();
+            $event->store();
+            PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gespeichert.')));
+        }
+        
+        $this->redirect($this->url_for('/urlaubskalender'));
    
         
     }
@@ -850,18 +917,9 @@ class UrlaubskalenderController extends StudipController
     }
     
     
-    private function events_of_type($type = 'all', $begin_time = null){
+    private function events_of_type($type = 'all', $begin_time = 1111111111){
         
-        if (!$begin_time){
-            $begin_time = time();
-        }
-        
-        $begin_date = new DateTime();
-        $begin_date->setTimestamp($begin_time);
-        $end_date = new DateTime();
-        $end_date->setTimestamp(3333333333);
-        
-        $calendar_events = CalendarEvent::getEventsByInterval($this->sem_id, $begin_date, $end_date);
+        $calendar_events = self::getEventsByInterval($this->sem_id, $begin_time, 3333333333);
             
         if ($type == 'all'){
             foreach ($calendar_events as $calendar_event){
@@ -886,5 +944,63 @@ class UrlaubskalenderController extends StudipController
         //$this->setProperties($calendar_event, $component);
         //$calendar_event->setRecurrence($component['RRULE']);
     }
+    
+    public static function getEventsByInterval($range_id, $start, $end)
+    {
+        $stmt = DBManager::get()->prepare('SELECT * FROM calendar_event '
+                . 'INNER JOIN event_data USING(event_id) '
+                . 'WHERE range_id = :range_id '
+                . 'AND ((start BETWEEN :start AND :end) OR '
+                . "(start <= :end AND (expire + end - start) >= :start AND rtype != 'SINGLE') "
+                . 'OR (:start BETWEEN start AND end)) '
+                . 'ORDER BY start ASC');
+        $stmt->execute(array(
+            ':range_id' => $range_id,
+            ':start'    => $start,
+            ':end'      => $end
+        ));
+        $i = 0;
+        $event_collection = new SimpleORMapCollection();
+        $event_collection->setClassName('Event');
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $event_collection[$i] = new CalendarEvent();
+            $event_collection[$i]->setData($row);
+            $event_collection[$i]->setNew(false);
+            $event = new EventData();
+            $event->setData($row);
+            $event->setNew(false);
+            $event_collection[$i]->event = $event;
+            $i++;
+        }
+        return $event_collection;
+    }
   
+    public static function getEventsByDayAndMonth($range_id, $day, $month)
+    {
+        $stmt = DBManager::get()->prepare('SELECT * FROM calendar_event '
+                . 'INNER JOIN event_data USING(event_id) '
+                . 'WHERE range_id = :range_id '
+                . 'AND (day = :day AND month = :month) '
+                . 'ORDER BY start ASC');
+        $stmt->execute(array(
+            ':range_id' => $range_id,
+            ':day'      => $day,
+            ':month'    => $month
+        ));
+        $i = 0;
+        $event_collection = new SimpleORMapCollection();
+        $event_collection->setClassName('Event');
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $event_collection[$i] = new CalendarEvent();
+            $event_collection[$i]->setData($row);
+            $event_collection[$i]->setNew(false);
+            $event = new EventData();
+            $event->setData($row);
+            $event->setNew(false);
+            $event_collection[$i]->event = $event;
+            $i++;
+        }
+        return $event_collection;
+    }
+    
 }

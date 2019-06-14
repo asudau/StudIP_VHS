@@ -101,13 +101,12 @@
                 
                 <!--  Text: [begin] -->
                      <img src="<?=$plugin->getPluginURL().'/assets/images/klee_klein.jpg' ?>" alt="" border="0" width="100%">
-                     <h2 class="intranet"> <a href="<?=$controller->url_for('urlaubskalender/birthday')?>" title="Opens internal link in current window" class="internal-link">Geburtstage</a></h2>
-                      <?php if ($birthday_dates): ?>   
+                     <h2 class="intranet"> <a href="<?=$controller->url_for('urlaubskalender/birthday')?>" title="Opens internal link in current window" class="internal-link">Geburtstage <?= $today->format('d.m.Y') ?></a></h2>
+                     <?php if ($birthday_dates): ?>   
                         <p class="bodytext">   
                         <section class="contentbox folder">
                         <? foreach ($birthday_dates as $date){ ?>
-                        <? $userinfo = UserModel::getUser($date->user_id); ?>
-                        <li class='birthday' title='... hat heute Geburtstag'><?= Icon::create('star', 'clickable')?> <?= $userinfo['Vorname'] . ' ' . $userinfo['Nachname']?></li>
+                        <li class='birthday' title='... hat am <?=date('d.m.Y', $date->start) ?> Geburtstag'><?= Icon::create('star', 'clickable')?> <?= $date->summary?></li>
                         <?}?>
                         </section>
 

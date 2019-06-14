@@ -1,5 +1,26 @@
 <? use Studip\Button, Studip\LinkButton; ?>
 
+<?= var_dump($dates[0]->summary)?>
+<?= var_dump($dates[0]->start)?>
+<?= var_dump($dates[0]->end)?>
+<table class='default'>
+    <head>
+        <th>Datum</th>
+        <th>Name</th>
+    </head>
+    <tbody>
+        <? if($dates) : ?>
+            <? foreach($dates as $event): ?>
+            <tr>
+                <td><?= date("d.m.Y", $event['start']) ?> </td>
+                <td><?= $event['summary']?></td>
+            </tr>
+            <? endforeach ?>
+        <? endif ?>
+    </tbody>
+</table>
+
+
 <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>
     <div class="dhx_cal_navline">
         <div class="dhx_cal_prev_button">&nbsp;</div>

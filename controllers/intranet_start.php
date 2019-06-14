@@ -1,6 +1,7 @@
 <?php
 require_once 'app/controllers/news.php';
 require_once 'app/controllers/calendar/single.php';
+require_once 'urlaubskalender.php';
 
 
 class IntranetStartController extends StudipController {
@@ -11,6 +12,9 @@ class IntranetStartController extends StudipController {
         $this->plugin = $dispatcher->plugin;
         Navigation::activateItem('start');
         PageLayout::addStylesheet($this->plugin->getPluginURL().'/assets/no_tabs.css');
+        
+        $this->sem_id = 'b8d02f67fca5aac0efa01fb1782166d1';
+        $this->sem_id = '14ddc9353c17a5c8bf2ccfe1e4c82345';
     }
 
     public function before_filter(&$action, &$args)
@@ -89,8 +93,17 @@ class IntranetStartController extends StudipController {
 //        $this->internnewstemplate->icons = $icons;
         
         //get special dates (maybe)
-        $this->birthday_dates = IntranetDate::findBySQL("type = 'birthday' AND begin = ?", array(date('d.m.Y', time())));
-
+        //$this->birthday_dates = IntranetDate::findBySQL("type = 'birthday' AND begin = ?", array(date('d.m.Y', time())));
+        $this->today = new DateTime();
+        $this->birthday_dates = [];
+        $this->today_dates = UrlaubskalenderController::getEventsByDayAndMonth($this->sem_id, $this->today->format('d'), $this->today->format('m'));
+        foreach ($this->today_dates as $calendar_event){
+            $data = EventData::findOneByEvent_id($calendar_event['event_id']);
+            if ($data->category_intern == 11){
+                $this->birthday_dates[] = $data;
+            }
+        }
+        
         //get new and recently visited courses of user
         $statement = DBManager::get()->prepare("SELECT s.Seminar_id, s.Name, ouv.visitdate, ouv.type "
                 . "FROM seminare as s "
