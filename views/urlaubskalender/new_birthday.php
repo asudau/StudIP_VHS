@@ -8,7 +8,7 @@
         <fieldset>
             
             <h2 name="add_username" id="add_username"><?= (!$mitarbeiter_admin) ? $user->vorname . ' ' . $user->nachname : '' ?></h2>
-            <input id="birthday_user_id"  type="hidden" name="user_id" value="<?= (!$mitarbeiter_admin) ? $GLOBALS['user']->id : '' ?>" id="user_id"></input><br>
+            <input id="birthday_user_id"  type="hidden" name="user_id" value="<?= $GLOBALS['user']->id?>" id="user_id"></input><br>
             <div id='holidays' style="<?= (!$mitarbeiter_admin) ? '' : 'display:none;' ?>">
                 <label> Datum: </label>
                 <input required type="text" id="begin" name="begin" data-date-picker value="<?= $date ? date("m.d.y", $date['start']) : ''?> "></input><br>
