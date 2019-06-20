@@ -355,47 +355,23 @@ class UrlaubskalenderController extends StudipController
      *
      * @return void
      */
-    public function new_birthday_action($user_id = '', $id = '')
+    public function new_birthday_action()
     {
         PageLayout::setTitle(_('Neuen Geburtstag eintragen'));
+        $user_id = Request::get('user_id');
         
-        if ($id){
-            $this->date = EventData::find($id);
-        }
+        //gibt es zu diesem nutzer schon einen termin vom typ geburtstag?
+        $this->date = EventData::findOneBySQL('author_id = ? AND category_intern = 11', [$user_id]);
+
         if ($user_id){
             $this->user = User::find($user_id);
         }
 
         global $perm;
         $this->mitarbeiter_hilfskraft = $perm->have_studip_perm('tutor', $this->sem_id);
-        
-        $sidebar = Sidebar::get();
-        $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/klee_klein.jpg");
-        $sidebar->setTitle(_("Geburtstage"));
 
-            
-        $views = new ViewsWidget();
-        $views->addLink(_('Kalenderansicht'),
-                        $this->url_for('urlaubskalender/birthday')); 
-        $sidebar->addWidget($views);
-            
-            // Show action to add widget only if not all widgets have already been added.
-            $actions = new ActionsWidget();
-
-            $actions->addLink(_('Neuen Geburtstag eintragen'),
-                              $this->url_for('urlaubskalender/new_birthday'),
-                              Icon::create('add', 'clickable'))->asDialog('size=medium'); 
-            
-            $actions->addLink(_('Geburtstag bearbeiten'),
-                              $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_hilfskraft ? ('edituser_birthday/'.$GLOBALS['user']->id) : 'edit_birthday')),
-                              Icon::create('edit', 'clickable'))->asDialog('size=medium'); 
-            
-            $sidebar->addWidget($actions);
-       
-        
-        
         $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen');
-      
+        
         $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname "
                             . "FROM auth_user_md5 "
                             . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
@@ -410,9 +386,11 @@ class UrlaubskalenderController extends StudipController
                 _('Nutzer suchen'), 'user_id');
         //$this->quick_search = QuickSearch::get('user_id', $search_obj);
         $this->quick_search = QuickSearch::get('user_id', $search_obj)
-                    ->fireJSFunctionOnSelect('birthday_select_user_id')
-                    ->withButton();
-        
+                        ->setInputStyle("width: 240px")
+                        //->fireJSFunctionOnSelect('doktoranden_select')
+                        ->defaultValue( $user_id, $this->user->username)
+                        ->withButton();
+
         $this->render_action('new_birthday');
         
     
@@ -476,16 +454,19 @@ class UrlaubskalenderController extends StudipController
 
 
     public function save_birthday_action($id = NULL) {
-        
-        $date = DateTime::createFromFormat('d.m.Y', Request::get('begin'));
-        if($this->entry = EventData::find($id)){
-            $entry->author_id = Request::get('user_id');
-            $entry->editor_id = Request::get('user_id');
+        $date_id = Request::get('date_id');
+        $date = DateTime::createFromFormat('d.m.', Request::get('birthday'));
+        $user = User::find(Request::get('user_id'));
+        if($entry = EventData::find($date_id)){
+            $entry->author_id = $user->id;
+            $entry->editor_id = $user->id;
             $entry->start = $date->getTimestamp();
             $entry->end = $date->getTimestamp();
+            $entry->rtype = 'YEARLY';
+            $entry->category_intern = 11;
             $entry->month = $date->format('m');
             $entry->day = $date->format('d');
-            $entry->summary =  Request::get('notice');
+            $entry->summary =  $user->vorname . ' ' . $user->nachname;
             $entry->store();
             PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gespeichert.')));
         
@@ -498,9 +479,8 @@ class UrlaubskalenderController extends StudipController
             $entry->rtype = 'YEARLY';
             $entry->month = $date->format('m');
             $entry->day = $date->format('d');
-            $entry->linterval = 1;
             $entry->category_intern = 11;
-            $entry->summary =  Request::get('notice');
+            $entry->summary =  $user->vorname . ' ' . $user->nachname;
             $entry->store();
             $event = new CalendarEvent();
             $event->range_id = $this->sem_id;
@@ -555,6 +535,7 @@ class UrlaubskalenderController extends StudipController
     }
 
     /**
+     * TODO umschreiben
      *  This actions removes a holiday entry
      *
      *
@@ -636,7 +617,7 @@ class UrlaubskalenderController extends StudipController
 
         $actions->addLink(_('Neuen Geburtstag eintragen'),
                           $this->url_for('urlaubskalender/new_birthday'),
-                          Icon::create('add', 'clickable'))->asDialog('size=medium'); 
+                          Icon::create('add', 'clickable'))->asDialog('size=auto'); 
 
         $actions->addLink(_('Geburtstag bearbeiten'),
                           $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_hilfskraft ? ('edituser_birthday/'.$GLOBALS['user']->id) : 'edit_birthday')),
