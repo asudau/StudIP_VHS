@@ -13,8 +13,6 @@ class IntranetStartController extends StudipController {
         Navigation::activateItem('start');
         PageLayout::addStylesheet($this->plugin->getPluginURL().'/assets/no_tabs.css');
         
-        $this->sem_id = 'b8d02f67fca5aac0efa01fb1782166d1';
-        $this->sem_id = '14ddc9353c17a5c8bf2ccfe1e4c82345';
     }
 
     public function before_filter(&$action, &$args)
@@ -27,9 +25,11 @@ class IntranetStartController extends StudipController {
 
     public function index_action($inst_id = null)
     {
-        
+        $inst_id = Institute::findCurrent()->id;
+        //TODO Berechtingung für INstitut abfragen
         $this->calendar_controller = new Calendar_CalendarController();
-
+        $this->calendar_sem_id =  IntranetConfig::find($inst_id)->calendar_seminar;
+        
 
         if ($GLOBALS['perm']->have_perm('admin')){
             $this->intranets = IntranetConfig::getInstitutesWithIntranet(true);
@@ -96,7 +96,7 @@ class IntranetStartController extends StudipController {
         //$this->birthday_dates = IntranetDate::findBySQL("type = 'birthday' AND begin = ?", array(date('d.m.Y', time())));
         $this->today = new DateTime();
         $this->birthday_dates = [];
-        $this->today_dates = UrlaubskalenderController::getEventsByDayAndMonth($this->sem_id, $this->today->format('d'), $this->today->format('m'));
+        $this->today_dates = UrlaubskalenderController::getEventsByDayAndMonth($this->calendar_sem_id, $this->today->format('d'), $this->today->format('m'));
         foreach ($this->today_dates as $calendar_event){
             $data = EventData::findOneByEvent_id($calendar_event['event_id']);
             if ($data->category_intern == 11){
