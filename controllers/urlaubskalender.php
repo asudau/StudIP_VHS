@@ -332,7 +332,7 @@ class UrlaubskalenderController extends StudipController
         
         if($id){
             $this->entry = EventData::find($id);
-            $this->user = User::find($this->date->author_id);
+            $this->user = User::find($this->entry->author_id);
         } else if ($user_id){
             $this->user = User::find($user_id);
         }
@@ -425,10 +425,10 @@ class UrlaubskalenderController extends StudipController
             $entry->store();
             PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gespeichert.')));
         
-        } else {
+        } else if ($user) {
             $entry = new EventData();
-            $entry->author_id = Request::get('user_id');
-            $entry->editor_id = Request::get('user_id');
+            $entry->author_id = $user->id;
+            $entry->editor_id = $user->id;
             $entry->start = $date->getTimestamp();
             $entry->end = $date->getTimestamp();
             $entry->rtype = 'YEARLY';
@@ -450,25 +450,27 @@ class UrlaubskalenderController extends StudipController
 
     }
     
-    public function save_vacation_action() {
+    public function save_vacation_action($id = NULL) {
         $id = Request::get('event_id');
         $begin_date = DateTime::createFromFormat('d.m.Y', Request::get('begin'));
         $end_date = DateTime::createFromFormat('d.m.Y', Request::get('end'));
+        $user = User::find(Request::get('user_id'));
         if($entry = EventData::find($id)){
             $entry->start = $begin_date->getTimestamp();
             $entry->end = $end_date->getTimestamp();
             $entry->store();
             PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gespeichert.')));
         
-        } else {
+        } else if ($user){
             $entry = new EventData();
-            $entry->author_id = Request::get('user_id');
-            $entry->editor_id = Request::get('user_id');
+            $entry->author_id = $user->id;
+            $entry->editor_id = $user->id;
             $entry->start = $begin_date->getTimestamp();
             $entry->end = $end_date->getTimestamp();
             $entry->rtype = 'SINGLE';
             $entry->category_intern = 13;
-            $entry->summary =  Request::get('notice');
+            $entry->summary =  $user->vorname . ' ' . $user->nachname;
+            $entry->description =  Request::get('notice');
             $entry->store();
             $event = new CalendarEvent();
             $event->range_id = $this->sem_id;
