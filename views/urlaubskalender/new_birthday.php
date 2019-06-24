@@ -15,7 +15,7 @@
             
             <h2 name="add_username" id="add_username"><?= $user->vorname . ' ' . $user->nachname ?></h2>
             <input id="birthday_user_id"  type="hidden" name="user_id" value="<?= $user->id?>" id="user_id"></input>
-            <input id="birthday_id"  type="hidden" name="date_id" value="<?= ($date) ? $date->id : ''?>"></input>
+            <input id="birthday_id"  type="hidden" name="date_id" value="<?= ($date) ? $date['event_id'] : ''?>"></input>
             <div id='holidays'>
                 <label> Datum: </label>
                 <input required id ='birthday' name ='birthday' value='<?= $date ? date("d.m.", $date['start']) : ''?> '></input><br>

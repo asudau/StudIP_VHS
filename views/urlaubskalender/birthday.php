@@ -5,6 +5,7 @@
     <head>
         <th>Datum</th>
         <th>Name</th>
+        <th>Aktionen</th>
     </head>
     <tbody>
         <? if($dates) : ?>
@@ -12,6 +13,7 @@
             <tr>
                 <td><a href='<?= $controller->url_for('urlaubskalender/new_birthday/'. $event['event_id']) ?>' data-dialog ><?= date("d.m.", $event['start']) ?> </a></td>
                 <td><?= $event['summary']?></td>
+                <td><a href='<?= $controller->url_for('urlaubskalender/delete_birthday/'. $event['event_id']) ?>' ><?= Icon::create('trash', 'clickable') ?> </a></td>
             </tr>
             <? endforeach ?>
         <? endif ?>
