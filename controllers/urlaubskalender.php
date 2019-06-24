@@ -327,9 +327,16 @@ class UrlaubskalenderController extends StudipController
         //$this->id = '568fce7262620700103ce1657cabc5e3';
         global $perm;
         $this->mitarbeiter_admin = $perm->have_studip_perm('tutor', $this->sem_id);
+        
+        $user_id = Request::get('user_id');
+        
+        if($id){
+            $this->entry = EventData::find($id);
+            $this->user = User::find($this->date->author_id);
+        } else if ($user_id){
+            $this->user = User::find($user_id);
+        }
       
-        $this->entry = EventData::find($id);
-            
         $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen' . $this->id);
 
         $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname "
@@ -337,14 +344,16 @@ class UrlaubskalenderController extends StudipController
                             . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
                             . "LEFT JOIN seminar_user ON (auth_user_md5.user_id = seminar_user.user_id) "
                             . "WHERE "
-                            . "seminar_user.Seminar_id IN (". $this->id . ") "
+                            . "seminar_user.Seminar_id LIKE '". $this->sem_id . "' "
                             . "AND (username LIKE :input OR Vorname LIKE :input "
                             . "OR CONCAT(Vorname,' ',Nachname) LIKE :input "
                             . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
                             . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input) "
                             . " ORDER BY fullname ASC",
                 _('Nutzer suchen'), 'user_id');
-        $this->quick_search = QuickSearch::get('user_id', $search_obj);
+        $this->quick_search = QuickSearch::get('user_id', $search_obj)
+                 ->setInputStyle("width: 240px")
+                 ->defaultValue( $user_id, $this->user->username);
 
 
         $this->render_action('new');
@@ -485,13 +494,13 @@ class UrlaubskalenderController extends StudipController
     function delete_action($id)
     {
         if($entry = EventData::find($id)){
-            $event = CalendarEvent::findByEvent_id($id);
+            $event = CalendarEvent::findOneByEvent_id($id);
             $event->delete();
             $entry->delete();
             PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gelöscht.')));
         }
         
-        $this->redirect($this->url_for('/urlaubskalender'));
+        $this->redirect($this->url_for('/urlaubskalender/edit'));
     }
     
     function delete_birthday_action($id)

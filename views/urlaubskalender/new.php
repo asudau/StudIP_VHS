@@ -1,7 +1,5 @@
 <? use Studip\Button, Studip\LinkButton;
 
-
-
         /**
         $mp = MultiPersonSearch::get("contacts_statusgroup_" . $id)
         ->setLinkText("")
@@ -15,11 +13,16 @@
         ->render();
         **/
     
+    if (!$user) : ?>
+    <form action="<?= $controller->url_for('urlaubskalender/new_vacation') ?>" class="default" method="POST" data-dialog='size=auto'>
+        <?= $quick_search->render(); ?>
+        <footer data-dialog-button>
+          <?= Button::createAccept(_('Nutzer wählen'), 'submit') ?>
+          <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('urlaubskalender/birthday')) ?>
+        </footer>
+    </form>
+<? else: ?>
 
-?>
-
-
-    
     <form action="<?= $controller->url_for('urlaubskalender/save_vacation') ?>" class="studip_form" method="POST">
         <fieldset>
             <input type="hidden" name="user_id" value="<?= $GLOBALS['user']->id ?>" id="user_id"></input>
@@ -35,7 +38,7 @@
           <?= Button::createAccept(_('Speichern'), 'submit') ?>
           <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('urlaubskalender/')) ?>
     </form>
-
+<? endif ?>
 
 <script type="text/javascript">
   
