@@ -11,9 +11,14 @@
         <? if($dates) : ?>
             <? foreach($dates as $event): ?>
             <tr>
-                <td><a href='<?= $controller->url_for('urlaubskalender/new_birthday/'. $event['event_id']) ?>' data-dialog ><?= date("d.m.", $event['start']) ?> </a></td>
+                <td><?= date("d.m.", $event['start']) ?></td>
                 <td><?= $event['summary']?></td>
-                <td><a href='<?= $controller->url_for('urlaubskalender/delete_birthday/'. $event['event_id']) ?>' ><?= Icon::create('trash', 'clickable') ?> </a></td>
+                <td>
+                    <a href='<?= $controller->url_for('urlaubskalender/new_birthday/'. $event['event_id']) ?>' data-dialog >
+                    <?= Icon::create('edit', 'clickable') ?> </a>
+                    <a href='<?= $controller->url_for('urlaubskalender/delete_birthday/'. $event['event_id']) ?>' >
+                    <?= Icon::create('trash', 'clickable') ?> </a>
+                </td>
             </tr>
             <? endforeach ?>
         <? endif ?>

@@ -93,7 +93,6 @@ class IntranetStartController extends StudipController {
 //        $this->internnewstemplate->icons = $icons;
         
         //get special dates (maybe)
-        //$this->birthday_dates = IntranetDate::findBySQL("type = 'birthday' AND begin = ?", array(date('d.m.Y', time())));
         $this->today = new DateTime();
         $this->birthday_dates = [];
         $this->today_dates = UrlaubskalenderController::getEventsByDayAndMonth($this->calendar_sem_id, $this->today->format('d'), $this->today->format('m'));
