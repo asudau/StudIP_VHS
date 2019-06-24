@@ -597,6 +597,7 @@ class UrlaubskalenderController extends StudipController
 
     }
     
+    //TODO wird das benutzt?
     function events_action($type = 'all'){
         
         $this->events[] = $this->events_of_type();
@@ -672,8 +673,8 @@ class UrlaubskalenderController extends StudipController
   
     public static function getEventsByDayAndMonth($range_id, $day, $month)
     {
-        $stmt = DBManager::get()->prepare('SELECT * FROM calendar_event '
-                . 'INNER JOIN event_data USING(event_id) '
+        $stmt = DBManager::get()->prepare('SELECT event_id FROM calendar_event '
+                . 'LEFT JOIN event_data USING(event_id) '
                 . 'WHERE range_id = :range_id '
                 . 'AND (day = :day AND month = :month) '
                 . 'ORDER BY start ASC');
@@ -682,20 +683,8 @@ class UrlaubskalenderController extends StudipController
             ':day'      => $day,
             ':month'    => $month
         ));
-        $i = 0;
-        $event_collection = new SimpleORMapCollection();
-        $event_collection->setClassName('Event');
-        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-            $event_collection[$i] = new CalendarEvent();
-            $event_collection[$i]->setData($row);
-            $event_collection[$i]->setNew(false);
-            $event = new EventData();
-            $event->setData($row);
-            $event->setNew(false);
-            $event_collection[$i]->event = $event;
-            $i++;
-        }
-        return $event_collection;
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
 }
