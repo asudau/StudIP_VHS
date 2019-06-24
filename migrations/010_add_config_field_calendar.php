@@ -5,14 +5,14 @@
  *
  * @author Christian Flothmann <christian.flothmann@uos.de>
  */
-class AddConfigFields extends Migration
+class AddConfigFieldCalendar extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function description()
     {
-        return 'Adds fields for intranet config';
+        return 'Adds field for intranet config which seminar to use for intern calendar';
     }
 
     /**
@@ -21,9 +21,7 @@ class AddConfigFields extends Migration
     public function up()
     {
         $db = DBManager::get();
-        $db->exec('ALTER TABLE `intranet_seminar_config` ADD COLUMN news_position INT AFTER news_caption');
-        $db->exec('ALTER TABLE `intranet_seminar_config` ADD COLUMN news_sidebar BOOLEAN AFTER news_position');
-        $db->exec('ALTER TABLE `intranet_seminar_config` ADD COLUMN files_position INT AFTER files_caption');
+        $db->exec('ALTER TABLE `intranet_config` ADD COLUMN calendar_seminar VARCHAR(32) AFTER seminare');
         SimpleORMap::expireTableScheme();
     }
 
@@ -33,9 +31,7 @@ class AddConfigFields extends Migration
     public function down()
     {
         $db = DBManager::get();
-        $db->exec('ALTER TABLE `intranet_seminar_config` DROP COLUMN news_position');
-        $db->exec('ALTER TABLE `intranet_seminar_config` DROP COLUMN news_sidebar');
-        $db->exec('ALTER TABLE `intranet_seminar_config` DROP COLUMN files_position');
+        $db->exec('ALTER TABLE `intranet_config` DROP COLUMN calendar_seminar');
         SimpleORMap::expireTableScheme();
     }
 }
