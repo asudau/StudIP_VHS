@@ -97,8 +97,8 @@ class IntranetStartController extends StudipController {
         $this->today = new DateTime();
         $this->birthday_dates = [];
         $this->today_dates = UrlaubskalenderController::getEventsByDayAndMonth($this->calendar_sem_id, $this->today->format('d'), $this->today->format('m'));
-        foreach ($this->today_dates as $calendar_event){
-            $data = EventData::findOneByEvent_id($calendar_event['event_id']);
+        foreach ($this->today_dates as $calendar_event_id){
+            $data = EventData::findOneByEvent_id($calendar_event_id);
             if ($data->category_intern == 11){
                 $this->birthday_dates[] = $data;
             }
