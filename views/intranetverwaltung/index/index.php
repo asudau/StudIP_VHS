@@ -14,7 +14,7 @@ $dialog_attr = Request::isXhr() ? ' data-dialog="size=50%"' : '';
 $message_types = array('msg' => "success", 'error' => "error", 'info' => "info");
 ?>
 
-<h1>Konfiguration</h1>
+<h1>Konfiguration <?= ($intranet_inst) ? ' : ' . $intranet_inst->name : ''?></h1>
 <p>Um einen Intranetbereich einzurichten wählen Sie unter <a href='<?= URLHelper::getURL('dispatch.php/institute/basicdata/index?cid=')?>' >Einrichtungen</a> eine Einrichtung und aktivieren Sie das Attribut <b>Eigener Intranetbereich</b></p>
 
 
