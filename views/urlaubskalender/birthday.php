@@ -5,6 +5,7 @@
     <head>
         <th>Datum</th>
         <th>Name</th>
+        <th>Hinweis</th>
         <th>Aktionen</th>
     </head>
     <tbody>
@@ -13,6 +14,7 @@
             <tr>
                 <td><?= date("d.m.", $event['start']) ?></td>
                 <td><?= $event['summary']?></td>
+                <td><?= $event['description']?></td>
                 <td>
                     <a href='<?= $controller->url_for('urlaubskalender/new_birthday/'. $event['event_id']) ?>' data-dialog >
                     <?= Icon::create('edit', 'clickable') ?> </a>
