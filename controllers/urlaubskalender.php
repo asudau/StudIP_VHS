@@ -36,6 +36,13 @@ class UrlaubskalenderController extends StudipController
 //        $this->sem_id = 'b8d02f67fca5aac0efa01fb1782166d1';
 //        $this->sem_id = '14ddc9353c17a5c8bf2ccfe1e4c82345';
         $this->sem_id = IntranetConfig::find(Institute::findCurrent()->id)->calendar_seminar;
+        //falls keine instituts id verfügbar ist, über nutzer->intranets->zugehörige veranstaltung die sem_id holen wenn möglich
+        $this->intranets = IntranetConfig::getIntranetIDsForUser(User::findCurrent());
+        $i = 0;
+        while (!$this->sem_id && $i < sizeof($this->intranets) ){
+            $this->sem_id = IntranetConfig::find($this->intranets[$i])->calendar_seminar;
+            $i++;
+        }
         $this->mitarbeiter_admin = $GLOBALS['perm']->have_studip_perm('dozent', $this->sem_id);
     }
     
@@ -633,14 +640,6 @@ class UrlaubskalenderController extends StudipController
         }
         return $events;
         
-        
-        
-        //the following sucks
-        //$this->calendar = new SingleCalendar($this->sem_id);
-        //$this->events = $this->calendar->getEvents()->events->toGroupedArray();
-          
-        //$this->setProperties($calendar_event, $component);
-        //$calendar_event->setRecurrence($component['RRULE']);
     }
     
     public static function getEventsByInterval($range_id, $start, $end)
