@@ -23,7 +23,7 @@ class IntranetStartController extends StudipController {
         PageLayout::setTitle(_("Meine Startseite"));
     }
 
-    public function index_action($inst_id = null)
+    public function index_action()
     {
         $inst_id = Institute::findCurrent()->id;
         //TODO Berechtingung für INstitut abfragen
