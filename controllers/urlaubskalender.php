@@ -172,8 +172,8 @@ class UrlaubskalenderController extends StudipController
         $this->keys = array();
         $cnt = 0;
         foreach($this->dates as $date){
-            if (!array_key_exists($date->summary ,$this->keys)){
-                $this->keys[$date->summary] = $cnt;
+            if (!array_key_exists($date->author_id ,$this->keys)){
+                $this->keys[$date->author_id] = $cnt;
                 $cnt++;
             }
         }
@@ -546,12 +546,7 @@ class UrlaubskalenderController extends StudipController
     function color_by_crossfoot ( $digits )
   {
     // Typcast falls Integer uebergeben
-    $strDigits = ( string ) $digits;
-
-    for( $intCrossfoot = $i = 0; $i < strlen ( $strDigits ); $i++ )
-    {
-      $intCrossfoot += $strDigits{$i};
-    }
+    $strDigits = ( string ) hexdec(substr(md5($digits),0,8));
 
     $colors = array('1' => '#1e90ff',
                     '2' => '#008000',
@@ -566,7 +561,7 @@ class UrlaubskalenderController extends StudipController
         );
     
     
-    return $colors[$intCrossfoot];
+    return $colors[$strDigits%10];
   } 
   
   function birthday_action()
