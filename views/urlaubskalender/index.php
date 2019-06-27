@@ -61,7 +61,7 @@
                     . "text:\"" . $event['summary'] . ($event['description'] ? (" (" . $event['description'] . ")") : "") . "\", "
                     . " start_date:\"" . date("m/d/Y", $event['start']) . "\", "
                     . " end_date:\"" . date("m/d/Y", $event['end'] + 86400) . "\", "
-                    . " color:\"". $controller->color_by_crossfoot($i) . "\"}," ;
+                    . " color:\"". $controller->color_by_crossfoot($event['author_id']) . "\"}," ;
         $i++;
         }
     }
