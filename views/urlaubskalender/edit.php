@@ -18,7 +18,7 @@
                 <td>
                     <a href='<?= $controller->url_for('urlaubskalender/new_vacation/' . $event['id']) ?>' data-dialog='size=auto' >
                         <?= Icon::create('edit', 'clickable')?></a>
-                    <a target='_blank' href='<?= $controller->url_for('urlaubskalender/delete/'. $event['event_id']) ?>' >
+                    <a href='<?= $controller->url_for('urlaubskalender/delete/'. $event['event_id']) ?>' >
                         <?= Icon::create('trash', 'clickable') ?> </a>
                 </td>
             </tr>
