@@ -649,7 +649,7 @@ class UrlaubskalenderController extends StudipController
                 . 'AND ((start BETWEEN :start AND :end) OR '
                 . "(start <= :end AND (expire + end - start) >= :start AND rtype != 'SINGLE') "
                 . 'OR (:start BETWEEN start AND end)) '
-                . 'ORDER BY start ASC');
+                . 'ORDER BY start ASC, summary ASC');
         $stmt->execute(array(
             ':range_id' => $range_id,
             ':start'    => $start,
