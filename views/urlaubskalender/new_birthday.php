@@ -19,6 +19,7 @@
             <div id='holidays'>
                 <label> Datum: </label>
                 <input required id ='birthday' name ='birthday' value='<?= $date ? date("d.m.", $date['start']) : ''?> '></input><br>
+                <label> Hinweis/Notiz:</label> <input type="" name="notice" value="<?= ($date) ? $date->getValue('description') : ''?>"></input>
             </div>
         </fieldset>
       
