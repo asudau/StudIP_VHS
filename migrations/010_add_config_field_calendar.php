@@ -21,7 +21,7 @@ class AddConfigFieldCalendar extends Migration
     public function up()
     {
         $db = DBManager::get();
-        $db->exec('ALTER TABLE `intranet_config` ADD COLUMN calendar_seminar VARCHAR(32) AFTER seminare');
+        $db->exec('ALTER TABLE `intranet_config` ADD COLUMN calendar_seminar VARCHAR(32) AFTER template');
         SimpleORMap::expireTableScheme();
     }
 
