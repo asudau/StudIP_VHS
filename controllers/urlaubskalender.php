@@ -425,10 +425,13 @@ class UrlaubskalenderController extends StudipController
         $date = DateTime::createFromFormat('d.m.', Request::get('birthday'));
         $user = User::find(Request::get('user_id'));
         if($entry = EventData::find($date_id)){
-            $entry->start = $date->getTimestamp();
-            $entry->end = $date->getTimestamp();
-            $entry->month = $date->format('m');
-            $entry->day = $date->format('d');
+            if ($date) { 
+                $entry->start = $date->getTimestamp(); 
+                $entry->end = $date->getTimestamp();
+                $entry->month = $date->format('m');
+                $entry->day = $date->format('d');
+                }
+            $entry->description =  Request::get('notice');
             $entry->store();
             PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gespeichert.')));
         
@@ -443,6 +446,7 @@ class UrlaubskalenderController extends StudipController
             $entry->day = $date->format('d');
             $entry->category_intern = 11;
             $entry->summary =  $user->vorname . ' ' . $user->nachname;
+            $entry->description =  Request::get('notice');
             $entry->store();
             $event = new CalendarEvent();
             $event->range_id = $this->sem_id;
