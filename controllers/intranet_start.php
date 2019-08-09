@@ -1,6 +1,7 @@
 <?php
 require_once 'app/controllers/news.php';
 require_once 'app/controllers/calendar/single.php';
+require_once 'urlaubskalender.php';
 
 
 class IntranetStartController extends StudipController {
@@ -11,6 +12,7 @@ class IntranetStartController extends StudipController {
         $this->plugin = $dispatcher->plugin;
         Navigation::activateItem('start');
         PageLayout::addStylesheet($this->plugin->getPluginURL().'/assets/no_tabs.css');
+        
     }
 
     public function before_filter(&$action, &$args)
@@ -21,11 +23,13 @@ class IntranetStartController extends StudipController {
         PageLayout::setTitle(_("Meine Startseite"));
     }
 
-    public function index_action($inst_id = null)
+    public function index_action()
     {
-        
+        $inst_id = Institute::findCurrent()->id;
+        //TODO Berechtingung für INstitut abfragen
         $this->calendar_controller = new Calendar_CalendarController();
-
+        $this->calendar_sem_id =  IntranetConfig::find($inst_id)->calendar_seminar;
+        
 
         if ($GLOBALS['perm']->have_perm('admin')){
             $this->intranets = IntranetConfig::getInstitutesWithIntranet(true);
@@ -89,8 +93,16 @@ class IntranetStartController extends StudipController {
 //        $this->internnewstemplate->icons = $icons;
         
         //get special dates (maybe)
-        $this->birthday_dates = IntranetDate::findBySQL("type = 'birthday' AND begin = ?", array(date('d.m.Y', time())));
-
+        $this->today = new DateTime();
+        $this->birthday_dates = [];
+        $this->today_dates = UrlaubskalenderController::getEventsByDayAndMonth($this->calendar_sem_id, $this->today->format('d'), $this->today->format('m'));
+        foreach ($this->today_dates as $calendar_event_id){
+            $data = EventData::findOneByEvent_id($calendar_event_id);
+            if ($data->category_intern == 11){
+                $this->birthday_dates[] = $data;
+            }
+        }
+        
         //get new and recently visited courses of user
         $statement = DBManager::get()->prepare("SELECT s.Seminar_id, s.Name, ouv.visitdate, ouv.type "
                 . "FROM seminare as s "

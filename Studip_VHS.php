@@ -74,12 +74,12 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         $intranets = IntranetConfig::getIntranetIDsForUser(User::findCurrent());
         
         if (Navigation::hasItem('/start') && $intranets){
-            Navigation::getItem('/start')->setURL(PluginEngine::getLink($this, array(), 'intranet_start/index/' . $intranets[0]) );
+            Navigation::getItem('/start')->setURL(PluginEngine::getLink($this, array('cid' => $intranets[0]), 'intranet_start/index') );
         }
         //Intranetnutzer werden statt auf die allgemeine Startseite auf ihre individuelle Startseite weitergeleitet
         if ( $referer!=str_replace("dispatch.php/start","",$referer) &&  $intranets){
             //$result = $this->getSemStmt($GLOBALS['user']->id);
-            header('Location: '. PluginEngine::getLink($this, array(), 'intranet_start/index/' . $intranets[0]) , false, 303);
+            header('Location: '. PluginEngine::getLink($this, array(), 'intranet_start/index?cid=' . $intranets[0]) , false, 303);
             exit();	
         //Nicht-Intranetnutzer werden, wenn sie die Intranet URL verwenden, auf die allgemeine Startseite weitergeleitet
         } 

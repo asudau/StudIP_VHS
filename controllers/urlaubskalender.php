@@ -18,6 +18,7 @@ require_once 'app/controllers/news.php';
 //require_once 'app/controllers/calendar/single.php';
 require_once 'lib/webservices/api/studip_user.php';
 require_once 'app/models/calendar/SingleCalendar.php';
+require_once 'lib/models/EventData.class.php';
 
 class UrlaubskalenderController extends StudipController
 {
@@ -31,8 +32,18 @@ class UrlaubskalenderController extends StudipController
         PageLayout::addScript($this->plugin->getPluginURL().'/assets/scripts/dhtmlxscheduler.js');
         PageLayout::addScript($this->plugin->getPluginURL().'/assets/scripts/locale_de.js');
         PageLayout::addScript($this->plugin->getPluginURL().'/assets/scripts/dhtmlxscheduler_timeline.js');
-        
-        $this->sem_id = 'b8d02f67fca5aac0efa01fb1782166d1';
+        //ID der Veranstaltung welche als Grundlage für den Kalender verwendet werden soll
+//        $this->sem_id = 'b8d02f67fca5aac0efa01fb1782166d1';
+//        $this->sem_id = '14ddc9353c17a5c8bf2ccfe1e4c82345';
+        $this->sem_id = IntranetConfig::find(Institute::findCurrent()->id)->calendar_seminar;
+        //falls keine instituts id verfügbar ist, über nutzer->intranets->zugehörige veranstaltung die sem_id holen wenn möglich
+        $this->intranets = IntranetConfig::getIntranetIDsForUser(User::findCurrent());
+        $i = 0;
+        while (!$this->sem_id && $i < sizeof($this->intranets) ){
+            $this->sem_id = IntranetConfig::find($this->intranets[$i])->calendar_seminar;
+            $i++;
+        }
+        $this->mitarbeiter_admin = $GLOBALS['perm']->have_studip_perm('dozent', $this->sem_id);
     }
     
     
@@ -79,11 +90,10 @@ class UrlaubskalenderController extends StudipController
             $date = Request::option('jmp_date');
         }
         $this->date = date('Y-m-d',$date);
+        PageLayout::setTitle(_('Interner Urlaubskalender'));
         
-        $this->mitarbeiter_admin = $perm->have_studip_perm('dozent', $this->sem_id);
-
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/luggage-klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/luggage-klein.jpg");
         $sidebar->setTitle(_("Urlaubskalender"));
     
         $views = new ViewsWidget();
@@ -92,18 +102,22 @@ class UrlaubskalenderController extends StudipController
                     ->setActive(true);
         $views->addLink(_('Zeitstrahl-Ansicht'),
                         $this->url_for('urlaubskalender/timeline'));
+//        $views->addLink(_('Wochenensicht gesamt'),
+//                        $GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/week?cid=" . $this->sem_id);
+        if ($this->mitarbeiter_admin){
+                $views->addLink(_('Urlaubstermine bearbeiten'),
+                          $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'edit')));
+        }
         $sidebar->addWidget($views);
             
         // Show action to add widget only if not all widgets have already been added.
         $actions = new ActionsWidget();
-
+                        
         $actions->addLink(_('Neuen Urlaubstermin eintragen'),
-                          $this->url_for('urlaubskalender/new'),
-                          Icon::create('add', 'clickable'));
+                    $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'new_vacation')),
+                    //$GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/edit/" . $this->sem_id,
+                    Icon::create('add', 'clickable'))->asDialog(['size=small']);
 
-        $actions->addLink(_('Urlaubstermine bearbeiten'),
-                          $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'edit')),
-                          Icon::create('edit', 'clickable'));
         $sidebar->addWidget($actions);
         
         $tmpl_factory = $this->get_template_factory();
@@ -118,8 +132,8 @@ class UrlaubskalenderController extends StudipController
         
         Sidebar::get()->addWidget($filters);
         
-
-        $this->dates = IntranetDate::findBySQL("type = 'urlaub'");
+        $this->dates = $this->events_of_type(13);
+        //$this->dates = IntranetDate::findBySQL("type = 'urlaub'");
 
         // Root may set initial positions
         if ($GLOBALS['perm']->have_perm('root')) {
@@ -139,15 +153,27 @@ class UrlaubskalenderController extends StudipController
      */
     function timeline_action($action = false, $widgetId = null)
     {
-        //alle Einträge der Tabelle
-        $this->dates = IntranetDate::findBySQL('1=1');
+        $sidebar = Sidebar::get();
+        $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/luggage-klein.jpg");
+        $sidebar->setTitle(_("Urlaubskalender"));
+        $views = new ViewsWidget();
+        $views->addLink(_('Kalenderansicht'),
+                        $this->url_for('urlaubskalender'));
+        $views->addLink(_('Zeitstrahl-Ansicht'),
+                        $this->url_for('urlaubskalender/timeline'))->setActive(true);
+        if ($this->mitarbeiter_admin){
+            $views->addLink(_('Urlaubstermine bearbeiten'),
+                          $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'edit')));
+        }
+        $sidebar->addWidget($views);
+        $this->dates = $this->events_of_type(13);
         
         //für die Darstellung in der Timeline braucht man Integer keys für die Labels
         $this->keys = array();
         $cnt = 0;
         foreach($this->dates as $date){
-            if (!array_key_exists($date->getValue('user_id') ,$this->keys)){
-                $this->keys[$date->getValue('user_id')] = $cnt;
+            if (!array_key_exists($date->author_id ,$this->keys)){
+                $this->keys[$date->author_id] = $cnt;
                 $cnt++;
             }
         }
@@ -222,171 +248,28 @@ class UrlaubskalenderController extends StudipController
     }
     
     
-       public function edit_action($range_id = null, $event_id = null)
+    public function edit_action($range_id = null, $event_id = null)
     {
-        $this->range_id = $range_id ?: $this->range_id;
-        $this->calendar = new SingleCalendar($this->range_id);
-        $this->event = $this->calendar->getEvent($event_id);
-
-        if ($this->event->isNew()) {
-         //   $this->event = $this->calendar->getNewEvent();
-            if (Request::get('isdayevent')) {
-                $this->event->setStart(mktime(0, 0, 0, date('n', $this->atime),
-                        date('j', $this->atime), date('Y', $this->atime)));
-                $this->event->setEnd(mktime(23, 59, 59, date('n', $this->atime),
-                        date('j', $this->atime), date('Y', $this->atime)));
-            } else {
-                $this->event->setStart($this->atime);
-                $this->event->setEnd($this->atime + 3600);
-            }
-            $this->event->setAuthorId($GLOBALS['user']->id);
-            $this->event->setEditorId($GLOBALS['user']->id);
-            $this->event->setAccessibility('PRIVATE');
-//            if (!Request::isXhr()) {
-//                PageLayout::setTitle($this->getTitle($this->calendar, _('Neuer Termin')));
-//            }
-        } else {
-            // open read only events and course events not as form
-            // show information in dialog instead
-            if (!$this->event->havePermission(Event::PERMISSION_WRITABLE)
-                    || $this->event instanceof CourseEvent) {
-                if (!$this->event instanceof CourseEvent && $this->event->attendees->count() > 1) {
-                    if ($this->event->group_status) {
-                        $this->redirect($this->url_for('calendar/single/edit_status/' . implode('/',
-                            array($this->range_id, $this->event->event_id))));
-                    } else {
-                        $this->redirect($this->url_for('calendar/single/event/' . implode('/',
-                            array($this->range_id, $this->event->event_id))));
-                    }
-                } else {
-                    $this->redirect($this->url_for('calendar/single/event/' . implode('/',
-                            array($this->range_id, $this->event->event_id))));
-                }
-                return null;
-            }
-//            if (!Request::isXhr()) {
-//                PageLayout::setTitle($this->getTitle($this->calendar, _('Termin bearbeiten')));
-//            }
+        $sidebar = Sidebar::get();
+        $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/luggage-klein.jpg");
+        $sidebar->setTitle(_("Urlaubskalender"));
+        $views = new ViewsWidget();
+        $views->addLink(_('Kalenderansicht'),
+                        $this->url_for('urlaubskalender'));
+        $views->addLink(_('Zeitstrahl-Ansicht'),
+                        $this->url_for('urlaubskalender/timeline'));
+        if ($this->mitarbeiter_admin){
+            $views->addLink(_('Urlaubstermine bearbeiten'),
+                          $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'edit')))->setActive(true);
         }
+        $sidebar->addWidget($views);
+        $this->dates = $this->events_of_type(13);
 
-        if (Config::get()->CALENDAR_GROUP_ENABLE
-                && $this->calendar->getRange() == Calendar::RANGE_USER) {
-
-            if (Config::get()->CALENDAR_GRANT_ALL_INSERT) {
-                $search_obj = SQLSearch::get("SELECT DISTINCT auth_user_md5.user_id, "
-                    . "{$GLOBALS['_fullname_sql']['full_rev_username']} as fullname, "
-                    . "auth_user_md5.perms, auth_user_md5.username "
-                    . "FROM auth_user_md5 "
-                    . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
-                    . 'WHERE auth_user_md5.user_id <> ' . DBManager::get()->quote($GLOBALS['user']->id)
-                    . ' AND (username LIKE :input OR Vorname LIKE :input '
-                    . "OR CONCAT(Vorname,' ',Nachname) LIKE :input "
-                    . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
-                    . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input "
-                    . ") ORDER BY fullname ASC",
-                    _('Person suchen'), 'user_id');
-            } else {
-                $search_obj = SQLSearch::get("SELECT DISTINCT auth_user_md5.user_id, "
-                    . "{$GLOBALS['_fullname_sql']['full_rev_username']} as fullname, "
-                    . "auth_user_md5.perms, auth_user_md5.username "
-                    . "FROM calendar_user "
-                    . "LEFT JOIN auth_user_md5 ON calendar_user.owner_id = auth_user_md5.user_id "
-                    . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
-                    . 'WHERE calendar_user.user_id = '
-                    . DBManager::get()->quote($GLOBALS['user']->id)
-                    . ' AND calendar_user.permission > ' . Event::PERMISSION_READABLE
-                    . ' AND auth_user_md5.user_id <> ' . DBManager::get()->quote($GLOBALS['user']->id)
-                    . ' AND (username LIKE :input OR Vorname LIKE :input '
-                    . "OR CONCAT(Vorname,' ',Nachname) LIKE :input "
-                    . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
-                    . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input "
-                    . ") ORDER BY fullname ASC",
-                    _('Person suchen'), 'user_id');
-            }
-
-            // SEMBBS
-            // Eintrag von Terminen bereits ab PERMISSION_READABLE
-            /*
-            $search_obj = new SQLSearch('SELECT DISTINCT auth_user_md5.user_id, '
-                . $GLOBALS['_fullname_sql']['full_rev'] . ' as fullname, username, perms '
-                . 'FROM calendar_user '
-                . 'LEFT JOIN auth_user_md5 ON calendar_user.owner_id = auth_user_md5.user_id '
-                . 'LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) '
-                . 'WHERE calendar_user.user_id = '
-                . DBManager::get()->quote($GLOBALS['user']->id)
-                . ' AND calendar_user.permission >= ' . Event::PERMISSION_READABLE
-                . ' AND (username LIKE :input OR Vorname LIKE :input '
-                . "OR CONCAT(Vorname,' ',Nachname) LIKE :input "
-                . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
-                . 'OR Nachname LIKE :input OR '
-                . $GLOBALS['_fullname_sql']['full_rev'] . ' LIKE :input '
-                . ') ORDER BY fullname ASC',
-                _('Nutzer suchen'), 'user_id');
-            // SEMBBS
-             *
-             */
-
-
-            $this->quick_search = QuickSearch::get('user_id', $search_obj)
-                    ->fireJSFunctionOnSelect('STUDIP.Messages.add_adressee')
-                    ->withButton();
-
-      //      $default_selected_user = array($this->calendar->getRangeId());
-            $this->mps = MultiPersonSearch::get('add_adressees')
-                ->setLinkText(_('Mehrere Teilnehmer hinzufügen'))
-       //         ->setDefaultSelectedUser($default_selected_user)
-                ->setTitle(_('Mehrere Teilnehmer hinzufügen'))
-                ->setExecuteURL($this->url_for($this->base . 'edit'))
-                ->setJSFunctionOnSubmit('STUDIP.Messages.add_adressees')
-                ->setSearchObject($search_obj);
-            $owners = SimpleORMapCollection::createFromArray(
-                    CalendarUser::findByUser_id($this->calendar->getRangeId()))
-                    ->pluck('owner_id');
-            foreach (Calendar::getGroups($GLOBALS['user']->id) as $group) {
-                $this->mps->addQuickfilter(
-                    $group->name,
-                    $group->members->filter(
-                        function ($member) use ($owners) {
-                            if (in_array($member->user_id, $owners)) {
-                                return $member;
-                            }
-                        })->pluck('user_id')
-                );
-            }
-        }
-
-        $stored = false;
-        if (Request::submitted('store')) {
-            $stored = $this->storeEventData($this->event, $this->calendar);
-        }
-
-        if ($stored !== false) {
-            if ($stored === 0) {
-                if (Request::isXhr()) {
-                    header('X-Dialog-Close: 1');
-                    exit;
-                } else {
-                    PageLayout::postMessage(MessageBox::success(_('Der Termin wurde nicht geändert.')));
-                    $this->relocate('calendar/single/' . $this->last_view, array('atime' => $this->atime));
-                }
-            } else {
-                PageLayout::postMessage(MessageBox::success(_('Der Termin wurde gespeichert.')));
-                $this->relocate('calendar/single/' . $this->last_view, array('atime' => $this->atime));
-            }
-        }
-
-//        $this->createSidebar('edit', $this->calendar);
-//        $this->createSidebarFilter();
-        
-        $this->template = $this->date_template_engine->render('calendar/single/edit', ['event' => $this->event,
-            'calendar' => $this->calendar,
-            'controller' => $this]);
+       
     }
 
-
-    
-    
     /**
+     *  TODO: raus, wird nicht mehr benutzt
      *  This action adds a holiday entry
      *
      * @return void
@@ -399,7 +282,7 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_admin = $perm->have_studip_perm('tutor', $this->sem_id);
         
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/luggage-klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL()."/assets/assets/images/luggage-klein.jpg");
         $sidebar->setTitle(_("Urlaubskalender"));
 
             
@@ -414,8 +297,9 @@ class UrlaubskalenderController extends StudipController
             $actions = new ActionsWidget();
 
             $actions->addLink(_('Neuen Urlaubstermin eintragen'),
-                              $this->url_for('urlaubskalender/new'),
-                              Icon::create('add', 'clickable'));
+                            $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'new_vacation')),  
+                            //$GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/edit/" . $this->sem_id,
+                          Icon::create('add', 'clickable'), ['data-dialog']);
             
             $actions->addLink(_('Urlaubstermine bearbeiten'),
                               $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'new')),
@@ -426,7 +310,7 @@ class UrlaubskalenderController extends StudipController
         
         $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen');
 
-        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname, username, perms "
+        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname "
                             . "FROM auth_user_md5 "
                             . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
                             . "LEFT JOIN seminar_user ON (auth_user_md5.user_id = seminar_user.user_id) "
@@ -438,54 +322,36 @@ class UrlaubskalenderController extends StudipController
                             . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input) "
                             . " ORDER BY fullname ASC",
                 _('Nutzer suchen'), 'user_id');
-        $this->quick_search = QuickSearch::get('user_id', $search_obj)
-                    ->fireJSFunctionOnSelect('select_user');   
+        $this->quick_search = QuickSearch::get('user_id', $search_obj);   
         
     
     }
     
-    
-    public function new_action($id = '')
+    //vacation
+    public function new_vacation_action($id = '')
     {
     
-        PageLayout::setTitle(_('Neuen Urlaubstermin eintragen'));
-        $this->id = '568fce7262620700103ce1657cabc5e3';
+        //$this->id = '568fce7262620700103ce1657cabc5e3';
         global $perm;
-        $this->mitarbeiter_admin = $perm->have_studip_perm('tutor', $this->id);
-
-        $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/luggage-klein.jpg");
-        $sidebar->setTitle(_("Urlaubskalender"));
-
-
-            $views = new ViewsWidget();
-        $views->addLink(_('Kalenderansicht'),
-                        $this->url_for('urlaubskalender'));
-        $views->addLink(_('Zeitstrahl-Ansicht'),
-                        $this->url_for('urlaubskalender/timeline'));
-        $sidebar->addWidget($views);
-
-            // Show action to add widget only if not all widgets have already been added.
-            $actions = new ActionsWidget();
-
-            $actions->addLink(_('Neuen Urlaubstermin eintragen'),
-                              $this->url_for('urlaubskalender/new'),
-                              Icon::create('add', 'clickable'));
-
-            $actions->addLink(_('Urlaubstermine bearbeiten'),
-                              $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'edit')),
-                              Icon::create('edit', 'clickable'));
-
-            $sidebar->addWidget($actions);
-
+        $this->mitarbeiter_admin = $perm->have_studip_perm('tutor', $this->sem_id);
+        
+        $user_id = Request::get('user_id');
+        
+        if($id){
+            $this->entry = EventData::find($id);
+            $this->user = User::find($this->entry->author_id);
+        } else if ($user_id){
+            $this->user = User::find($user_id);
+        }
+      
         $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen' . $this->id);
 
-        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname, username, perms "
+        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname "
                             . "FROM auth_user_md5 "
                             . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
                             . "LEFT JOIN seminar_user ON (auth_user_md5.user_id = seminar_user.user_id) "
                             . "WHERE "
-                            . "seminar_user.Seminar_id IN (". $this->id . ") "
+                            . "seminar_user.Seminar_id LIKE '". $this->sem_id . "' "
                             . "AND (username LIKE :input OR Vorname LIKE :input "
                             . "OR CONCAT(Vorname,' ',Nachname) LIKE :input "
                             . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
@@ -493,7 +359,8 @@ class UrlaubskalenderController extends StudipController
                             . " ORDER BY fullname ASC",
                 _('Nutzer suchen'), 'user_id');
         $this->quick_search = QuickSearch::get('user_id', $search_obj)
-                    ->fireJSFunctionOnSelect('select_user');
+                 ->setInputStyle("width: 240px")
+                 ->defaultValue( $user_id, $this->user->username);
 
 
         $this->render_action('new');
@@ -508,38 +375,26 @@ class UrlaubskalenderController extends StudipController
     public function new_birthday_action($id = '')
     {
         PageLayout::setTitle(_('Neuen Geburtstag eintragen'));
+        $user_id = Request::get('user_id');
+        
+        if($id){
+            $this->date = EventData::find($id);
+            $this->user = User::find($this->date->author_id);
+        } else if ($user_id){
+            $this->user = User::find($user_id);
+            //gibt es zu diesem nutzer schon einen termin vom typ geburtstag?
+            $this->date = EventData::findOneBySQL('author_id = ? AND category_intern = 11', [$user_id]);
+            //TODO: sollte eigentlich auch zur selben veranstaltung gehören
+        }
 
-         global $perm;
+        global $perm;
         $this->mitarbeiter_hilfskraft = $perm->have_studip_perm('tutor', $this->sem_id);
-        
-         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/klee_klein.jpg");
-        $sidebar->setTitle(_("Geburtstage"));
 
-            
-        $views = new ViewsWidget();
-        $views->addLink(_('Kalenderansicht'),
-                        $this->url_for('urlaubskalender/birthday')); 
-        $sidebar->addWidget($views);
-            
-            // Show action to add widget only if not all widgets have already been added.
-            $actions = new ActionsWidget();
-
-            $actions->addLink(_('Neuen Geburtstag eintragen'),
-                              $this->url_for('urlaubskalender/new_birthday'),
-                              Icon::create('add', 'clickable'));
-            
-            $actions->addLink(_('Geburtstag bearbeiten'),
-                              $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_hilfskraft ? ('edituser_birthday/'.$GLOBALS['user']->id) : 'edit_birthday')),
-                              Icon::create('edit', 'clickable'));
-            
-            $sidebar->addWidget($actions);
-       
-        
-        
         $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen');
-
-        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname, username, perms "
+        
+        //da hier nur MA eingeatragen werden können die in der zugehörigen VA sind sollte der Zentrale Kalender 
+        //nur in VA mit Auto-eintrag aktivierbar sein
+        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname "
                             . "FROM auth_user_md5 "
                             . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
                             . "LEFT JOIN seminar_user ON (auth_user_md5.user_id = seminar_user.user_id) "
@@ -551,211 +406,99 @@ class UrlaubskalenderController extends StudipController
                             . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input) "
                             . " ORDER BY fullname ASC",
                 _('Nutzer suchen'), 'user_id');
+        //$this->quick_search = QuickSearch::get('user_id', $search_obj);
         $this->quick_search = QuickSearch::get('user_id', $search_obj)
-                    ->fireJSFunctionOnSelect('select_user');
-        
-        $this->type = 'birthday';
-        
+                        ->setInputStyle("width: 240px")
+                        //->fireJSFunctionOnSelect('doktoranden_select')
+                        ->defaultValue( $user_id, $this->user->username)
+                        ->withButton();
+
         $this->render_action('new_birthday');
         
     
     }
     
-    /**
-     *  This action adds a holiday entry
-     *
-     * @return void
-     */
-    public function edit_birthday_action($id = '')
-    {
-        PageLayout::setTitle(_('Geburtstag eintragen'));
+ 
 
-         global $perm;
-        $this->mitarbeiter_hilfskraft = $perm->have_studip_perm('tutor', $this->sem_id);
-        
-        $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/klee_klein.jpg");
-        $sidebar->setTitle(_("Geburtstage"));
-
-            
-            $views = new ViewsWidget();
-        $views->addLink(_('Kalenderansicht'),
-                        $this->url_for('urlaubskalender/birthday'));
-        $sidebar->addWidget($views);
-            
-            // Show action to add widget only if not all widgets have already been added.
-            $actions = new ActionsWidget();
-
-            $actions->addLink(_('Neuen Geburtstag eintragen'),
-                              $this->url_for('urlaubskalender/new_birthday'),
-                              Icon::create('add', 'clickable'));
-            
-            $actions->addLink(_('Geburtstag bearbeiten'),
-                              $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_hilfskraft ? ('edituser_birthday/'.$GLOBALS['user']->id) : 'edit_birthday')),
-                              Icon::create('edit', 'clickable'));
-
-            $sidebar->addWidget($actions);
-        
-        
-        $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen');
-
-        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname, username, perms "
-                            . "FROM auth_user_md5 "
-                            . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
-                            . "LEFT JOIN seminar_user ON (auth_user_md5.user_id = seminar_user.user_id) "
-                            . "WHERE "
-                            . "seminar_user.Seminar_id LIKE '". $this->id . "' "
-                            . "AND (username LIKE :input OR Vorname LIKE :input "
-                            . "OR CONCAT(Vorname,' ',Nachname) LIKE :input "
-                            . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
-                            . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input) "
-                            . " ORDER BY fullname ASC",
-                _('Nutzer suchen'), 'user_id');
-        $this->quick_search = QuickSearch::get('user_id', $search_obj)
-                    ->fireJSFunctionOnSelect('select_user');   
-        
-    
-    }
-    
-     /**
-     *  This action adds a holiday entry
-     *
-     * @return void
-     */
-    public function edituser_action($id = '')
-    {
-        PageLayout::setTitle(_('Neuen Urlaubstermin eintragen'));
-
-        global $perm;
-        $this->mitarbeiter_admin = $perm->have_studip_perm('dozent', $this->sem_id);
-        
-        $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/luggage-klein.jpg");
-        $sidebar->setTitle(_("Urlaubskalender"));
-
-            
-            $views = new ViewsWidget();
-        $views->addLink(_('Kalenderansicht'),
-                        $this->url_for('urlaubskalender'));
-        $views->addLink(_('Zeitstrahl-Ansicht'),
-                        $this->url_for('urlaubskalender/timeline'));
-        $sidebar->addWidget($views);
-            
-            // Show action to add widget only if not all widgets have already been added.
-            $actions = new ActionsWidget();
-
-            $actions->addLink(_('Neuen Urlaubstermin eintragen'),
-                              $this->url_for('urlaubskalender/new'),
-                              Icon::create('add', 'clickable'));
-            
-            $actions->addLink(_('Urlaubstermine bearbeiten'),
-                              $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'edit')),
-                              Icon::create('edit', 'clickable'));
-
-            $sidebar->addWidget($actions);
-       
-        
-        
-        $this->user_id = $id ? $id : $_POST['user_id'];
-        
-        if (!$this->user_id){
-            $this->render_action('new');
-        }
-        
-        $this->entries = IntranetDate::findBySQL('user_id = ? ORDER BY begin ASC',
-                    array($this->user_id));
-        
-        $this->render_action('edituser');
-        
-    
-    }
-    
-     public function edituser_birthday_action($id = '')
-    {
-        PageLayout::setTitle(_('Geburtstag eintragen'));
-
-         global $perm;
-        $this->mitarbeiter_hilfskraft = $perm->have_studip_perm('tutor', $this->sem_id);
-        
-        $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/klee_klein.jpg");
-        $sidebar->setTitle(_("Geburtstage"));
-
-            
-            $views = new ViewsWidget();
-        $views->addLink(_('Kalenderansicht'),
-                        $this->url_for('urlaubskalender/birthday'));
-        $sidebar->addWidget($views);
-            
-            // Show action to add widget only if not all widgets have already been added.
-            $actions = new ActionsWidget();
-
-            $actions->addLink(_('Neuen Geburtstag eintragen'),
-                              $this->url_for('urlaubskalender/new_birthday'),
-                              Icon::create('add', 'clickable'));
-            
-            $actions->addLink(_('Geburtstag bearbeiten'),
-                              $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_hilfskraft ? ('edituser_birthday/'.$GLOBALS['user']->id) : 'edit_birthday')),
-                              Icon::create('edit', 'clickable'));
-
-            $sidebar->addWidget($actions);
-       
-        
-        
-            $this->user_id = $id ? $id : $_POST['user_id'];
-            $this->entries = IntranetDate::findBySQL("user_id = ? AND type = 'birthday' ORDER BY begin ASC",
-                    array($this->user_id));
-        
-        
-    
-    }
-
-    public function save_action($type, $id = NULL) {
-        
-        if($this->entry = IntranetDate::find($id)){
-            
-            foreach($_POST as $key => $value){
-                if (is_array($value)){
-                    $value = implode(", ", $value);
+    public function save_birthday_action($id = NULL) {
+        $date_id = Request::get('date_id');
+        $date = DateTime::createFromFormat('d.m.', Request::get('birthday'));
+        $user = User::find(Request::get('user_id'));
+        if($entry = EventData::find($date_id)){
+            if ($date) { 
+                $entry->start = $date->getTimestamp(); 
+                $entry->end = $date->getTimestamp();
+                $entry->month = $date->format('m');
+                $entry->day = $date->format('d');
                 }
-                
-                    try {
-                    $this->entry->setValue($key, $value);
-                    } catch (Exception $e){}
-                
-            }
-            $this->entry->chdate  = time();
-            $this->entry->store();
-            PageLayout::postMessage(MessageBox::success(_('Die Änderungen wurden gespeichert.')));
-        } else {
-            $this->entry = new IntranetDate();
-            foreach($_POST as $key => $value){
-                if (is_array($value)){
-                    $value = implode(", ", $value);
-                }
-                
-                    try {
-                    $this->entry->setValue($key, $value);
-                    } catch (Exception $e){}
-                
-            }
-            if($type == 'birthday'){
-                $this->entry->end  = $this->entry->begin;
-            }
-            $this->entry->type  = $type;
-            $this->entry->mkdate  = time();
-            $this->entry->chdate  = time();
-            $this->entry->store();
+            $entry->description =  Request::get('notice');
+            $entry->store();
+            PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gespeichert.')));
+        
+        } else if ($user) {
+            $entry = new EventData();
+            $entry->author_id = $user->id;
+            $entry->editor_id = $user->id;
+            $entry->start = $date->getTimestamp();
+            $entry->end = $date->getTimestamp();
+            $entry->rtype = 'YEARLY';
+            $entry->month = $date->format('m');
+            $entry->day = $date->format('d');
+            $entry->category_intern = 11;
+            $entry->summary =  $user->vorname . ' ' . $user->nachname;
+            $entry->description =  Request::get('notice');
+            $entry->store();
+            $event = new CalendarEvent();
+            $event->range_id = $this->sem_id;
+            $event->event_id = $entry->event_id;
+            $event->mkdate = time();
+            $event->chdate = time();
+            $event->store();
             PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gespeichert.')));
         }
-        if ($type == 'birthday') {
-            $this->redirect($this->url_for('/urlaubskalender/birthday'));
-        } else
-        $this->redirect($this->url_for('/urlaubskalender'));
+        
+        $this->redirect($this->url_for('/urlaubskalender/birthday'));
+
+    }
+    
+    public function save_vacation_action($id = NULL) {
+        $id = Request::get('event_id');
+        $begin_date = DateTime::createFromFormat('d.m.Y', Request::get('begin'));
+        $end_date = DateTime::createFromFormat('d.m.Y', Request::get('end'));
+        $user = User::find(Request::get('user_id'));
+        if($entry = EventData::find($id)){
+            $entry->start = $begin_date->getTimestamp();
+            $entry->end = $end_date->getTimestamp();
+            $entry->store();
+            PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gespeichert.')));
+        
+        } else if ($user){
+            $entry = new EventData();
+            $entry->author_id = $user->id;
+            $entry->editor_id = $user->id;
+            $entry->start = $begin_date->getTimestamp();
+            $entry->end = $end_date->getTimestamp();
+            $entry->rtype = 'SINGLE';
+            $entry->category_intern = 13;
+            $entry->summary =  $user->vorname . ' ' . $user->nachname;
+            $entry->description =  Request::get('notice');
+            $entry->store();
+            $event = new CalendarEvent();
+            $event->range_id = $this->sem_id;
+            $event->event_id = $entry->event_id;
+            $event->mkdate = time();
+            $event->chdate = time();
+            $event->store();
+            PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gespeichert.')));
+        }
+        
+        $this->redirect($this->url_for('/urlaubskalender/edit'));
+   
         
     }
 
     /**
+     * TODO umschreiben
      *  This actions removes a holiday entry
      *
      *
@@ -763,13 +506,28 @@ class UrlaubskalenderController extends StudipController
      */
     function delete_action($id)
     {
-        if($entry = IntranetDate::find($id)){
+        if($entry = EventData::find($id)){
+            $event = CalendarEvent::findOneByEvent_id($id);
+            $event->delete();
             $entry->delete();
             PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gelöscht.')));
         }
         
-        $this->redirect($this->url_for('/urlaubskalender'));
+        $this->redirect($this->url_for('/urlaubskalender/edit'));
     }
+    
+    function delete_birthday_action($id)
+    {
+        if($entry = EventData::find($id)){
+            $event = CalendarEvent::findOneByEvent_id($id);
+            $event->delete();
+            $entry->delete();
+            PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gelöscht.')));
+        }
+        
+        $this->redirect($this->url_for('/urlaubskalender/birthday'));
+    }
+
 
     
      function url_for($to)
@@ -792,12 +550,7 @@ class UrlaubskalenderController extends StudipController
     function color_by_crossfoot ( $digits )
   {
     // Typcast falls Integer uebergeben
-    $strDigits = ( string ) $digits;
-
-    for( $intCrossfoot = $i = 0; $i < strlen ( $strDigits ); $i++ )
-    {
-      $intCrossfoot += $strDigits{$i};
-    }
+    $strDigits = ( string ) hexdec(substr(md5($digits),0,8));
 
     $colors = array('1' => '#1e90ff',
                     '2' => '#008000',
@@ -812,7 +565,7 @@ class UrlaubskalenderController extends StudipController
         );
     
     
-    return $colors[$intCrossfoot];
+    return $colors[$strDigits%10];
   } 
   
   function birthday_action()
@@ -822,13 +575,13 @@ class UrlaubskalenderController extends StudipController
         $this->mitarbeiter_hilfskraft = $perm->have_studip_perm('tutor', $this->sem_id);
 
         $sidebar = Sidebar::get();
-        $sidebar->setImage("../../plugins_packages/elanev/IntranetMitarbeiterInnen/assets/images/klee_klein.jpg");
+        $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/klee_klein.jpg");
         $sidebar->setTitle(_("Geburtstage"));
 
             
         $views = new ViewsWidget();
         $views->addLink(_('Kalenderansicht'),
-                        $this->url_for('Geburtstage'))
+                        $this->url_for('urlaubskalender/birthday'))
                     ->setActive(true);
         $sidebar->addWidget($views);
             
@@ -837,16 +590,13 @@ class UrlaubskalenderController extends StudipController
 
         $actions->addLink(_('Neuen Geburtstag eintragen'),
                           $this->url_for('urlaubskalender/new_birthday'),
-                          Icon::create('add', 'clickable'));
+                          Icon::create('add', 'clickable'))->asDialog('size=auto'); 
 
-        $actions->addLink(_('Geburtstag bearbeiten'),
-                          $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_hilfskraft ? ('edituser_birthday/'.$GLOBALS['user']->id) : 'edit_birthday')),
-                          Icon::create('edit', 'clickable'));
         $sidebar->addWidget($actions);
 
 
-        $this->dates = IntranetDate::findBySQL("type = 'birthday'");
-
+        //$this->dates = IntranetDate::findBySQL("type = 'birthday'");
+        $this->dates = $this->events_of_type(11);
 
         // Root may set initial positions
         if ($GLOBALS['perm']->have_perm('root')) {
@@ -854,5 +604,87 @@ class UrlaubskalenderController extends StudipController
         }
 
     }
+    
+    //TODO wird das benutzt?
+    function events_action($type = 'all'){
+        
+        $this->events[] = $this->events_of_type();
+        
+        
+        
+        //the following sucks
+        //$this->calendar = new SingleCalendar($this->sem_id);
+        //$this->events = $this->calendar->getEvents()->events->toGroupedArray();
+          
+        //$this->setProperties($calendar_event, $component);
+        //$calendar_event->setRecurrence($component['RRULE']);
+    }
+    
+    
+    private function events_of_type($type = 'all', $begin_time = 1111111111){
+        
+        $calendar_events = self::getEventsByInterval($this->sem_id, $begin_time, 3333333333);
+            
+        if ($type == 'all'){
+            foreach ($calendar_events as $calendar_event){
+                $events[] = EventData::findOneByEvent_id($calendar_event['event_id']);
+            }
+        } else {
+            foreach ($calendar_events as $calendar_event){
+                $data = EventData::findOneByEvent_id($calendar_event['event_id']);
+                if ($data->category_intern == $type){
+                    $events[] = $data;
+                }
+            }
+        }
+        return $events;
+        
+    }
+    
+    public static function getEventsByInterval($range_id, $start, $end)
+    {
+        $stmt = DBManager::get()->prepare('SELECT * FROM calendar_event '
+                . 'INNER JOIN event_data USING(event_id) '
+                . 'WHERE range_id = :range_id '
+                . 'AND ((start BETWEEN :start AND :end) OR '
+                . "(start <= :end AND (expire + end - start) >= :start AND rtype != 'SINGLE') "
+                . 'OR (:start BETWEEN start AND end)) '
+                . 'ORDER BY start ASC');
+        $stmt->execute(array(
+            ':range_id' => $range_id,
+            ':start'    => $start,
+            ':end'      => $end
+        ));
+        $i = 0;
+        $event_collection = new SimpleORMapCollection();
+        $event_collection->setClassName('Event');
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $event_collection[$i] = new CalendarEvent();
+            $event_collection[$i]->setData($row);
+            $event_collection[$i]->setNew(false);
+            $event = new EventData();
+            $event->setData($row);
+            $event->setNew(false);
+            $event_collection[$i]->event = $event;
+            $i++;
+        }
+        return $event_collection;
+    }
   
+    public static function getEventsByDayAndMonth($range_id, $day, $month)
+    {
+        $stmt = DBManager::get()->prepare('SELECT event_id FROM calendar_event '
+                . 'LEFT JOIN event_data USING(event_id) '
+                . 'WHERE range_id = :range_id '
+                . 'AND (day = :day AND month = :month) '
+                . 'ORDER BY start ASC');
+        $stmt->execute(array(
+            ':range_id' => $range_id,
+            ':day'      => $day,
+            ':month'    => $month
+        ));
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
 }

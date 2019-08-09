@@ -1,25 +1,5 @@
 <? use Studip\Button, Studip\LinkButton; ?>
 
-<!--<table class='default'>
-    <head>
-        <th>Beginn</th>
-        <th>Ende</th>
-        <th>Name</th>
-    </head>
-    <tbody>
-        <? if($dates) : ?>
-            <? foreach($dates as $event): ?>
-            <tr>
-                <td><?= date("d.m.Y", $event['start']) ?> </td>
-                <td><?= date("d.m.Y", $event['end']) ?> </td>
-                <td><?= $event['summary']?></td>
-            </tr>
-            <? endforeach ?>
-        <? endif ?>
-    </tbody>
-</table>-->
-
-
 <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>
     <div class="dhx_cal_navline">
         <div class="dhx_cal_prev_button">&nbsp;</div>
@@ -33,7 +13,7 @@
     <div class="dhx_cal_header"></div>
     <div class="dhx_cal_data"></div>       
 </div>
-<?= $date ?>
+
 <style type="text/css" media="screen">
     html, body{
         margin:0px;
@@ -49,23 +29,23 @@
     scheduler.config.resize_month_timed= false; 
     scheduler.attachEvent("onBeforeDrag", function(){return false;});
     
-    scheduler.init('scheduler_here', new Date('<?=$date?>'),"month");
-    
+    scheduler.init('scheduler_here', new Date(),"month");
     var events = [
        
-     <?    
+    <?    
     $i = 1;         
-    if($dates){
-        foreach($dates as $event){
+    if($events){
+        foreach($events as $event){
             echo "  {id:". $i . ", "
                     . "text:\"" . $event['summary'] . ($event['description'] ? (" (" . $event['description'] . ")") : "") . "\", "
                     . " start_date:\"" . date("m/d/Y", $event['start']) . "\", "
                     . " end_date:\"" . date("m/d/Y", $event['end'] + 86400) . "\", "
-                    . " color:\"". $controller->color_by_crossfoot($event['author_id']) . "\"}," ;
+                    . " color:\"". $controller->color_by_crossfoot($i) . "\"}," ;
         $i++;
         }
     }
     ?>    
+ 
     ];
 
     scheduler.parse(events, "json");//takes the name and format of the data source
