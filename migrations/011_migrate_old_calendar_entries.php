@@ -41,8 +41,8 @@ class MigrateOldCalendarEntries extends Migration
             } else if($row['type'] == 'urlaub'){
                 $entry = new EventData();
                 $user = User::find($row['user_id']);
-                $entry->author_id = $user->id;
-                $entry->editor_id = $user->id;
+                $entry->author_id = $row['user_id'];
+                $entry->editor_id = $row['user_id'];
                 $entry->start = strtotime(str_replace('.', '-', $row['begin']));
                 $entry->end = strtotime(str_replace('.', '-', $row['end']));
                 $entry->rtype = 'SINGLE';
