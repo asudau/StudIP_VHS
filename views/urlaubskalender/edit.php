@@ -1,11 +1,11 @@
 
-<table class='default'>
+<table class="sortable-table default">
     <head>
-        <th>Beginn</th>
-        <th>Ende</th>
-        <th>Name</th>
-        <th>Hinweis</th>
-        <th>Aktionen</th>
+        <th data-sort="htmldata">Beginn</th>
+        <th data-sort="htmldata">Ende</th>
+        <th data-sort="htmldata">Name</th>
+        <th data-sort="false">Hinweis</th>
+        <th data-sort="false">Aktionen</th>
     </head>
     <tbody>
         <? if($dates) : ?>
@@ -18,7 +18,7 @@
                 <td>
                     <a href='<?= $controller->url_for('urlaubskalender/new_vacation/' . $event['id']) ?>' data-dialog='size=auto' >
                         <?= Icon::create('edit', 'clickable')?></a>
-                    <a href='<?= $controller->url_for('urlaubskalender/delete/'. $event['event_id']) ?>' >
+                    <a target='_blank' href='<?= $controller->url_for('urlaubskalender/delete/'. $event['event_id']) ?>' >
                         <?= Icon::create('trash', 'clickable') ?> </a>
                 </td>
             </tr>

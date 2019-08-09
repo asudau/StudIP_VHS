@@ -512,8 +512,8 @@ class UrlaubskalenderController extends StudipController
             $entry->delete();
             PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gelöscht.')));
         }
-        
-        $this->redirect($this->url_for('/urlaubskalender/edit'));
+        $this->render_nothing();
+        //$this->redirect($this->url_for('/urlaubskalender/edit'));
     }
     
     function delete_birthday_action($id)
