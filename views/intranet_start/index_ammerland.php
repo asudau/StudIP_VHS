@@ -65,36 +65,10 @@
                       Image block: [end] 
                 </div>
                   CONTENT ELEMENT, uid:75/textpic [end] -->
-                
-                
-                 <? foreach ($folderwithfiles_array as $course_id => $folderwithfiles) : ?>
-                <!--  CONTENT ELEMENT, uid:14/textpic [begin] -->
-                <div id="c14" class="csc-default csc-space-after-25">
-                <!--  Image block: [begin] -->
-                <div class="csc-textpic-text">
-                
-                <!--  Text: [begin] -->
-                    <img src="<?= $plugin->getPluginURL().'/assets/images/unterlagen1.png' ?>" alt="" border="0" width="100%">
-                    <h2 class="intranet"> 
-                        <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
-                        <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>folder.php?cid=<?=$course_id?>&cmd=tree" title="Direkt in den Dateibereich wechseln" class="internal-link"><?=$filesCaptions[$course_id]?></a>
-                        <? if ($GLOBALS['perm']->have_studip_perm('dozent', $course_id)){ ?>
-                            <a href="<?=$edit_link_files?>">
-                                <?= Icon::create('add', 'clickable')?>           
-                            </a>
-                        <? } ?>
-                        </div>
-                    </h2>
-                        <?= $this->render_partial('_partials/folder_with_files', array('folderwithfiles' => $folderwithfiles, 'parentfolder' => $parentfolder, 'parent' => NULL)) ?>
-                    <hr>
-                <!--  Text: [end] -->
-                </div>  
-                <!--  Image block: [end] -->
-                </div>
-                <!--  CONTENT ELEMENT, uid:14/textpic [end] -->
-                <? endforeach ?>
-                
-                 <!--  CONTENT ELEMENT, uid:16/textpic [begin] -->
+
+
+
+                  <!--  CONTENT ELEMENT, uid:16/textpic [begin] -->
                 <div id="c16" class="csc-default csc-space-after-25">
                 <!--  Image block: [begin] -->
                 <div class="csc-textpic-text">
@@ -140,6 +114,32 @@
                 </div>
             <!--  CONTENT ELEMENT, uid:15/textpic [end] -->
                 
+                 <? foreach ($folderwithfiles_array as $course_id => $folderwithfiles) : ?>
+                <!--  CONTENT ELEMENT, uid:14/textpic [begin] -->
+                <div id="c14" class="csc-default csc-space-after-25">
+                <!--  Image block: [begin] -->
+                <div class="csc-textpic-text">
+                
+                <!--  Text: [begin] -->
+                    <img src="<?= $plugin->getPluginURL().'/assets/images/unterlagen1.png' ?>" alt="" border="0" width="100%">
+                    <h2 class="intranet"> 
+                        <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
+                        <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>folder.php?cid=<?=$course_id?>&cmd=tree" title="Direkt in den Dateibereich wechseln" class="internal-link"><?=$filesCaptions[$course_id]?></a>
+                        <? if ($GLOBALS['perm']->have_studip_perm('dozent', $course_id)){ ?>
+                            <a href="<?=$edit_link_files?>">
+                                <?= Icon::create('add', 'clickable')?>           
+                            </a>
+                        <? } ?>
+                        </div>
+                    </h2>
+                        <?= $this->render_partial('_partials/folder_with_files', array('folderwithfiles' => $folderwithfiles, 'parentfolder' => $parentfolder, 'parent' => NULL)) ?>
+                    <hr>
+                <!--  Text: [end] -->
+                </div>  
+                <!--  Image block: [end] -->
+                </div>
+                <!--  CONTENT ELEMENT, uid:14/textpic [end] -->
+                <? endforeach ?>
   
 				<h4 class="intranet">Unsere Angebote</h4>
 				<table class="dsR4" cellspacing="0" cellpadding="0" border="0">
