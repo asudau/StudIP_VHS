@@ -108,16 +108,22 @@ class UrlaubskalenderController extends StudipController
                 $views->addLink(_('Urlaubstermine bearbeiten'),
                           $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'edit')));
         }
+        
+        $views->addLink(_('Nutzerfilter'),
+                    $this->url_for('urlaubskalender/filter_user'),
+                    //$GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/edit/" . $this->sem_id,
+                    null);
+        
         $sidebar->addWidget($views);
             
         // Show action to add widget only if not all widgets have already been added.
         $actions = new ActionsWidget();
                         
         $actions->addLink(_('Neuen Urlaubstermin eintragen'),
-                    $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'new_vacation')),
+                    $this->url_for('urlaubskalender/new_vacation'),
                     //$GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/edit/" . $this->sem_id,
                     Icon::create('add', 'clickable'))->asDialog(['size=small']);
-
+        
         $sidebar->addWidget($actions);
         
         $tmpl_factory = $this->get_template_factory();
@@ -139,7 +145,7 @@ class UrlaubskalenderController extends StudipController
         if ($GLOBALS['perm']->have_perm('root')) {
 
         }
-
+        
     }
     
     
@@ -222,6 +228,64 @@ class UrlaubskalenderController extends StudipController
         //$this->setProperties($calendar_event, $component);
         //$calendar_event->setRecurrence($component['RRULE']);
     }
+    
+    public function filter_user_action(){
+        $sidebar = Sidebar::get();
+        $sidebar->setImage($this->plugin->getPluginURL()."/assets/images/luggage-klein.jpg");
+        $sidebar->setTitle(_("Urlaubskalender"));
+    
+        $views = new ViewsWidget();
+        $views->addLink(_('Kalenderansicht'),
+                        $this->url_for('urlaubskalender'));
+        $views->addLink(_('Zeitstrahl-Ansicht'),
+                        $this->url_for('urlaubskalender/timeline'));
+//        $views->addLink(_('Wochenensicht gesamt'),
+//                        $GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/week?cid=" . $this->sem_id);
+        if ($this->mitarbeiter_admin){
+                $views->addLink(_('Urlaubstermine bearbeiten'),
+                          $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'edit')));
+        }
+        
+        $views->addLink(_('Nutzerfilter'),
+                    $this->url_for('urlaubskalender/filter_user'),
+                    //$GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/edit/" . $this->sem_id,
+                    null)->setActive(true);
+        
+        $sidebar->addWidget($views);
+            
+        // Show action to add widget only if not all widgets have already been added.
+        $actions = new ActionsWidget();
+                        
+        $actions->addLink(_('Neuen Urlaubstermin eintragen'),
+                    $this->url_for('urlaubskalender/new_vacation'),
+                    //$GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/edit/" . $this->sem_id,
+                    Icon::create('add', 'clickable'))->asDialog(['size=small']);
+        
+        $sidebar->addWidget($actions);
+        
+        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname "
+                            . "FROM auth_user_md5 "
+                            . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
+                            . "LEFT JOIN seminar_user ON (auth_user_md5.user_id = seminar_user.user_id) "
+                            . "WHERE "
+                            . "seminar_user.Seminar_id LIKE '". $this->sem_id . "' "
+                            . "AND (username LIKE :input OR Vorname LIKE :input "
+                            . "OR CONCAT(Vorname,' ',Nachname) LIKE :input "
+                            . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
+                            . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input) "
+                            . " ORDER BY fullname ASC",
+                _('Nutzer suchen'), 'filterUser');
+        
+        $this->mp = MultiPersonSearch::get('filterUser')
+            ->setLinkText(_('Nutzer filtern'))
+            ->setTitle(_('NutzerInnen für die Anzeige auswählen'))
+            ->setSearchObject($search_obj)
+            ->setExecuteURL($this->url_for('/urlaubskalender'))
+            ->render();
+        
+
+    }
+    
     
     public function week_action($range_id = null)
     {
@@ -335,13 +399,17 @@ class UrlaubskalenderController extends StudipController
         global $perm;
         $this->mitarbeiter_admin = $perm->have_studip_perm('tutor', $this->sem_id);
         
-        $user_id = Request::get('user_id');
+        if ($this->mitarbeiter_admin){
+            $user_id = Request::get('user_id_search');
+        }
         
         if($id){
             $this->entry = EventData::find($id);
             $this->user = User::find($this->entry->author_id);
         } else if ($user_id){
             $this->user = User::find($user_id);
+        } else if (!$this->mitarbeiter_admin){
+            $this->user = User::findCurrent();
         }
       
         $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen' . $this->id);
@@ -357,8 +425,8 @@ class UrlaubskalenderController extends StudipController
                             . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
                             . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input) "
                             . " ORDER BY fullname ASC",
-                _('Nutzer suchen'), 'user_id');
-        $this->quick_search = QuickSearch::get('user_id', $search_obj)
+                _('Nutzer suchen'), 'user_id_search');
+        $this->quick_search = QuickSearch::get('user_id_search', $search_obj)
                  ->setInputStyle("width: 240px")
                  ->defaultValue( $user_id, $this->user->username);
 
@@ -375,7 +443,7 @@ class UrlaubskalenderController extends StudipController
     public function new_birthday_action($id = '')
     {
         PageLayout::setTitle(_('Neuen Geburtstag eintragen'));
-        $user_id = Request::get('user_id');
+        $user_id = Request::get('user_id_birthday_search');
         
         if($id){
             $this->date = EventData::find($id);
@@ -405,9 +473,9 @@ class UrlaubskalenderController extends StudipController
                             . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
                             . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input) "
                             . " ORDER BY fullname ASC",
-                _('Nutzer suchen'), 'user_id');
+                _('Nutzer suchen'), 'user_id_birthday_search');
         //$this->quick_search = QuickSearch::get('user_id', $search_obj);
-        $this->quick_search = QuickSearch::get('user_id', $search_obj)
+        $this->quick_search = QuickSearch::get('user_id_birthday_search', $search_obj)
                         ->setInputStyle("width: 240px")
                         //->fireJSFunctionOnSelect('doktoranden_select')
                         ->defaultValue( $user_id, $this->user->username)

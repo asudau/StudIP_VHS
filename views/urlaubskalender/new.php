@@ -23,6 +23,7 @@
     </form>
 <? else: ?>
 
+    <h2> <?= $user->vorname . ' ' . $user->nachname ?> </h2>
     <form action="<?= $controller->url_for('urlaubskalender/save_vacation') ?>" class="studip_form" method="POST">
         <fieldset>
             <input type="hidden" name="user_id" value="<?= $user->id?>" id="user_id"></input>
