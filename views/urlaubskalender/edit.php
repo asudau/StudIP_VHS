@@ -10,7 +10,7 @@
     <tbody>
         <? if($dates) : ?>
             <? foreach($dates as $event): ?>
-                <? if (!$mitarbeiter_admin && ($event['summary'] == ($user->vorname . ' ' . $user->nachname))): ?>
+                <? if ($mitarbeiter_admin || ($event['summary'] == ($user->vorname . ' ' . $user->nachname))): ?>
                 <tr>
                     <td><?= date("d.m.Y", $event['start']) ?> </td>
                     <td><?= date("d.m.Y", $event['end']) ?> </td>
