@@ -701,9 +701,7 @@ class UrlaubskalenderController extends StudipController
             foreach ($calendar_events as $calendar_event){
                 $data = EventData::findOneByEvent_id($calendar_event['event_id']);
                 if ($data->category_intern == $type){
-                    if (!$this->mitarbeiter_admin && ($data->summary == ($user->vorname . ' ' . $user->nachname))){
-                        $events[] = $data;
-                    }
+                    $events[] = $data;
                 }
             }
         }
