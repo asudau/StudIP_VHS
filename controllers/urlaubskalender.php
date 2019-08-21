@@ -328,7 +328,7 @@ class UrlaubskalenderController extends StudipController
         }
         $sidebar->addWidget($views);
         $this->dates = $this->events_of_type(13);
-
+        $this->user = User::findCurrent();
        
     }
 
