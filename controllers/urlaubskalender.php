@@ -457,6 +457,7 @@ class UrlaubskalenderController extends StudipController
             //TODO: sollte eigentlich auch zur selben veranstaltung gehören
         } else if (!$this->mitarbeiter_hilfskraft) {
             $this->user = User::findCurrent();
+            $this->date = EventData::findOneBySQL('author_id = ? AND category_intern = 11', [$this->user->id]);
         }
         
         $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen');
