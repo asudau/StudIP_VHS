@@ -104,10 +104,10 @@ class UrlaubskalenderController extends StudipController
                         $this->url_for('urlaubskalender/timeline'));
 //        $views->addLink(_('Wochenensicht gesamt'),
 //                        $GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/calendar/single/week?cid=" . $this->sem_id);
-        if ($this->mitarbeiter_admin){
-                $views->addLink(_('Urlaubstermine bearbeiten'),
-                          $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'edit')));
-        }
+
+        $views->addLink(_('Urlaubstermine bearbeiten'),
+            $this->url_for('urlaubskalender/edit'));
+
         
         $views->addLink(_('Nutzerfilter'),
                     $this->url_for('urlaubskalender/filter_user'),
@@ -691,6 +691,7 @@ class UrlaubskalenderController extends StudipController
     private function events_of_type($type = 'all', $begin_time = 1111111111){
         
         $calendar_events = self::getEventsByInterval($this->sem_id, $begin_time, 3333333333);
+        $user = User::findCurrent();
             
         if ($type == 'all'){
             foreach ($calendar_events as $calendar_event){
@@ -700,7 +701,9 @@ class UrlaubskalenderController extends StudipController
             foreach ($calendar_events as $calendar_event){
                 $data = EventData::findOneByEvent_id($calendar_event['event_id']);
                 if ($data->category_intern == $type){
-                    $events[] = $data;
+                    if (!$this->mitarbeiter_admin && ($data->summary == ($user->vorname . ' ' . $user->nachname))){
+                        $events[] = $data;
+                    }
                 }
             }
         }
