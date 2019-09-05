@@ -79,16 +79,25 @@ class IntranetConfig extends SimpleORMap
         return $institutes_with_intranet;
     }
     
-    public function getIntranetIDsForUser($user){
+     public function getIntranetIDsForUser($user){
         $datafield_id_inst = md5('Eigener Intranetbereich');
-        $intranets = array();
+        
+        $user_intranets = array();
         foreach($user->institute_memberships as $membership){
             $entries = DataFieldEntry::getDataFieldEntries($membership->institut_id);
             if ($entries[$datafield_id_inst]->value){
-                $intranets[] = $membership->institut_id;
+                $user_intranets[] = $membership->institut_id;
             }
         }
-        return $intranets;
+        //Reihenfolge anpassen
+        $user_intranets_ordered = array();
+        $intranets = self::getInstitutesWithIntranet();
+        foreach ($intranets as $intranet){
+            if (in_array($intranet->id, $user_intranets)){
+                $user_intranets_ordered[] = $intranet->id;
+            }
+        }
+        return $user_intranets_ordered;
     }
     
      public static function addUserToIntranetCourses($user_id, $intranet_id, $status) {
