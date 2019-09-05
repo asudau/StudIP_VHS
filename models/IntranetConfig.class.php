@@ -69,7 +69,7 @@ class IntranetConfig extends SimpleORMap
         //$datafield_id_sem = md5('Intranet-Veranstaltung');
         $institutes_with_intranet = array();
         
-        $institute_fields = DatafieldEntryModel::findBySQL('datafield_id = \'' . $datafield_id_inst . '\' AND content = 1');
+        $institute_fields = DatafieldEntryModel::findBySQL('datafield_id = \'' . $datafield_id_inst . '\' AND content = 1 ORDER BY mkdate ASC');
         foreach ($institute_fields as $field){
             if ($id){
                 array_push($institutes_with_intranet, $field->range_id); 
