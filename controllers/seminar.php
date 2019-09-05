@@ -2,6 +2,7 @@
 require_once 'app/controllers/news.php';
 require_once 'app/controllers/questionnaire.php';
 require_once 'app/controllers/course/overview.php';
+require_once 'intranet_start.php';
 
 
 class SeminarController extends StudipController {
@@ -41,8 +42,7 @@ class SeminarController extends StudipController {
 
     public function index_action()
     {
-        //$course = Course::findCurrent()->id;
-        $localEntries = DataFieldEntry::getDataFieldEntries(Course::findCurrent()->id);
+        $localEntries = DataFieldEntry::getDataFieldEntries($this->course->id);
         $this->style = $localEntries[$this->datafield_id]->value;
         
         //defaultwert wenn noch nichts gewählt wurde
@@ -137,10 +137,7 @@ class SeminarController extends StudipController {
         $this->questionnairetemplate->icons = $icons;
         $this->questionnaires =  $this->questionnairetemplate;
         
-        
-        
-        
-        
+
         if($GLOBALS['auth']->auth['uid'] != 'nobody'){
             // Load evaluations
             $eval_db = new EvaluationDB();
@@ -183,8 +180,14 @@ class SeminarController extends StudipController {
             $this->dates = $response->body;
         }
 	
-        $response = $this->relay("seminar/documents");
-        $this->documents = $response->body;
+        //$controller = new IntranetStartController();
+        $sem_folder = IntranetStartController::get_folders_from_seminar_id($this->course->id);
+        $details = IntranetStartController::get_folderwithfiles_from_folder_ids($sem_folder);
+        $this->folderwithfiles = $details['folderwithfiles'];
+        
+        //folder auf Unterebene
+        $this->parentfolder = $details['parentfolder'];
+        //$this->folderwithfiles = $this->getSeminarDocuments();
         
         $this->render_action($this->style);
 
@@ -285,10 +288,10 @@ class SeminarController extends StudipController {
         $this->users = $this->sem->getMembers('user');
     }
 
-    public function documents_action() {
-        $this->documents = $this->getSeminarDocuments();
-
-    }  
+//    public function documents_action() {
+//        $this->documents = $this->getSeminarDocuments();
+//
+//    }  
     
     /**
      * Widget controller to produce the formally known show_votes()
@@ -450,7 +453,7 @@ class SeminarController extends StudipController {
 
     }
         
-	return $documents;
+	return $folderwithfiles;
     }
     
     private function get_tabs(){

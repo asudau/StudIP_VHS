@@ -68,11 +68,12 @@ if(strcmp($datesTemplate, "Die Zeiten der Veranstaltung stehen nicht fest.") !==
     <?if ($perm || $questionnaires): ?>
         <?= $this->render_partial($questionnaires, compact('widget')) ?>
     <?endif;?>
-    	
     
+    <section class=contentbox>
+        <header><h1>Dateien (zum Herunterladen anklicken)</h1></header>
+        <?= $this->render_partial('_partials/folder_with_files', array('folderwithfiles' => $folderwithfiles, 'parentfolder' => $parentfolder, 'parent' => NULL)) ?>
+    </section>
 
-<? echo $documents; ?>
-       
 
 </div>
 
@@ -220,7 +221,15 @@ if ($votes || $evaluations): ?>
 
 </div>
 
+<script>
 
+$(".folder_open").click(function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $(this).siblings('.file_download').toggle();
+    $(this).siblings('.folder').toggle();
+ });
+</script>
 
 			
 
