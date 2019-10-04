@@ -166,6 +166,58 @@ class UrlaubskalenderController extends StudipController
                           $this->url_for('urlaubskalender/'. (!$this->mitarbeiter_admin ? ('edituser/'.$GLOBALS['user']->id) : 'edit')));
         }
         $sidebar->addWidget($views);
+        
+        // quickfilter: tutors of institut
+        $sql = "SELECT user_id FROM seminar_user WHERE Seminar_id = ?";
+        $db = DBManager::get();
+        $statement = $db->prepare($sql, array(PDO::FETCH_NUM));
+        $statement->execute(array($this->sem_id));
+        $membersOfSem = $statement->fetchAll(PDO::FETCH_COLUMN, 0);
+        
+        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname, username, perms "
+            . "FROM auth_user_md5 "
+            . "LEFT JOIN seminar_user ON(auth_user_md5.user_id = seminar_user.user_id) WHERE Seminar_id = '" . $this->sem_id . "' "
+//            . "AND ((CONCAT(auth_user_md5.Vorname, \" \", auth_user_md5.Nachname) LIKE :input "
+//            . "OR CONCAT(auth_user_md5.Nachname, \" \", auth_user_md5.Vorname) LIKE :input "
+//            . "OR auth_user_md5.username LIKE :input))"
+            . "ORDER BY Vorname, Nachname ",
+            _("person wählen"), "username");
+
+        // add "add tutor" to infobox
+        $mp = MultiPersonSearch::get("urlaubs_filter")
+            ->setLinkText(sprintf(_('Personen wählen')))
+            ->setDefaultSelectedUser('')
+            ->setLinkIconPath("")
+            ->setTitle(sprintf(_('Person wählen')))
+            ->setExecuteURL($this->url_for('urlaubskalender/multipersonsearch_filter'))
+            ->setSearchObject($search_obj)
+            ->addQuickfilter(sprintf(_('Nutzer der Einrichtung')), $membersOfSem)
+            //->setNavigationItem('/')
+            ->render();
+        $element = LinkElement::fromHTML($mp, Icon::create('community+add', 'clickable'));
+        $widget = new ActionsWidget();
+        $widget->addElement($element);
+        $sidebar->addWidget($widget);
+        
+//        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname, username, perms "
+//            . "FROM auth_user_md5 "
+//            . "WHERE (CONCAT(auth_user_md5.Vorname, \" \", auth_user_md5.Nachname) LIKE :input "
+//            . "OR CONCAT(auth_user_md5.Nachname, \" \", auth_user_md5.Vorname) LIKE :input "
+//            . "OR auth_user_md5.username LIKE :input)"
+//            . "AND auth_user_md5.perms LIKE 'dozent'"
+//            . "AND auth_user_md5.user_id NOT IN "
+//            . "(SELECT supervisor_group_user.user_id FROM supervisor_group_user WHERE supervisor_group_user.supervisor_group_id = '" . $supervisorgroupid . "')  "
+//            . "ORDER BY Vorname, Nachname ",
+//            _("Teilnehmer suchen"), "username");
+//        
+//        $this->mp = MultiPersonSearch::get('supervisorgroupSelectUsers')
+//            ->setLinkText(_('Supervisoren hinzufügen'))
+//            ->setTitle(_('Personen zur Supervisorgruppe hinzufügen'))
+//            ->setSearchObject($search_obj)
+//            ->setExecuteURL(URLHelper::getLink('plugins.php/eportfolioplugin/supervisorgroup/addUser/' . $group->id, ['id' => $group_id, 'redirect' => $this->url_for('showsupervisor/supervisorgroup/' . $this->linkId)]))
+//            ->render();
+        
+        
         $this->dates = $this->events_of_type(13);
         
         //für die Darstellung in der Timeline braucht man Integer keys für die Labels
@@ -528,6 +580,26 @@ class UrlaubskalenderController extends StudipController
         $this->redirect($this->url_for('/urlaubskalender/birthday'));
     }
 
+    function multipersonsearch_filter()
+    {
+        // load MultiPersonSearch object
+        $mp = MultiPersonSearch::load("urlaubs_filter");
+        $sem = Seminar::GetInstance($this->sem_id);
+
+        $countAdded = 0;
+        foreach ($mp->getAddedUsers() as $a) {
+            $msg = $this->members->addMember($a, 'autor', Request::get('consider_contingent'));
+            $countAdded++;
+        }
+
+        if ($countAdded == 1) {
+            $text = _("Es wurde eine neue Person hinzugefügt.");
+        } else {
+            $text = sprintf(_("Es wurden %s neue Personen hinzugefügt."), $countAdded);
+        }
+        PageLayout::postMessage(MessageBox::success($text));
+        $this->redirect('course/members/index');
+    }
 
     
      function url_for($to)
