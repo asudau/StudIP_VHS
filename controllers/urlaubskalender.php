@@ -203,7 +203,7 @@ class UrlaubskalenderController extends StudipController
         $element = LinkElement::fromHTML($mp, Icon::create('community+add', 'clickable'));
         $widget = new ActionsWidget();
         $widget->addElement($element);
-        $sidebar->addWidget($widget);
+        //$sidebar->addWidget($widget);
         
 //        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname, username, perms "
 //            . "FROM auth_user_md5 "
