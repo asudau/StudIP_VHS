@@ -105,7 +105,9 @@ class IntranetConfig extends SimpleORMap
         foreach ($courses as $course) {
             $sem_config = IntranetSeminar::find([$course->id, $intranet_id]);
             if ($sem_config && $sem_config->add_instuser_as){
-                $status = $sem_config->add_instuser_as;
+                //if ($sem_config->add_instuser_as){
+                    $status = $sem_config->add_instuser_as;
+                //}
                 $statement = DBManager::get()->prepare($query);
                 $statement->execute(array(
                     $course->id,
