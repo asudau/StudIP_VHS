@@ -42,6 +42,14 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
                 <td>
                     <a data-dialog href ='<?= $controller->url_for('intranetverwaltung/index/editseminar/' . $course->id . '/' . $intranet_inst->institut_id )?>'> <?= $course->name ?>
                 </td>
+                <td>
+                    <? $sem_config = IntranetSeminar::find([$course->id, $intranet_inst->id]); ?>
+                    <? if ($sem_config): ?>
+                        Automatischer Eintrag als '<?= $sem_config->add_instuser_as ?>'
+                    <? else: ?>
+                        Kein automatischer Eintrag konfiguriert
+                    <? endif ?>
+                </td>
             </tr>
             <?php endforeach ?>
             <?php endif ?>
