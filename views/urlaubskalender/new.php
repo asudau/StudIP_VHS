@@ -30,8 +30,8 @@
             <input type="hidden" name="event_id" value="<?= ($entry) ? $entry->getValue('id') : '' ?>" id="event_id"></input>
             <div id='holidays' >
                 <label> Urlaubsbeginn: </label>
-                <input required type="text" id="begin" name="begin" data-date-picker='{"<":"#end"}' value="<?= ($entry) ? date("d.m.Y", $entry->getValue('start')) :'' ?>"></input><br>
-                <label> Urlaubsende:</label> <input id="end" data-date-picker='{">":"#begin"}' type="" name="end" value="<?= ($entry) ? date("d.m.Y", $entry->getValue('end')) : ''?>"></input>
+                <input required type="text" id="begin" name="begin" data-date-picker='{"<=":"#end"}' value="<?= ($entry) ? date("d.m.Y", $entry->getValue('start')) :'' ?>"></input><br>
+                <label> Urlaubsende:</label> <input id="end" data-date-picker='{"=>":"#begin"}' type="" name="end" value="<?= ($entry) ? date("d.m.Y", $entry->getValue('end')) : ''?>"></input>
                 <label> Hinweis/Notiz:</label> <input type="" name="notice" value="<?= ($entry) ? $entry->getValue('description') : ''?>"></input>
             </div>
         </fieldset>
