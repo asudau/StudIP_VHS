@@ -136,23 +136,25 @@
 			</div>
 			<div class="haupt">
 	       
-                
-    <!-- News -->
-    <? foreach ($newsTemplates as $course_id => $template) : ?>
-	<!--  CONTENT ELEMENT, uid:434/textpic [begin] -->
+     <!-- News -->
+    <? foreach ($newsPosition as $course_id => $position) : ?>
+        <? $template = $newsTemplates[$course_id]; ?>
+        <!--  CONTENT ELEMENT, uid:434/textpic [begin] -->
 		<div class="intranet_news csc-default csc-space-after-25">
 		<!--  Image block: [begin] -->
 			<div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight"><div class="csc-textpic-text">
 		<!--  Text: [begin] -->
             <? $avatar = CourseAvatar::getAvatar($course_id); ?>
-            <img src="<?= ($avatar->is_customized()) ? $avatar->getCustomAvatarURl('original') : $plugin->getPluginURL().'/assets/images/Projektbereich.png' ?>" alt="" border="0" width="100%">
-            <h2 class="intranet">
-                    <a href="" title="" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
+            <img src="<?= ($avatar->is_customized()) ? $avatar->getCustomAvatarURl('original') : $plugin->getPluginURL().'/assets/images/Projektbereich.png' ?>" alt="" border="0" width="100%" max-height='171px'>
+			<h2 class="intranet">
+                <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
+                    <a href="" title="Opens internal link in current window" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
                     <? if ($GLOBALS['perm']->have_studip_perm('dozent', $course_id)){ ?>
-                    <a style="margin-left: 68%;" href="<?=URLHelper::getLink("dispatch.php/news/edit_news/new/" . $course_id) ?>" rel="get_dialog">
+                    <a href="<?=URLHelper::getLink("dispatch.php/news/edit_news/new/" . $course_id) ?>" rel="get_dialog">
                         <?= Icon::create('add', 'clickable')?>             
                     </a>
                     <? } ?>
+                </div>
             </h2>
 
             <?= $this->render_partial($template, compact('widget')) ?>
@@ -164,6 +166,7 @@
 			</div>
 	<!--  CONTENT ELEMENT, uid:434/textpic [end] -->
     <? endforeach ?>
+    
 		
     <div class="intranet_news csc-default csc-space-after-50">
 		<!--  Image block: [begin] -->
