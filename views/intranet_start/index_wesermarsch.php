@@ -167,23 +167,6 @@
 	<!--  CONTENT ELEMENT, uid:434/textpic [end] -->
     <? endforeach ?>
     
-		
-    <div class="intranet_news csc-default csc-space-after-50">
-		<!--  Image block: [begin] -->
-			<div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight" style='margin-left: 20px'><div class="csc-textpic-text">
-		<!--  Text: [begin] -->
-        <a href='<?=$plugin->getPluginURL().'/assets/images/Intranet eL4.png' ?>' target='_blank'><img src="<?=$plugin->getPluginURL().'/assets/images/Intranet eL4.png' ?>" alt="" height="200px" width="200px"  style="border:1px solid black"></a>
-        <a href='<?=$plugin->getPluginURL().'/assets/images/Intranet Osnabrueck.png' ?>' target='_blank'><img src="<?=$plugin->getPluginURL().'/assets/images/Intranet Osnabrueck.png' ?>" alt="" height="200px" width="200px"  style="border:1px solid black"></a>
-        <a href='<?=$plugin->getPluginURL().'/assets/images/Intranet Ammerland.png' ?>' target='_blank'><img src="<?=$plugin->getPluginURL().'/assets/images/Intranet Ammerland.png' ?>" alt="" height="200px" width="200px"  style="border:1px solid black"></a>
-        <h2 class="intranet">
-                    <a href="" title="" class="internal-link">3 Screenshots verschiedener Intranet Startseiten, einfach drauflicken!</a>
-
-            </h2>
-		<!--  Text: [end] -->
-			</div></div>
-		<!--  Image block: [end] -->
-	</div>
-    
     
 <!--    <iframe width="655px" height="600px" src="https://www.yumpu.com/de/embed/view/3Zg6zYDHcToasqF5" frameborder="0" allowfullscreen="true"  allowtransparency="true"></iframe>
 	-->
