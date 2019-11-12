@@ -1,5 +1,5 @@
 
-<div style='height:315px; width:472px; float:left; padding-right:25px'> 
+<div style='height:315px; width:472px; float:left'> 
     <h2>Erste Schritte</h1>
     Diese drei Videos unterstützen dich beim Einstieg in Stud.IP. <br>
     Das Video 'Erste Schritte in Stud.IP' erklärt, wie Stud.IP aufgebaut ist und was es kann.<br>
