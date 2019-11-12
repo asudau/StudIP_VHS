@@ -203,6 +203,10 @@ class IntranetStartController extends StudipController {
         
     }
     
+    public function about_el4_action(){
+        
+    }
+    
     public function send_form_action(){
         if (Request::get('message_body')){
             $mailtext = Studip\Markup::purifyHtml(Request::get('message_body'));

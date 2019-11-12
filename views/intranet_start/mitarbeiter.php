@@ -164,10 +164,10 @@
             <table cellspacing="0" cellpadding="0" border="0">
                 <tbody><tr>
                     <td class="dsR4"><div class="zentriert intranet-kachel">
-                        <a data-dialog="title=Feedback geben;width=300px; height=200px;" href="<?=$this->controller->url_for('intranet_start/feedback_chat')?>" title="Feedback">
+                        <a data-dialog="title=Erste Schritte;size=1000x800;" href="<?=$this->controller->url_for('intranet_start/about_el4')?>" title="Feedback">
                             <?= Icon::create('chat2', 'clickable', ['size' => 100])?>
                         <br>
-                            Feedback
+                            Erste Schritte
                         </a>
                     </div>
                     </td>
