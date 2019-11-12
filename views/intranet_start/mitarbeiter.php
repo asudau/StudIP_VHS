@@ -165,7 +165,7 @@
                 <tbody><tr>
                     <td class="dsR4"><div class="zentriert intranet-kachel">
                         <a data-dialog="title=Erste Schritte;size=1000x800;" href="<?=$this->controller->url_for('intranet_start/about_el4')?>" title="Feedback">
-                            <?= Icon::create('key', 'clickable', ['size' => 100])?>
+                            <?= Icon::create('support', 'clickable', ['size' => 100])?>
                         <br>
                             Erste Schritte
                         </a>
