@@ -176,7 +176,7 @@ class SeminarController extends StudipController {
 	
         // Fetch dates
         if (!$this->studygroup_mode) {
-            $response = $this->relay("seminar/display/{$this->course_id}/1210000");
+            $response = $this->relay("seminar/display/{$this->course->id}/1210000");
             $this->dates = $response->body;
         }
 	
@@ -483,7 +483,7 @@ class SeminarController extends StudipController {
 
 			
 		    	$block = SeminarTab::findOneBySQL('seminar_id = ? AND tab IN (?) ORDER BY position ASC',
-                                 array($this->course_id, 'mooc_progress') );
+                                 array($this->course->id, 'mooc_progress') );
 			if ($block){
 		    		$this->tabs[] = array('tab' => $block->getValue('tab'), 
 						 'title' => $block->getValue('title'),
@@ -516,7 +516,7 @@ class SeminarController extends StudipController {
 			
 		    if(!in_array($tab->getTitle(), $this->ignore_tabs)){
 		    	$block = SeminarTab::findOneBySQL('seminar_id = ? AND tab IN (?) ORDER BY position ASC',
-                                 array($this->course_id, $key) );
+                                 array($this->course->id, $key) );
 			if ($block && !in_array($key, $this->ignore_tabs)){
 		    		$this->tabs[] = array('tab' => $block->getValue('tab'), 
 						 'title' => $block->getValue('title'),
