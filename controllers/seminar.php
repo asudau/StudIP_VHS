@@ -527,9 +527,9 @@ class SeminarController extends StudipController {
 			} else if (!in_array($key, $this->ignore_tabs)){
 			      $this->tabs[] = array('tab' => $key,
 						 'title' => $tab->getTitle(), 
-						 'position' => $tab->getValue('position'),
+						 'position' => $block->getValue('position'),
 						 'orig_title' => $orig_title[0]['title'],
-						 'visible' => $tab->getValue('tn_visible') ? 'checked': '',
+						 'visible' => $block->getValue('tn_visible') ? 'checked': '',
 					  );
 			}
 			$position++;
