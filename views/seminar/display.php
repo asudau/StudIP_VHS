@@ -22,7 +22,7 @@
   <? if($termine): ?>
 
     <? foreach ($termine as $termin): ?>
-        <?= $this->render_partial('show/_termin.php', array('termin' => $termin)); ?>    
+        <?= $this->render_partial('seminar/_termin.php', array('termin' => $termin)); ?>    
     <? endforeach; ?>
 <? else: ?>
     <section>
