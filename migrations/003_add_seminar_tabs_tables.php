@@ -1,5 +1,5 @@
 <?php
-class AddSeminarTabsTables extends DBMigration {
+class AddSeminarTabsTables extends Migration {
 
     public function description () {
         return 'create tables for the SeminarTabs-plugin';
