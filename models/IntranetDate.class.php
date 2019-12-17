@@ -25,11 +25,10 @@ class IntranetDate extends \SimpleORMap
      *
      * @param mixed $id primary key of table
      */
-    public function __construct($id = null) {
-
-        $this->db_table = 'intranet_dates';
-
-        parent::__construct($id);
+    protected static function configure($config = array())
+    {
+        $config['db_table'] = 'intranet_dates';
+        parent::configure($config);
     }
 
 }

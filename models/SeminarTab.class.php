@@ -30,17 +30,15 @@ class SeminarTab extends \SimpleORMap
      *
      * @param mixed $id primary key of table
      */
-    public function __construct($id = null) {
-
-        $this->db_table = 'seminar_tabs';
-
-        $this->belongs_to['course'] = array(
+    protected static function configure($config = array())
+    {
+        $config['db_table'] = 'seminar_tabs';
+        
+        $config['belongs_to']['course'] = array(
             'class_name'  => '\\Course',
             'foreign_key' => 'seminar_id');
-
-
-        parent::__construct($id);
+        
+        parent::configure($config);
     }
 
-   
 }
