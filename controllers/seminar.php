@@ -46,7 +46,7 @@ class SeminarController extends StudipController {
         $this->style = $localEntries[$this->datafield_id]->value;
         
         //defaultwert wenn noch nichts gewählt wurde
-        if(!$this->style){
+        if(!$this->style || $this->style == ''){
             $this->style = 'full';
         }
         
@@ -124,9 +124,9 @@ class SeminarController extends StudipController {
         // Fetch frageboegen
         $dispatcher = new StudipDispatcher();
         $controller = new QuestionnaireController($dispatcher);
-        $response = $controller->relay('questionnaire/widget/' . $this->course->id);
-        $this->questionnairetemplate = $GLOBALS['template_factory']->open('shared/string');
-        $this->questionnairetemplate->content = $response->body;
+//        $response = $controller->relay('questionnaire/widget/' . $this->course->id);
+//        $this->questionnairetemplate = $GLOBALS['template_factory']->open('shared/string');
+//        $this->questionnairetemplate->content = $response->body;
         
         if (StudipNews::CountUnread() > 0) {
             $navigation = new Navigation('', PluginEngine::getLink($this, array(), 'read_all'));
@@ -180,14 +180,8 @@ class SeminarController extends StudipController {
             $this->dates = $response->body;
         }
 	
-        //$controller = new IntranetStartController();
-        $sem_folder = IntranetStartController::get_folders_from_seminar_id($this->course->id);
-        $details = IntranetStartController::get_folderwithfiles_from_folder_ids($sem_folder);
-        $this->folderwithfiles = $details['folderwithfiles'];
-        
-        //folder auf Unterebene
-        $this->parentfolder = $details['parentfolder'];
-        //$this->folderwithfiles = $this->getSeminarDocuments();
+        //$response = $this->relay("seminar/documents");
+        //$this->documents = $response->body;
         
         $this->render_action($this->style);
 
@@ -221,7 +215,7 @@ class SeminarController extends StudipController {
        
     }
     
-    public function set_action() {
+    public function set_action($course_id) {
         $style = Request::get('style');
         $description = Request::get('description');
         
@@ -288,10 +282,10 @@ class SeminarController extends StudipController {
         $this->users = $this->sem->getMembers('user');
     }
 
-//    public function documents_action() {
-//        $this->documents = $this->getSeminarDocuments();
-//
-//    }  
+    public function documents_action() {
+        $this->documents = $this->getSeminarDocuments();
+
+    }  
     
     /**
      * Widget controller to produce the formally known show_votes()
@@ -428,7 +422,7 @@ class SeminarController extends StudipController {
 	// Dokumente 
  	//Get File-Folders of Intern Seminar MitarbeiterInnen
     $db = DBManager::get();
-    $stmt = $db->prepare("SELECT folder_id, name FROM folder WHERE seminar_id = :cid");
+    $stmt = $db->prepare("SELECT id, name FROM folders WHERE range_id = :cid");
     $stmt->bindParam(":cid", $this->course->id);
     $stmt->execute();
     $this->folder = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -438,9 +432,9 @@ class SeminarController extends StudipController {
     foreach ($this->folder as $folder){
 
         $db = \DBManager::get();
-        $stmt = $db->prepare("SELECT * FROM `dokumente` WHERE `range_id` = :range_id
+        $stmt = $db->prepare("SELECT * FROM `file_refs` WHERE `folder_id` = :range_id
             ORDER BY `name`");
-        $stmt->bindParam(":range_id", $folder['folder_id']);
+        $stmt->bindParam(":range_id", $folder['id']);
         $stmt->execute();
         $response = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 

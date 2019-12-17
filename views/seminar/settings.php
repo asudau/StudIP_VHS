@@ -18,7 +18,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
     <?= MessageBox::$message_types[$msg[0]]($msg[1]) ?>
 <? endforeach ?>
 
-<form name="course-settings" name="settings" method="post" action="<?= $controller->url_for('seminar/set', $course_id) ?>" <?= $dialog_attr ?> class="default collapsable">
+<form name="course-settings" name="settings" method="post" action="<?= $controller->url_for('seminar/set/' . $course->id) ?>" <?= $dialog_attr ?> class="default collapsable">
     <?= CSRFProtection::tokenTag() ?>
     <input id="open_variable" type="hidden" name="open" value="<?= $flash['open'] ?>">
     
