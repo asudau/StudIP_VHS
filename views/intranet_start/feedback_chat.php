@@ -3,7 +3,7 @@
      
     <div>
         <label>
-            <h4><span style='color:black'><?= _("Schreiben Sie ein Feedback und klicken Sie auf 'Abschicken'. Ihr Feedback wird anschließend im Intranet-Chat veröffentlicht") ?>:</span></h4>
+            <h4><span style='color:black'><?= _("Schreiben Sie ein Feedback und klicken Sie auf 'Abschicken'. Ihr Feedback wird anschlieÃŸend im Intranet-Chat verÃ¶ffentlicht") ?>:</span></h4>
             <textarea style="width: 100%; height: 300px;" name="content" class="add_toolbar"></textarea>
         </label>
     </div>

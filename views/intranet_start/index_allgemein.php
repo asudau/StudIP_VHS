@@ -19,7 +19,7 @@
                     <div class="csc-textpic-text">
                 <!--  Text: [begin] -->
                     <img src="<?= $plugin->getPluginURL().'/assets/images/Kursstart.png' ?>" alt="" border="0" width="100%">
-                    <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/my_courses" title="Zur ausführlichen Übersicht" class="internal-link">Meine Gruppen/Mein Arbeitsbereich</a></h2>
+                    <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/my_courses" title="Zur ausfÃ¼hrlichen Ãœbersicht" class="internal-link">Meine Gruppen/Mein Arbeitsbereich</a></h2>
                     <? foreach ($courses as $course){ ?>
                     <section class="contentbox course">
                         <a href='<?=$GLOBALS['ABSOLUTE_URI_STUDIP']. 'seminar_main.php?auswahl=' . $course['Seminar_id'] ?>'><?= $course['Name'] ?></a></section>

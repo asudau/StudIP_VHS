@@ -21,7 +21,7 @@
                 <!--  Text: [begin] -->
                     <img src="<?= $plugin->getPluginURL().'/assets/images/Kursstart.png' ?>" alt="" border="0" width="100%">
                     <h2 class="intranet">
-                        <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/my_courses" title="Zur ausführlichen Übersicht" class="internal-link">
+                        <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/my_courses" title="Zur ausfÃ¼hrlichen Ãœbersicht" class="internal-link">
                                 Meine Gruppen/Mein Arbeitsbereich
                         </a>
                     </h2>
@@ -58,7 +58,7 @@
                     <h2 class="intranet"><a href="" title="" class="internal-link">Rund um meine Kurse</a></h2>
                     
                     <section class="contentbox themen">
-                        <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Leitfaden für neue DozentInnen (PDF)</a>
+                        <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Leitfaden fÃ¼r neue DozentInnen (PDF)</a>
                     </section>
                     <section class="contentbox themen">
                         <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Formular xyz (DOC)</a>
@@ -119,7 +119,7 @@
                         <td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=92&kathaupt=1&katid=189&catDepth=1#kateg189" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/gesundheit.png" ?>" alt="" border="0" width="73" height="72"><br>
 							Gesundheits- bildung</a></div></td>
 						<td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=92&katid=222&catDepth=1&kathaupt=1#kateg222" target="_blank"><img src="<?= $plugin->getPluginURL()."/assets/images/kochen.png" ?>" alt="" border="0" width="73" height="72"><br>
-						Kochen und Ernährung</a></div></td>
+						Kochen und ErnÃ¤hrung</a></div></td>
 						
 					</tr>
 					<tr>

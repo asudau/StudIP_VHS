@@ -49,7 +49,7 @@ if(strcmp($datesTemplate, "Die Zeiten der Veranstaltung stehen nicht fest.") !==
         <?
         $next_date = $sem->getNextDate();
         if ($next_date) {
-            echo '<section class=contentbox><header><h1>'._("Nächster Termin").':</h1></header>';
+            echo '<section class=contentbox><header><h1>'._("NÃ¤chster Termin").':</h1></header>';
             echo '<article>' . $next_date . '</article></section>';
         } else if ($first_date = $sem->getFirstDate()) {
             echo '<section class=contentbox><header><h1>'._("Erster Termin").':</h1></header>';
@@ -167,7 +167,7 @@ if ($votes || $evaluations): ?>
 
     			<footer>
         			<? if ($vote->multiplechoice): ?>
-        			<?= _('Sie konnten mehrere Antworten auswählen.') ?>
+        			<?= _('Sie konnten mehrere Antworten auswÃ¤hlen.') ?>
         			<? endif; ?>
         			<?= $vote->countInfo ?>
         			<?= $vote->anonymousInfo ?>
@@ -183,7 +183,7 @@ if ($votes || $evaluations): ?>
         					: Studip\LinkButton::create(_('Sortieren'), ContentBoxHelper::href($vote->id, array('preview[]' => $vote->id, 'sort' => 1)))
     					?>
     					<? if ($vote->changeable && $vote->state == 'active'): ?>
-        					<?= Studip\LinkButton::create(_('Antwort ändern'), ContentBoxHelper::href($vote->id, array('change' => 1))) ?>
+        					<?= Studip\LinkButton::create(_('Antwort Ã¤ndern'), ContentBoxHelper::href($vote->id, array('change' => 1))) ?>
     					<? endif; ?>
     					<? if ($vote->namesvisibility): ?>
         					<? if (Request::get('revealNames') === $vote->id) : ?>

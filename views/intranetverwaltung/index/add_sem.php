@@ -10,7 +10,7 @@ use Studip\Button, Studip\LinkButton;
     Hier stehen Sachen drin
     
     <footer data-dialog-button>
-        <?= Button::create(_('Übernehmen')) ?>
+        <?= Button::create(_('Ãœbernehmen')) ?>
     </footer>
 </form>
 <?php

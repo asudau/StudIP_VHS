@@ -20,7 +20,7 @@
                 <!--  Text: [begin] -->
                     <? $avatar = CourseAvatar::getAvatar($course_id); ?>
                     <img src="<?= ($avatar->is_customized()) ? $avatar->getCustomAvatarURl('original') : $plugin->getPluginURL().'/assets/images/Projektbereich.png' ?>" alt="" border="0" width="100%">
-                    <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/my_courses" title="Zur ausführlichen Übersicht" class="internal-link">Meine Gruppen/Mein Arbeitsbereich</a></h2>
+                    <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/my_courses" title="Zur ausfÃ¼hrlichen Ãœbersicht" class="internal-link">Meine Gruppen/Mein Arbeitsbereich</a></h2>
                     <? foreach ($courses as $course){ ?>
                     <section class="contentbox course">
                         <a href='<?=$GLOBALS['ABSOLUTE_URI_STUDIP']. 'seminar_main.php?auswahl=' . $course['Seminar_id'] ?>'><?= $course['Name'] ?></a></section>
@@ -49,7 +49,7 @@
                              <img src="<?=$plugin->getPluginURL().'/assets/images/moodle.jpeg' ?>" alt="" border="0" width="100%">
                         </a>
                     <h2 class="intranet">
-                        <a href='<?=URLHelper::getLink("wiki.php", ['cid' => 'b8d02f67fca5aac0efa01fb1782166d1', 'keyword' => 'moodle-kurse']) ?>' title="" class="internal-link">Übersicht: Moodle Inhalte in Stud.IP!</a>
+                        <a href='<?=URLHelper::getLink("wiki.php", ['cid' => 'b8d02f67fca5aac0efa01fb1782166d1', 'keyword' => 'moodle-kurse']) ?>' title="" class="internal-link">Ãœbersicht: Moodle Inhalte in Stud.IP!</a>
                     </h2>
                     <!--  Text: [end] -->
                         </div></div>
@@ -67,7 +67,7 @@
                     <h2 class="intranet"><a href="" title="" class="internal-link">Rund um meine Kurse</a></h2>
                     
                     <section class="contentbox themen">
-                        <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Leitfaden für neue DozentInnen (PDF)</a>
+                        <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Leitfaden fÃ¼r neue DozentInnen (PDF)</a>
                     </section>
                     <section class="contentbox themen">
                         <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Formular xyz (DOC)</a>
@@ -149,8 +149,8 @@
                     <?= Icon::create('glossary', 'clickable', ['size' => 90])?>
                     <h2 class="intranet-inner">
                         <a href="<?= $this->controller->url_for('intranet_start/folder/eb0d49fba9c83fd4bf4373aca82c8f3e') ?>" 
-                           title="Schnellzugriff auf Handbücher" class="internal-link" data-dialog='size=400'>
-                           Schnellzugriff Handbücher
+                           title="Schnellzugriff auf HandbÃ¼cher" class="internal-link" data-dialog='size=400'>
+                           Schnellzugriff HandbÃ¼cher
                         </a>
                     </h2>
                     </div>
@@ -177,8 +177,8 @@
                     <?= Icon::create('file', 'clickable', ['size' => 100, 'align' => 'center'])?>
                     <h2 class="intranet-inner">
                         <a href="<?= $this->controller->url_for('intranet_start/semfolder/67ef6b9f0e60a5b03fc97287791cf1eb') ?>" 
-                           title="Tutorials für Dozierende" class="internal-link" data-dialog='size=600'>
-                            Tutorials für Dozierende </a>
+                           title="Tutorials fÃ¼r Dozierende" class="internal-link" data-dialog='size=600'>
+                            Tutorials fÃ¼r Dozierende </a>
                     </h2>
                     </div>
                     <!--  Image block: [end] -->

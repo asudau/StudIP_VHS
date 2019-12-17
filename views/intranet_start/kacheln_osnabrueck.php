@@ -4515,8 +4515,8 @@ a.th {
 				<div class="portal-boxenoverlay">
 					<h3 class="portal-boxenheadline">Kurse und Projekte</h3>
 					<p class="portal-boxendate"></p>
-					<div class="portal-boxentext"><p>Hier kommen Sie direkt zur umfassenden Übersicht über all Ihre Kurse, Projekte und Arbeitsgruppen.</p></div>
-					<a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/my_courses" type="submit" class="btn btn-primary portal-boxenbutton"><?=Icon::create('seminar', 'info_alt')?> weiter zur Übersicht <?=Icon::create('arr_1right', 'info_alt')?></a>
+					<div class="portal-boxentext"><p>Hier kommen Sie direkt zur umfassenden Ã¼bersicht Ã¼ber all Ihre Kurse, Projekte und Arbeitsgruppen.</p></div>
+					<a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/my_courses" type="submit" class="btn btn-primary portal-boxenbutton"><?=Icon::create('seminar', 'info_alt')?> weiter zur Ãœbersicht <?=Icon::create('arr_1right', 'info_alt')?></a>
 					<button class="portal-boxenclose" onclick="changeBack(this);"><img src="<?=$plugin->getPluginURL()?>/assets/images/close.png" alt="[X]"></button>
 				</div>
 			
@@ -4534,7 +4534,7 @@ a.th {
 				<div class="portal-boxenoverlay">
 					<h3 class="portal-boxenheadline">Tipp: Stud.IP Nachrichten</h3>
 					<p class="portal-boxendate"></p>
-					<div class="portal-boxentext"><p>Stud.IP bietet ein eigenes internes Nachrichtensystem. Interne Nachrichten werden Ihnen zusätzlich per Mail weitergeleitet. Dies können Sie optional im Bereich Profil/Einstellungen anpassen. </p></div>
+					<div class="portal-boxentext"><p>Stud.IP bietet ein eigenes internes Nachrichtensystem. Interne Nachrichten werden Ihnen zusÃ¤tzlich per Mail weitergeleitet. Dies kÃ¶nnen Sie optional im Bereich Profil/Einstellungen anpassen. </p></div>
 					<a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/messages/overview" type="submit" class="btn btn-primary portal-boxenbutton"><?=Icon::create('mail', 'info_alt')?> weiter zu meinen Nachrichten <?=Icon::create('arr_1right', 'info_alt')?></a>
 					<button class="portal-boxenclose" onclick="changeBack(this);"><img src="<?=$plugin->getPluginURL()?>/assets/images/close.png" alt="[X]"></button>
 				</div>
@@ -4547,7 +4547,7 @@ a.th {
 			<div class="portal-boxeninner" style="background-image: url(<?=$plugin->getPluginURL().'/assets/images/people.jpg' ?>)" onclick="changeclass(this);">
 			
 				<div class="portal-boxenintro">
-					<h3 class="portal-boxenheadline">Stud.IP für DozentInnen</h3>
+					<h3 class="portal-boxenheadline">Stud.IP fÃ¼r DozentInnen</h3>
 					<p class="portal-boxendate"></p>
 				</div>
 				<div class="portal-boxenoverlay">
@@ -4565,7 +4565,7 @@ a.th {
 			<div class="portal-boxeninner" style="background-image: url(<?=$plugin->getPluginURL().'/assets/images/qualitaet.jpg' ?>)" onclick="changeclass(this);">
 			
 				<div class="portal-boxenintro">
-					<h3 class="portal-boxenheadline">Qualitätsmanagement</h3>
+					<h3 class="portal-boxenheadline">QualitÃ¤tsmanagement</h3>
 					<p class="portal-boxendate"></p>
 				</div>
 				<div class="portal-boxenoverlay">
@@ -4594,7 +4594,7 @@ a.th {
 				<div class="portal-boxenoverlay">
 					<h3 class="portal-boxenheadline">FAQ</h3>
 					<p class="portal-boxendate"></p>
-					<div class="portal-boxentext"><p>Wer legt die Kurse und Accounts für Nutzerinnen und Nutzer an? Woher kommt eigentlich Stud.IP und wer entwickelt es weiter? Antworten auf diese und andere Fragen finden Sie hier</p></div>
+					<div class="portal-boxentext"><p>Wer legt die Kurse und Accounts fÃ¼r Nutzerinnen und Nutzer an? Woher kommt eigentlich Stud.IP und wer entwickelt es weiter? Antworten auf diese und andere Fragen finden Sie hier</p></div>
 					<a href="" type="submit" class="btn btn-primary portal-boxenbutton">weiter <?=Icon::create('arr_1right', 'info_alt')?></a>
 					<button class="portal-boxenclose" onclick="changeBack(this);"><img src="<?=$plugin->getPluginURL()?>/assets/images/close.png" alt="[X]"></button>
 				</div>
@@ -4613,7 +4613,7 @@ a.th {
 				<div class="portal-boxenoverlay">
 					<h3 class="portal-boxenheadline">Stud.IP erkunden</h3>
 					<p class="portal-boxendate"></p>
-					<div class="portal-boxentext"><p>Lernen Sie die vielfältigen Möglichkeiten von Stud.IP mit Hilfe von Schritt für Schritt Anleitungen und Video-Tutorials kennen</p></div>
+					<div class="portal-boxentext"><p>Lernen Sie die vielfÃ¤ltigen MÃ¶glichkeiten von Stud.IP mit Hilfe von Schritt fÃ¼r Schritt Anleitungen und Video-Tutorials kennen</p></div>
 					<a href="" type="submit" class="btn btn-primary portal-boxenbutton">weiter <?=Icon::create('arr_1right', 'info_alt')?></a>
 					<button class="portal-boxenclose" onclick="changeBack(this);"><img src="<?=$plugin->getPluginURL()?>/assets/images/close.png" alt="[X]"></button>
 				</div>
@@ -4625,7 +4625,7 @@ a.th {
         <div class="portal-boxeninner" onclick="changeclass(this);">
 
             <div class="portal-boxenintro">
-                <h3 class="portal-boxenheadline">Bei Fragen und Wünschen rund um Stud.IP helfen wir Ihnen gerne weiter:</h3>
+                <h3 class="portal-boxenheadline">Bei Fragen und WÃ¼nschen rund um Stud.IP helfen wir Ihnen gerne weiter:</h3>
                 <p class="portal-boxendate">Albrechtk@osnabrueck.de</p>
             </div>
             <div class="portal-boxenoverlay">

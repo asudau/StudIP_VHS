@@ -23,21 +23,21 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
     <input id="open_variable" type="hidden" name="open" value="<?= $flash['open'] ?>">
     
      <fieldset <?= isset($flash['open']) && $flash['open'] != 'begin_course' ? 'class="collapsed"' : ''?> data-open="begin_course">
-        <legend><?= sprintf(_('Kursfreigabe für %s'),  get_title_for_status('autor', 2)) ?></legend>
-            <label for="start_date"><?= sprintf(_('Kurs für %s freigeben ab'), get_title_for_status('autor', 2)) ?></label>
+        <legend><?= sprintf(_('Kursfreigabe fÃ¼r %s'),  get_title_for_status('autor', 2)) ?></legend>
+            <label for="start_date"><?= sprintf(_('Kurs fÃ¼r %s freigeben ab'), get_title_for_status('autor', 2)) ?></label>
              <input style='width:140px; max-width:140px' type='date' name ='start_date' value='<?= date('Y-m-d', $coursebegin) ?>'>
     </fieldset>
     
     
     <fieldset <?= !isset($flash['open']) || $flash['open'] != 'bd_basicsettings' ? 'class="collapsed"' : ''?> data-open="bd_basicsettings">
-        <legend><?= _('Aufbau der Übersichtsseite wählen') ?></legend>
+        <legend><?= _('Aufbau der Ãœbersichtsseite wÃ¤hlen') ?></legend>
         <table>
             <tr>
                 <td>    
                     <img class='style-preview box-shadow' src='<?= URLHelper::getURL($this->plugin->getpluginPath() . '/assets/images/standard.png')?>'/>
                 </td>
                 <td>
-                    <input type='radio' name ='style' value ='standard' <?= ($style == 'standard') ? 'checked' : '' ?>> <b> Standardformat: </b> Die Stud.IP Standardübersicht
+                    <input type='radio' name ='style' value ='standard' <?= ($style == 'standard') ? 'checked' : '' ?>> <b> Standardformat: </b> Die Stud.IP StandardÃ¼bersicht
                 </td>
             </tr>
             
@@ -46,7 +46,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
                     <img class='style-preview box-shadow' src='<?= URLHelper::getURL($this->plugin->getpluginPath() . '/assets/images/grid.png')?>'/>
                 </td>
                 <td>
-                    <input type='radio' name ='style' value ='grid' <?= ($style == 'grid') ? 'checked' : '' ?>> <b> Kachelformat: </b> Bequemer und schneller Zugriff auf alle verfügbaren Inhaltselemente
+                    <input type='radio' name ='style' value ='grid' <?= ($style == 'grid') ? 'checked' : '' ?>> <b> Kachelformat: </b> Bequemer und schneller Zugriff auf alle verfÃ¼gbaren Inhaltselemente
                 </td>
             </tr>
             
@@ -55,7 +55,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
                     <img class='style-preview box-shadow' src='<?= URLHelper::getURL($this->plugin->getpluginPath() . '/assets/images/full.png')?>'/>
                 </td>
                 <td>
-                    <input type='radio' name ='style' value ='full' <?= ($style == 'full') ? 'checked' : '' ?>> <b> Zusammenfassung: </b> Alle wichtigen Informationen und Inhalte direkt auf der Übersichtsseite.
+                    <input type='radio' name ='style' value ='full' <?= ($style == 'full') ? 'checked' : '' ?>> <b> Zusammenfassung: </b> Alle wichtigen Informationen und Inhalte direkt auf der Ãœbersichtsseite.
                 </td>
             </tr>
             
@@ -64,7 +64,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
                     <img class='style-preview box-shadow' src='<?= URLHelper::getURL($this->plugin->getpluginPath() . '/assets/images/individual.png')?>'/>
                 </td>
                 <td>
-                    <input type='radio' name ='style' value ='individual' <?= ($style == 'individual') ? 'checked' : '' ?>> <b> Individuell: </b> Die Übersichtsseite ganz individuell mit Informationen zum Kurs gestalten.
+                    <input type='radio' name ='style' value ='individual' <?= ($style == 'individual') ? 'checked' : '' ?>> <b> Individuell: </b> Die Ãœbersichtsseite ganz individuell mit Informationen zum Kurs gestalten.
                 </td>
             </tr>
            
@@ -86,8 +86,8 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
 
 <!--        <label>
             <h1>Navigationsart</h1>
-            <input type='radio' name ='navigation' value ='default' <?= ($style == 'default') ? 'checked' : '' ?>> Navigation über Veranstaltungsreiter <br>
-            <input type='radio' name ='navigation' value ='base-grid' <?= ($style == 'base-grid') ? 'checked' : '' ?>> Navigation über Kacheln auf Übersichtseite <br>
+            <input type='radio' name ='navigation' value ='default' <?= ($style == 'default') ? 'checked' : '' ?>> Navigation Ã¼ber Veranstaltungsreiter <br>
+            <input type='radio' name ='navigation' value ='base-grid' <?= ($style == 'base-grid') ? 'checked' : '' ?>> Navigation Ã¼ber Kacheln auf Ãœbersichtseite <br>
             <input type='radio' name ='navigation' value ='left-hand' <?= ($style == 'eft-hand') ? 'checked' : '' ?>> Linksseitige Navigation <br>
         </label>-->
         <label>
@@ -122,6 +122,6 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
     </fieldset>
     
     <footer data-dialog-button>
-        <?= Button::create(_('Übernehmen')) ?>
+        <?= Button::create(_('Ãœbernehmen')) ?>
     </footer>
 </form>

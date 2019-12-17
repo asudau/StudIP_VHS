@@ -26,7 +26,7 @@ class IntranetStartController extends StudipController {
     public function index_action()
     {
         $inst_id = Institute::findCurrent()->id;
-        //TODO Berechtingung für INstitut abfragen
+        //TODO Berechtingung fÃ¼r INstitut abfragen
         $this->calendar_controller = new Calendar_CalendarController();
         $this->calendar_sem_id =  IntranetConfig::find($inst_id)->calendar_seminar;
         
@@ -220,7 +220,7 @@ class IntranetStartController extends StudipController {
                 //->addRecipient('elmar.ludwig@uos.de', 'Elmar Ludwig', 'Cc')
                  ->setReplyToEmail( User::findCurrent()->email)
                  ->setSenderEmail( User::findCurrent()->email)
-                 ->setSenderName('Intranet für Dozenten')
+                 ->setSenderName('Intranet fÃ¼r Dozenten')
                  ->setSubject($betreff)
                  ->setBodyHtml($mailtext)
                  ->setBodyHtml(strip_tags($mailtext))  
@@ -238,7 +238,7 @@ class IntranetStartController extends StudipController {
     }
     
     public function feedback_chat_action(){
-        //TODO - In Intranet Veranstaltung für Chat wählen
+        //TODO - In Intranet Veranstaltung fÃ¼r Chat wÃ¤hlen
         $this->seminar_id = '2dac34217342bd706ac114d57dd0b3ec';
         if (!$GLOBALS['perm']->have_studip_perm('autor', $this->seminar_id)){
             $this->access = false;
@@ -273,7 +273,7 @@ class IntranetStartController extends StudipController {
                 $thread['description'] = $content;
             }
             if ($thread->store()) {
-                $message = MessageBox::success(_('Feedback wurde veröffentlicht! <a href=\''. URLHelper::getLink("/plugins.php/blubber/streams/forum?cid=" . $this->seminar_id) .'\'>Direkt zum Chat </a>'));
+                $message = MessageBox::success(_('Feedback wurde verÃ¶ffentlicht! <a href=\''. URLHelper::getLink("/plugins.php/blubber/streams/forum?cid=" . $this->seminar_id) .'\'>Direkt zum Chat </a>'));
                 PageLayout::postMessage($message);
             } else {
                $message = MessageBox::error(_('Da ist was schief gegangen. Versuchen Sie es  <a href=\''. URLHelper::getLink("/plugins.php/blubber/streams/forum?cid=" . $this->seminar_id) .'\'>hier </a>'));

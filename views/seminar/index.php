@@ -19,7 +19,7 @@
         <?
         $next_date = $sem->getNextDate();
         if ($next_date) {
-            echo '<b>'._("Nächster Termin").':</b><br>';
+            echo '<b>'._("NÃ¤chster Termin").':</b><br>';
             echo $next_date . '<br>';
         } else if ($first_date = $sem->getFirstDate()) {
             echo '<b>'._("Erster Termin").':</b><br>';
@@ -50,7 +50,7 @@
                 $show = false;
                 foreach ((array)$rule['attributes'] as $val) {
                     if ($val == 1) {
-                        // Es gibt also Zusatzangaben. Nun noch überprüfen ob der Nutzer diese Angaben schon gemacht hat...
+                        // Es gibt also Zusatzangaben. Nun noch Ã¼berprÃ¼fen ob der Nutzer diese Angaben schon gemacht hat...
                         $query = "SELECT 1
                                   FROM datafields
                                   LEFT JOIN datafields_entries USING (datafield_id)
@@ -65,7 +65,7 @@
                 }
 
                 if ($show) {
-                    echo MessageBox::info(_("Sie haben noch nicht die für diese Veranstaltung benötigten Zusatzinformationen eingetragen."), array(
+                    echo MessageBox::info(_("Sie haben noch nicht die fÃ¼r diese Veranstaltung benÃ¶tigten Zusatzinformationen eingetragen."), array(
                         _('Um das nachzuholen, gehen Sie unter "Teilnehmende" auf "Zusatzangaben"'),
                         _("oder") . ' <a href="' . URLHelper::getLink("dispatch.php/course/members/additional_input") . '"> ' . _("direkt zu den Zusatzangaben") . '</a>'
                     ));

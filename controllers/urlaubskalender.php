@@ -8,11 +8,9 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author   André Klaßen <klassen@elan-ev.de>
- * @author   Nadine Werner <nadine.werner@uni-osnabrueck.de>
+ * @author   Annelene Sudau <asudau@uos.de>
  * @license  http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category Stud.IP
- * @since    3.1
  */
 require_once 'app/controllers/news.php';
 //require_once 'app/controllers/calendar/single.php';
@@ -32,11 +30,11 @@ class UrlaubskalenderController extends StudipController
         PageLayout::addScript($this->plugin->getPluginURL().'/assets/scripts/dhtmlxscheduler.js');
         PageLayout::addScript($this->plugin->getPluginURL().'/assets/scripts/locale_de.js');
         PageLayout::addScript($this->plugin->getPluginURL().'/assets/scripts/dhtmlxscheduler_timeline.js');
-        //ID der Veranstaltung welche als Grundlage für den Kalender verwendet werden soll
+        //ID der Veranstaltung welche als Grundlage fÃ¼r den Kalender verwendet werden soll
 //        $this->sem_id = 'b8d02f67fca5aac0efa01fb1782166d1';
 //        $this->sem_id = '14ddc9353c17a5c8bf2ccfe1e4c82345';
         $this->sem_id = IntranetConfig::find(Institute::findCurrent()->id)->calendar_seminar;
-        //falls keine instituts id verfügbar ist, über nutzer->intranets->zugehörige veranstaltung die sem_id holen wenn möglich
+        //falls keine instituts id verfÃ¼gbar ist, Ã¼ber nutzer->intranets->zugehÃ¶rige veranstaltung die sem_id holen wenn mÃ¶glich
         $this->intranets = IntranetConfig::getIntranetIDsForUser(User::findCurrent());
         $i = 0;
         while (!$this->sem_id && $i < sizeof($this->intranets) ){
@@ -188,14 +186,14 @@ class UrlaubskalenderController extends StudipController
             . "OR CONCAT(auth_user_md5.Nachname, \" \", auth_user_md5.Vorname) LIKE :input "
             . "OR auth_user_md5.username LIKE :input))"
             . "ORDER BY Vorname, Nachname ",
-            _("person wählen"), "username");
+            _("person wÃ¤hlen"), "username");
 
         // add "add tutor" to infobox
         $mp = MultiPersonSearch::get("urlaubs_filter")
-            ->setLinkText(sprintf(_('Personen wählen')))
+            ->setLinkText(sprintf(_('Personen wÃ¤hlen')))
             ->setDefaultSelectedUser('')
             ->setLinkIconPath("")
-            ->setTitle(sprintf(_('Person wählen')))
+            ->setTitle(sprintf(_('Person wÃ¤hlen')))
             ->setExecuteURL($this->url_for('urlaubskalender/timeline'))
             ->setSearchObject($search_obj)
             ->addQuickfilter(sprintf(_('Nutzer der Einrichtung')), $membersOfSem)
@@ -218,8 +216,8 @@ class UrlaubskalenderController extends StudipController
 //            _("Teilnehmer suchen"), "username");
 //        
 //        $this->mp = MultiPersonSearch::get('supervisorgroupSelectUsers')
-//            ->setLinkText(_('Supervisoren hinzufügen'))
-//            ->setTitle(_('Personen zur Supervisorgruppe hinzufügen'))
+//            ->setLinkText(_('Supervisoren hinzufÃ¼gen'))
+//            ->setTitle(_('Personen zur Supervisorgruppe hinzufÃ¼gen'))
 //            ->setSearchObject($search_obj)
 //            ->setExecuteURL(URLHelper::getLink('plugins.php/eportfolioplugin/supervisorgroup/addUser/' . $group->id, ['id' => $group_id, 'redirect' => $this->url_for('showsupervisor/supervisorgroup/' . $this->linkId)]))
 //            ->render();
@@ -233,7 +231,7 @@ class UrlaubskalenderController extends StudipController
             $this->dates = $this->events_of_type(13);
         }
         
-        //für die Darstellung in der Timeline braucht man Integer keys für die Labels
+        //fÃ¼r die Darstellung in der Timeline braucht man Integer keys fÃ¼r die Labels
         $this->keys = array();
         $cnt = 0;
         foreach($this->dates as $date){
@@ -306,7 +304,7 @@ class UrlaubskalenderController extends StudipController
         }
         
         $this->render_action('timeline');
-        //TODO: nur ausgewählte Nutzer in Übersicht anzeigen
+        //TODO: nur ausgewÃ¤hlte Nutzer in Ãœbersicht anzeigen
     }
     
     public function filter_user_action(){
@@ -358,7 +356,7 @@ class UrlaubskalenderController extends StudipController
         
         $this->mp = MultiPersonSearch::get('filterUser')
             ->setLinkText(_('Nutzer filtern'))
-            ->setTitle(_('NutzerInnen für die Anzeige auswählen'))
+            ->setTitle(_('NutzerInnen fÃ¼r die Anzeige auswÃ¤hlen'))
             ->setSearchObject($search_obj)
             ->setExecuteURL($this->url_for('/urlaubskalender'))
             ->render();
@@ -452,7 +450,7 @@ class UrlaubskalenderController extends StudipController
 //            $sidebar->addWidget($actions);
 //        
 //        
-//        $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen');
+//        $this->help = _('Sie kÃ¶nnen nach Name, Vorname oder eMail-Adresse suchen');
 //
 //        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname "
 //                            . "FROM auth_user_md5 "
@@ -492,7 +490,7 @@ class UrlaubskalenderController extends StudipController
             $this->user = User::findCurrent();
         }
       
-        $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen' . $this->id);
+        $this->help = _('Sie kÃ¶nnen nach Name, Vorname oder eMail-Adresse suchen' . $this->id);
 
         $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname "
                             . "FROM auth_user_md5 "
@@ -534,15 +532,15 @@ class UrlaubskalenderController extends StudipController
             $this->user = User::find($user_id);
             //gibt es zu diesem nutzer schon einen termin vom typ geburtstag?
             $this->date = EventData::findOneBySQL('author_id = ? AND category_intern = 11', [$user_id]);
-            //TODO: sollte eigentlich auch zur selben veranstaltung gehören
+            //TODO: sollte eigentlich auch zur selben veranstaltung gehÃ¶ren
         } else if (!$this->mitarbeiter_hilfskraft) {
             $this->user = User::findCurrent();
             $this->date = EventData::findOneBySQL('author_id = ? AND category_intern = 11', [$this->user->id]);
         }
         
-        $this->help = _('Sie können nach Name, Vorname oder eMail-Adresse suchen');
+        $this->help = _('Sie kÃ¶nnen nach Name, Vorname oder eMail-Adresse suchen');
         
-        //da hier nur MA eingeatragen werden können die in der zugehörigen VA sind sollte der Zentrale Kalender 
+        //da hier nur MA eingeatragen werden kÃ¶nnen die in der zugehÃ¶rigen VA sind sollte der Zentrale Kalender 
         //nur in VA mit Auto-eintrag aktivierbar sein
         $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname "
                             . "FROM auth_user_md5 "
@@ -660,7 +658,7 @@ class UrlaubskalenderController extends StudipController
             $event = CalendarEvent::findOneByEvent_id($id);
             $event->delete();
             $entry->delete();
-            PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gelöscht.')));
+            PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gelÃ¶scht.')));
         }
         $this->redirect($this->url_for('/urlaubskalender/edit'));
     }
@@ -671,7 +669,7 @@ class UrlaubskalenderController extends StudipController
             $event = CalendarEvent::findOneByEvent_id($id);
             $event->delete();
             $entry->delete();
-            PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gelöscht.')));
+            PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gelÃ¶scht.')));
         }
         
         $this->redirect($this->url_for('/urlaubskalender/birthday'));
@@ -690,9 +688,9 @@ class UrlaubskalenderController extends StudipController
         }
 
         if ($countAdded == 1) {
-            $text = _("Es wurde eine neue Person hinzugefügt.");
+            $text = _("Es wurde eine neue Person hinzugefÃ¼gt.");
         } else {
-            $text = sprintf(_("Es wurden %s neue Personen hinzugefügt."), $countAdded);
+            $text = sprintf(_("Es wurden %s neue Personen hinzugefÃ¼gt."), $countAdded);
         }
         PageLayout::postMessage(MessageBox::success($text));
         $this->redirect('course/members/index');
@@ -810,7 +808,7 @@ class UrlaubskalenderController extends StudipController
         return $events;
         
     }
-    //TODO User IDs überprüfen/einbeziehen
+    //TODO User IDs Ã¼berprÃ¼fen/einbeziehen
     public static function getEventsByInterval($range_id, $start, $end, $user_ids = null)
     {
         $user_id_query_part = ($user_ids) ? 'AND event_data.editor_id IN (\'' . implode('\', \'', $user_ids) . '\') ' : '';

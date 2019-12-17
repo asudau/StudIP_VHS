@@ -15,11 +15,11 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
 ?>
 
 <h1>Konfiguration <?= ($intranet_inst) ? ' : ' . $intranet_inst->name : ''?></h1>
-<p>Um einen Intranetbereich einzurichten wählen Sie unter <a href='<?= URLHelper::getURL('dispatch.php/institute/basicdata/index?cid=')?>' >Einrichtungen</a> eine Einrichtung und aktivieren Sie das Attribut <b>Eigener Intranetbereich</b></p>
+<p>Um einen Intranetbereich einzurichten wÃ¤hlen Sie unter <a href='<?= URLHelper::getURL('dispatch.php/institute/basicdata/index?cid=')?>' >Einrichtungen</a> eine Einrichtung und aktivieren Sie das Attribut <b>Eigener Intranetbereich</b></p>
 
 
 <select name='inst_id' onchange="select_inst_id(this.value)">
-    <option value='' > Auswählen </option>
+    <option value='' > AuswÃ¤hlen </option>
     <?php foreach($institutes_with_intranet as $intranet) : ?>
         <option <?= ($intranet->id == $intranet_inst->id) ? 'selected' :'' ?> value='<?=$intranet->id?>' > <?=$intranet->name?> </option>
     <? endforeach ?>
@@ -34,7 +34,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
 
     <h1><?= $intranet_inst->name ?></h1>
     <fieldset <?= isset($flash['open']) && $flash['open'] != "courses" ? 'class="collapsed"' : ''?> data-open="courses">
-        <legend>Zugehörige Veranstaltungen</legend>
+        <legend>ZugehÃ¶rige Veranstaltungen</legend>
         <table>
             <?php if($intranet_courses) : ?>
             <?php foreach($intranet_courses as $course) : ?>
@@ -58,7 +58,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
 
     <fieldset <?= !isset($flash['open']) || $flash['open'] != 'page' ? 'class="collapsed"' : ''?> data-open="page">
         <legend><?= _('Individuelle Startseite gestalten') ?></legend>
-            <label for="description"><?= _('Template wählen') ?></label>
+            <label for="description"><?= _('Template wÃ¤hlen') ?></label>
             <select name="template">
                 <?php foreach($plugin->templates as $template) : ?>
                     <option value='<?= $template?>' <?= ( $inst_config[$intranet_inst->institut_id]  == $template ) ? 'selected' : ''?>><?= $template?></option>
@@ -66,7 +66,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
             </select>
     </fieldset>
     
-    <button title="Änderungen übernehmen" name="submit" class="button" type="submit">Übernehmen</button></p>
+    <button title="Ã„nderungen Ã¼bernehmen" name="submit" class="button" type="submit">Ãœbernehmen</button></p>
     
     
 </form>

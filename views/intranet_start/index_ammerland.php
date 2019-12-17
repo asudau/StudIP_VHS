@@ -20,7 +20,7 @@
                     <div class="csc-textpic-text">
                 <!--  Text: [begin] -->
                     <img src="<?= $plugin->getPluginURL().'/assets/images/Kursstart.png' ?>" alt="" border="0" width="100%">
-                    <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/my_courses" title="Zur ausführlichen Übersicht" class="internal-link">Meine Gruppen/Mein Arbeitsbereich</a></h2>
+                    <h2 class="intranet"><a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>dispatch.php/my_courses" title="Zur ausfÃ¼hrlichen Ãœbersicht" class="internal-link">Meine Gruppen/Mein Arbeitsbereich</a></h2>
                     <? foreach ($courses as $course){ ?>
                     <section class="contentbox course">
                         <a href='<?=$GLOBALS['ABSOLUTE_URI_STUDIP']. 'seminar_main.php?auswahl=' . $course['Seminar_id'] ?>'><?= $course['Name'] ?></a></section>
@@ -49,7 +49,7 @@
                     <h2 class="intranet"><a href="" title="" class="internal-link">Rund um meine Kurse</a></h2>
                     
                     <section class="contentbox themen">
-                        <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Leitfaden für neue DozentInnen (PDF)</a>
+                        <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Leitfaden fÃ¼r neue DozentInnen (PDF)</a>
                     </section>
                     <section class="contentbox themen">
                         <a href='<?=$this->controller->url_for('start/gebaeudemanagement')?>'>Formular xyz (DOC)</a>
@@ -101,7 +101,7 @@
                 
                 <!--  Text: [begin] -->
                      <img src="<?= $plugin->getPluginURL().'/assets/images/luggage-klein.jpg' ?>" alt="" border="0" width="100%">
-                     <h2 class="intranet"> <a href="<?=$controller->url_for('urlaubskalender')?>" title="Übersicht über Urlaubszeiten" class="internal-link">Urlaubskalender</a>
+                     <h2 class="intranet"> <a href="<?=$controller->url_for('urlaubskalender')?>" title="Ãœbersicht Ã¼ber Urlaubszeiten" class="internal-link">Urlaubskalender</a>
 <!--                     <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']. 'dispatch.php/calendar/single/week/'. Config::get()->getValue('INTRANET_SEMID_MITARBEITERINNEN'). '?category=13'?>" title="Opens internal link in current window" class="internal-link">Urlaub neu</a>
                      <a href="<?=$plugin->getPluginURL().'/calendar_intern'?>" title="Opens internal link in current window" class="internal-link">Urlaub neu</a>-->
                      </h2>
@@ -147,7 +147,7 @@
 						<td class="dsR15"><div class="zentriert"><a href="https://www.kvhs-ammerland.de/index.php?id=64" target="_blank"><img src="<?= $plugin->getPluginURL()."/assets/images/pro_gesellschaft.png" ?>" alt="" border="0" width="73" height="72"><br>
 							Gesellschaft</a></div></td>
 						<td class="dsR15"><div class="zentriert"><a href="https://www.kvhs-ammerland.de/index.php?id=65" target="_blank"><img src="<?= $plugin->getPluginURL()."/assets/images/pro_paedagogik.png" ?>" alt="" border="0" width="73" height="72"><br>
-						Pädagogik</a></div></td>
+						PÃ¤dagogik</a></div></td>
 						<td class="dsR15"><a href="https://www.kvhs-ammerland.de/index.php?id=66" target="_blank"></a><div class="zentriert"><a href="index.php?id=66"><img src="<?=$plugin->getPluginURL()."/assets/images/pro_zielgruppen.png" ?>" alt="" border="0" width="73" height="72"><br>
 							Zielgruppen</a></div></td>
 					</tr>
@@ -246,7 +246,7 @@
 			<div class="csc-textpic-text">
 		<!--  Text: [begin] -->
             <img src="<?=$plugin->getPluginURL().'/assets/images/Kursstart.png' ?>" alt="" border="0" width="100%">
-			<h2 class="intranet"> <a href="index.php?id=21" title="Opens internal link in current window" class="internal-link">Kurse, die demnächst starten</a>
+			<h2 class="intranet"> <a href="index.php?id=21" title="Opens internal link in current window" class="internal-link">Kurse, die demnÃ¤chst starten</a>
                 <? if ($admin){ ?>
                     <a style="margin-left: 58%;" href="<?= $this->controller->url_for('urlaubskalender/insertDate')?>" rel="get_dialog">
                         <?= Icon::create('add', 'clickable')?>             

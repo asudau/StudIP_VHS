@@ -12,6 +12,6 @@ use Studip\Button, Studip\LinkButton;
                         ->render();?>
 
       <footer data-dialog-button>
-        <?= Button::create(_('Übernehmen')) ?>
+        <?= Button::create(_('Ãœbernehmen')) ?>
     </footer>
 </form>

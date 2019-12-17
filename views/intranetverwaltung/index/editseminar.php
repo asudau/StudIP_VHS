@@ -12,12 +12,12 @@ use Studip\Button, Studip\LinkButton;
     
     
     <fieldset <?= isset($flash['open']) && $flash['open'] != 'bd_basicsettings' ? 'class="collapsed"' : ''?> data-open="bd_basicsettings">
-        <legend>News/Ankündigungen</legend>
+        <legend>News/AnkÃ¼ndigungen</legend>
 
         <table>
             <tr>
                 <td style="width:700px"  >
-                    Ankündigungen, die in dieser Veranstaltung angelegt werden, auf der zugehörigen Startseite anzeigen:
+                    AnkÃ¼ndigungen, die in dieser Veranstaltung angelegt werden, auf der zugehÃ¶rigen Startseite anzeigen:
                 </td>
                 <td style="width:300px"  >
                     <input type='checkbox' name="show_news" <?= ($entry->show_news ) ? 'checked' : ''?> ></input>
@@ -25,7 +25,7 @@ use Studip\Button, Studip\LinkButton;
             </tr>
             <tr>
                 <td>
-                    Überschrift für News-Box:
+                    Ãœberschrift fÃ¼r News-Box:
                 </td>
                 <td style="width:700px">
                     <input type='text' name ='news_caption' value = '<?= ($entry->news_caption )?>'> 
@@ -37,7 +37,7 @@ use Studip\Button, Studip\LinkButton;
         <table>
             <tr>
                 <td style="width:700px"  >
-                    Dateien, die in dieser Veranstaltung angelegt werden, auf der zugehörigen Startseite anzeigen:
+                    Dateien, die in dieser Veranstaltung angelegt werden, auf der zugehÃ¶rigen Startseite anzeigen:
                 </td>
                 <td style="width:300px"  >
                     <input type='checkbox' name="use_files" <?= ($entry->use_files ) ? 'checked' : ''?>></input>
@@ -45,7 +45,7 @@ use Studip\Button, Studip\LinkButton;
             </tr>
             <tr>
                 <td>
-                    Überschrift für Datei-Box:
+                    Ãœberschrift fÃ¼r Datei-Box:
                 </td>
                 <td style="width:700px">
                     <input type='text' name ='files_caption' value='<?= ($entry->files_caption )?>'> 
@@ -75,7 +75,7 @@ use Studip\Button, Studip\LinkButton;
 
     
     <footer data-dialog-button>
-        <?= Button::create(_('Übernehmen')) ?>
+        <?= Button::create(_('Ãœbernehmen')) ?>
     </footer>
 </form>
 

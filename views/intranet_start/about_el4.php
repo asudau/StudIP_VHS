@@ -1,10 +1,10 @@
 
 <div style='height:315px; width:472px; float:left'> 
     <h2>Erste Schritte</h1>
-    Diese drei Videos unterstützen dich beim Einstieg in Stud.IP. <br>
-    Das Video 'Erste Schritte in Stud.IP' erklärt, wie Stud.IP aufgebaut ist und was es kann.<br>
-    Im Video 'Mediengestützt Lehren und Lernen - Das Projekt eL4' stellt die eL4 kooperation kurz vor und gibt einen Überblick, wie Sie Stud.IP zur Begleitung Ihres Kurses nutzen können.<br>
-    Das dritte Video erklärt den Aufbau des Intranetbereichs für DozentInnen.
+    Diese drei Videos unterstÃ¼tzen dich beim Einstieg in Stud.IP. <br>
+    Das Video 'Erste Schritte in Stud.IP' erklÃ¤rt, wie Stud.IP aufgebaut ist und was es kann.<br>
+    Im Video 'MediengestÃ¼tzt Lehren und Lernen - Das Projekt eL4' stellt die eL4 kooperation kurz vor und gibt einen Ãœberblick, wie Sie Stud.IP zur Begleitung Ihres Kurses nutzen kÃ¶nnen.<br>
+    Das dritte Video erklÃ¤rt den Aufbau des Intranetbereichs fÃ¼r DozentInnen.
 </div>
 <iframe width="470" height="315" src="//www.youtube.com/embed/VAibAJquJSo" frameborder="0" allowfullscreen></iframe>
 <iframe width="470" height="315" src="//www.youtube.com/embed/IzBa_2L21q0" frameborder="0" allowfullscreen></iframe>

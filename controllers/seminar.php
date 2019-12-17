@@ -28,12 +28,12 @@ class SeminarController extends StudipController {
         $this->course = Course::findCurrent();
         $this->sem = new Seminar($this->course->id);
 
-        PageLayout::setTitle($this->course->getFullname()." - " ._("Übersicht"));
+        PageLayout::setTitle($this->course->getFullname()." - " ._("Ãœbersicht"));
 
         // $this->set_layout('layouts/base');
         $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
         
-		//falls innerhalb eines Kurses, Kursnavigation gemäß Konfiguration anpassen
+		//falls innerhalb eines Kurses, Kursnavigation gemÃ¤ÃŸ Konfiguration anpassen
 		if ($this->course) 
 		{
             $this->setupStudIPNavigation();	
@@ -45,7 +45,7 @@ class SeminarController extends StudipController {
         $localEntries = DataFieldEntry::getDataFieldEntries($this->course->id);
         $this->style = $localEntries[$this->datafield_id]->value;
         
-        //defaultwert wenn noch nichts gewählt wurde
+        //defaultwert wenn noch nichts gewÃ¤hlt wurde
         if(!$this->style){
             $this->style = 'full';
         }
@@ -64,7 +64,7 @@ class SeminarController extends StudipController {
 //                $sidebar = Sidebar::Get();
 //                $navcreate = new LinksWidget();
 //                $navcreate->setTitle('Weitere Aktionen');
-//                $navcreate->addLink(_('Ankündigung erstellen'),
+//                $navcreate->addLink(_('AnkÃ¼ndigung erstellen'),
 //                               URLHelper::getLink("dispatch.php/news/edit_news/new/" . $this->course->id),
 //                              Icon::create('news+add', 'clickable'), ['rel' => 'get_dialog']); 
 //                $sidebar->addWidget($navcreate);
@@ -76,14 +76,14 @@ class SeminarController extends StudipController {
          
         if (!Navigation::hasItem("/course/main")) {
        
-            $navigation = new Navigation(_('Übersicht'));
+            $navigation = new Navigation(_('Ãœbersicht'));
             $navigation->setImage(Icon::create('seminar', 'info_alt'));
             $navigation->setActiveImage(Icon::create('seminar', 'info'));
             $navigation->setURL(PluginEngine::getURL($this, array('style' => $this->style), 'seminar'));
             Navigation::getItem("/course")->addSubNavigation('main', $navigation);
        /** 
         
-        //Keine Übersichtsseite. Anstatt eines Fehler wird der Nutzer zum ersten
+        //Keine Ãœbersichtsseite. Anstatt eines Fehler wird der Nutzer zum ersten
         //Reiter der Veranstaltung weiter geleitet. passiert evtl auch schon in seminar_main.php
         if (Navigation::hasItem("/course")) {
             foreach (Navigation::getItem("/course")->getSubNavigation() as $navigation) {
@@ -206,7 +206,7 @@ class SeminarController extends StudipController {
         $actions->setTitle(_('Aktionen'));
 
         $actions->addLink(
-        'Zurück zur Übersicht',
+        'ZurÃ¼ck zur Ãœbersicht',
         URLHelper::getURL('seminar_main.php'));; 
 
         Sidebar::get()->addWidget($actions);
@@ -344,7 +344,7 @@ class SeminarController extends StudipController {
                     'info' => $termin instanceOf SeminarEvent ? array() :
                     array(
                         _('Kategorie') => $termin->toStringCategories(),
-                        _('Priorität') => $termin->toStringPriority(),
+                        _('PrioritÃ¤t') => $termin->toStringPriority(),
                         _('Sichtbarkeit') => $termin->toStringAccessibility(),
                         $termin->toStringRecurrence())
                 );
@@ -359,7 +359,7 @@ class SeminarController extends StudipController {
                 // Build info
                 $info = array();
                 if ($courseDate->dozenten[0]) {
-                    $info[_('Durchführende Dozenten')] = join(', ', $courseDate->dozenten->getFullname());
+                    $info[_('DurchfÃ¼hrende Dozenten')] = join(', ', $courseDate->dozenten->getFullname());
                 }
                 if ($courseDate->statusgruppen[0]) {
                     $info[_('Beteiligte Gruppen')] = join(', ', $courseDate->statusgruppen->getValue('name'));
@@ -383,7 +383,7 @@ class SeminarController extends StudipController {
 
         // Forge title
         if ($this->termine) {
-            $this->title = sprintf(_("Termine für die Zeit vom %s bis zum %s"), strftime("%d. %B %Y", $start), strftime("%d. %B %Y", $start + $timespan));
+            $this->title = sprintf(_("Termine fÃ¼r die Zeit vom %s bis zum %s"), strftime("%d. %B %Y", $start), strftime("%d. %B %Y", $start + $timespan));
         } else {
             $this->title = _('Termine');
         }
@@ -457,7 +457,7 @@ class SeminarController extends StudipController {
     }
     
     private function get_tabs(){
-        //Tabs und zugehörige Einstellung laden
+        //Tabs und zugehÃ¶rige Einstellung laden
 		$position = 100;
 		foreach( Navigation::getItem('course') as $key=>$tab){
 		    //systemtabs anlegen/abfragen
@@ -466,7 +466,7 @@ class SeminarController extends StudipController {
 		    $statement->execute(array('key' => $key));
         	    $orig_title = $statement->fetchAll(PDO::FETCH_ASSOC);
 	
-		    //Spezialfall Reiter die nur TN sehen (zB Courseware Fortschrittsübersicht)
+		    //Spezialfall Reiter die nur TN sehen (zB Courseware FortschrittsÃ¼bersicht)
 		    if($key == 'mooc_courseware'){
 			$query2 = "SELECT title FROM `system_tabs` WHERE tab IN (:key)" ;
 		    	$statement2 = DBManager::get()->prepare($query2);
@@ -474,11 +474,11 @@ class SeminarController extends StudipController {
         	    	$orig_title2 = $statement2->fetchAll(PDO::FETCH_ASSOC);
 		    
 			if (!$orig_title2[0]){
-				$values2 = array('id' => md5('mooc_progress'), 'tab' => 'mooc_progress', 'title' => 'Fortschrittsübersicht');
+				$values2 = array('id' => md5('mooc_progress'), 'tab' => 'mooc_progress', 'title' => 'FortschrittsÃ¼bersicht');
 				$query2 = "INSERT INTO `system_tabs` (`id`, `tab`, `title`) VALUES (:id, :tab, :title)" ;
 				$statement2 = DBManager::get()->prepare($query2);
 				$statement2->execute($values2);
-				$orig_title2[0]['title'] = "Fortschrittsübersicht";
+				$orig_title2[0]['title'] = "FortschrittsÃ¼bersicht";
 		        }
 
 			
@@ -493,7 +493,7 @@ class SeminarController extends StudipController {
 						);
 			} else {
 			      $this->tabs[] = array('tab' => 'mooc_progress',
-						 'title' => 'Fortschrittsübersicht', 
+						 'title' => 'FortschrittsÃ¼bersicht', 
 						 'position' => $position,
 						 'orig_title' => $orig_title2[0]['title'],
 						 'visible' => 'checked',
@@ -598,7 +598,7 @@ class SeminarController extends StudipController {
                 }
 
             } else { 
-               //keine Info bezüglich Reihenfolge also hinten dran
+               //keine Info bezÃ¼glich Reihenfolge also hinten dran
                //greift bei neu aktivierten Navigationselementen
                $restNavigation[$key] = $tab;
 

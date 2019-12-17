@@ -17,7 +17,7 @@ if ($input['type'] === "textarea") : ?>
 
 if ($input['type'] === "select") : ?>
     <? if (!$input['choices'][$input['value']]) : ?>
-        <?= _("Keine Änderung möglich") ?>
+        <?= _("Keine Ã„nderung mÃ¶glich") ?>
     <? else : ?>
     <select <?=$is_locked ?> name="<?= $input['name'] ?>" <? if ($input['must']) echo 'required'; ?>>
     <? if ($input['choices']) : foreach ($input['choices'] as $choice_value => $choice_name) : ?>
