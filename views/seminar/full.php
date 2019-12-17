@@ -61,13 +61,7 @@ if(strcmp($datesTemplate, "Die Zeiten der Veranstaltung stehen nicht fest.") !==
     ?>
         <br>
      
-    <?if ($perm || $news): ?>
-        <?= $this->render_partial($news, compact('widget')) ?>
-    <?endif;?>
-    	
-    <?if ($perm || $questionnaires): ?>
-        <?= $this->render_partial($questionnaires, compact('widget')) ?>
-    <?endif;?>
+
     
     <section class=contentbox>
         <header><h1>Dateien (zum Herunterladen anklicken)</h1></header>
