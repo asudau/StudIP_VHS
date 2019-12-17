@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @author Till Glöggler <tgloeggl@uos.de>
+ * @author Annelene Sudau <asudau@uos.de>
  */
 class AddCoursebeginDatafield extends Migration
 {

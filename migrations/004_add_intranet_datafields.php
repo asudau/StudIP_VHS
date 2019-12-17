@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @author Till Glöggler <tgloeggl@uos.de>
+ * @author Annelene Sudau <asudaul@uos.de>
  */
 class AddIntranetDatafields extends Migration
 {

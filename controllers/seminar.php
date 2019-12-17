@@ -56,7 +56,7 @@ class SeminarController extends StudipController {
 
             $actions->addLink(
             'Kurs gestalten',
-            $this->url_for('seminar/settings'),'icons/16/blue/edit.png'); 
+            $this->url_for('seminar/settings'),Icon::create('edit', 'clickable')); 
 
             Sidebar::get()->addWidget($actions);
             
