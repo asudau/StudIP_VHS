@@ -44,6 +44,7 @@ class UrlaubskalenderController extends StudipController
             $i++;
         }
         $this->mitarbeiter_admin = $GLOBALS['perm']->have_studip_perm('dozent', $this->sem_id);
+        $this->dates = [];
     }
     
     
@@ -183,9 +184,9 @@ class UrlaubskalenderController extends StudipController
         $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname, username, perms "
             . "FROM auth_user_md5 "
             . "LEFT JOIN seminar_user ON(auth_user_md5.user_id = seminar_user.user_id) WHERE Seminar_id = '" . $this->sem_id . "' "
-//            . "AND ((CONCAT(auth_user_md5.Vorname, \" \", auth_user_md5.Nachname) LIKE :input "
-//            . "OR CONCAT(auth_user_md5.Nachname, \" \", auth_user_md5.Vorname) LIKE :input "
-//            . "OR auth_user_md5.username LIKE :input))"
+            . "AND ((CONCAT(auth_user_md5.Vorname, \" \", auth_user_md5.Nachname) LIKE :input "
+            . "OR CONCAT(auth_user_md5.Nachname, \" \", auth_user_md5.Vorname) LIKE :input "
+            . "OR auth_user_md5.username LIKE :input))"
             . "ORDER BY Vorname, Nachname ",
             _("person wählen"), "username");
 
@@ -195,7 +196,7 @@ class UrlaubskalenderController extends StudipController
             ->setDefaultSelectedUser('')
             ->setLinkIconPath("")
             ->setTitle(sprintf(_('Person wählen')))
-            ->setExecuteURL($this->url_for('urlaubskalender/multipersonsearch_filter'))
+            ->setExecuteURL($this->url_for('urlaubskalender/timeline'))
             ->setSearchObject($search_obj)
             ->addQuickfilter(sprintf(_('Nutzer der Einrichtung')), $membersOfSem)
             //->setNavigationItem('/')
@@ -203,7 +204,7 @@ class UrlaubskalenderController extends StudipController
         $element = LinkElement::fromHTML($mp, Icon::create('community+add', 'clickable'));
         $widget = new ActionsWidget();
         $widget->addElement($element);
-        //$sidebar->addWidget($widget);
+        $sidebar->addWidget($widget);
         
 //        $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, CONCAT(auth_user_md5.nachname, ', ', auth_user_md5.vorname, ' (' , auth_user_md5.email, ')' ) as fullname, username, perms "
 //            . "FROM auth_user_md5 "
@@ -223,8 +224,14 @@ class UrlaubskalenderController extends StudipController
 //            ->setExecuteURL(URLHelper::getLink('plugins.php/eportfolioplugin/supervisorgroup/addUser/' . $group->id, ['id' => $group_id, 'redirect' => $this->url_for('showsupervisor/supervisorgroup/' . $this->linkId)]))
 //            ->render();
         
-        
-        $this->dates = $this->events_of_type(13);
+        $mp = MultiPersonSearch::load("urlaubs_filter");
+        //$sem = Seminar::GetInstance($this->course_id);
+
+        if (count($mp->getAddedUsers()) > 0) {
+            $this->dates = $this->events_of_type(13, $mp->getAddedUsers());
+        } else {
+            $this->dates = $this->events_of_type(13);
+        }
         
         //für die Darstellung in der Timeline braucht man Integer keys für die Labels
         $this->keys = array();
@@ -267,8 +274,6 @@ class UrlaubskalenderController extends StudipController
         //bearbeiten
         else if ($id){
             $this->event = new EventData($id);
-             var_dump('laden');
-            
         
         // neu anlegen
         } else {
@@ -279,6 +284,29 @@ class UrlaubskalenderController extends StudipController
         }
         //$this->setProperties($calendar_event, $component);
         //$calendar_event->setRecurrence($component['RRULE']);
+    }
+    
+    //TODO brauch ich vermutlich gar nicht
+    public function multipersonsearch_filter_action(){
+         // load MultiPersonSearch object
+        $mp = MultiPersonSearch::load("urlaubs_filter");
+        //$sem = Seminar::GetInstance($this->course_id);
+
+        foreach ($mp->getAddedUsers() as $a) {
+            $this->dates[] = $a;
+        }
+        
+        $this->keys = array();
+        $cnt = 0;
+        foreach($this->dates as $date){
+            if (!array_key_exists($date->author_id ,$this->keys)){
+                $this->keys[$date->author_id] = $cnt;
+                $cnt++;
+            }
+        }
+        
+        $this->render_action('timeline');
+        //TODO: nur ausgewählte Nutzer in Übersicht anzeigen
     }
     
     public function filter_user_action(){
@@ -762,9 +790,9 @@ class UrlaubskalenderController extends StudipController
     }
     
     
-    private function events_of_type($type = 'all', $begin_time = 1111111111){
+    private function events_of_type($type = 'all', $user_ids = null, $begin_time = 1111111111){
         
-        $calendar_events = self::getEventsByInterval($this->sem_id, $begin_time, 3333333333);
+        $calendar_events = self::getEventsByInterval($this->sem_id, $begin_time, 3333333333, $user_ids);
         $user = User::findCurrent();
             
         if ($type == 'all'){
@@ -782,15 +810,17 @@ class UrlaubskalenderController extends StudipController
         return $events;
         
     }
-    
-    public static function getEventsByInterval($range_id, $start, $end)
+    //TODO User IDs überprüfen/einbeziehen
+    public static function getEventsByInterval($range_id, $start, $end, $user_ids = null)
     {
+        $user_id_query_part = ($user_ids) ? 'AND event_data.editor_id IN (\'' . implode('\', \'', $user_ids) . '\') ' : '';
         $stmt = DBManager::get()->prepare('SELECT * FROM calendar_event '
                 . 'INNER JOIN event_data USING(event_id) '
                 . 'WHERE range_id = :range_id '
                 . 'AND ((start BETWEEN :start AND :end) OR '
                 . "(start <= :end AND (expire + end - start) >= :start AND rtype != 'SINGLE') "
                 . 'OR (:start BETWEEN start AND end)) '
+                . $user_id_query_part
                 . 'ORDER BY start ASC, summary ASC');
         $stmt->execute(array(
             ':range_id' => $range_id,
