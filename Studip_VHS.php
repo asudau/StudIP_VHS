@@ -61,10 +61,10 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
             $this->setupStudIPNavigation($this->course_id);
         }
 
-        //Adminbereich für Intranetverwaltung
+        //Adminbereich fÃ¼r Intranetverwaltung
         if($perm->have_perm('root')){
             $navigation = new Navigation('Intranetverwaltung', PluginEngine::getURL($this, array(), 'intranetverwaltung/index'));
-            $navigation->addSubNavigation('index', new Navigation('Übersicht', PluginEngine::getURL($this, array(), 'intranetverwaltung/index')));
+            $navigation->addSubNavigation('index', new Navigation('Ãœbersicht', PluginEngine::getURL($this, array(), 'intranetverwaltung/index')));
             $navigation->addSubNavigation('view_intranets', new Navigation('Intranet-Ansicht', PluginEngine::getURL($this, array(), 'intranet_start/index/')));
             Navigation::addItem('/admin/intranetverwaltung', $navigation);
         } 
@@ -103,7 +103,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         //Kurs hat noch nicht begonnen
         //TODO Navigation deaktivieren und Fehler werfen in den anderen Actions
         if (!$this->course_available($course_id)){
-            $navigation = new Navigation(_('Übersicht'));
+            $navigation = new Navigation(_('Ãœbersicht'));
             $navigation->setImage(Icon::create('seminar', 'info_alt'));
             $navigation->setActiveImage(Icon::create('seminar', 'info'));
             $navigation->setURL(PluginEngine::getURL($this, [], 'seminar/not_started'));
@@ -128,7 +128,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
             return $core_overview;
         }
        
-        $navigation = new Navigation(_('Übersicht'));
+        $navigation = new Navigation(_('Ãœbersicht'));
         $navigation->setImage(Icon::create('seminar', 'info_alt'));
         $navigation->setActiveImage(Icon::create('seminar', 'info'));
         $navigation->setURL(PluginEngine::getURL($this, array('style' => $this->style), 'seminar'));
@@ -206,7 +206,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
                     $subNavigations[$block->getValue('position')][$key] = $tab;
                 }
             } else { 
-               //keine Info bezüglich Reihenfolge also hinten dran
+               //keine Info bezÃ¼glich Reihenfolge also hinten dran
                //greift bei neu aktivierten Navigationselementen
                $restNavigation[$key] = $tab;
             }
@@ -236,7 +236,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         foreach(Navigation::getItem('/course') as $key => $tab){
             $navigation->removeSubNavigation($key);
         }    
-        $new_navigation = new Navigation(_('Übersicht'));
+        $new_navigation = new Navigation(_('Ãœbersicht'));
         $new_navigation->setImage(Icon::create('seminar', 'info_alt'));
         $new_navigation->setActiveImage(Icon::create('seminar', 'info'));
         $new_navigation->setURL(PluginEngine::getURL($this, [], 'seminar/not_started'));
@@ -245,7 +245,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
      }
      
      
-     //für Autoren sind KUrse die noch nciht begonnen haben nicht zugänglich
+     //fÃ¼r Autoren sind KUrse die noch nciht begonnen haben nicht zugÃ¤nglich
      private function course_available($course_id){
         $localEntries = DataFieldEntry::getDataFieldEntries($course_id);
         
