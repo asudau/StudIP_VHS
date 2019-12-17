@@ -16,7 +16,7 @@ class Intranetverwaltung_IndexController extends StudipController {
     {
         parent::before_filter($action, $args);
 
-        PageLayout::setTitle(_("Intranetverwaltung - Übersicht"));
+        PageLayout::setTitle(_("Intranetverwaltung - Ãœbersicht"));
 
         // $this->set_layout('layouts/base');
         //$this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
@@ -30,7 +30,7 @@ class Intranetverwaltung_IndexController extends StudipController {
         
         $sidebar = Sidebar::Get();
         $navcreate = new ActionsWidget();
-        $navcreate->addLink(_('Veranstaltung hinzufügen'),
+        $navcreate->addLink(_('Veranstaltung hinzufÃ¼gen'),
                               $this->url_for('intranetverwaltung/index/search_sem/' . $intranet_id),
                               Icon::create('seminar+add', 'clickable'))->asDialog('size=medium'); 
         $sidebar->addWidget($navcreate);
@@ -57,7 +57,7 @@ class Intranetverwaltung_IndexController extends StudipController {
         $defaultSelectedUser = new SimpleCollection(InstituteMember::findByInstituteAndStatus($intranet_id, words('autor tutor dozent admin')));
         URLHelper::setBaseURL($GLOBALS['ABSOLUTE_URI_STUDIP']);
         $mp = MultiPersonSearch::get("intranet_member_add" . $intranet_id)
-        ->setLinkText(_("Mitglieder hinzufügen"))
+        ->setLinkText(_("Mitglieder hinzufÃ¼gen"))
         ->setDefaultSelectedUser($defaultSelectedUser->pluck('user_id'))
         ->setTitle(_('Personen in die Einrichtung eintragen'))
         ->setExecuteURL($this->url_for('intranetverwaltung/index/add_user/' . $intranet_id . '/autor'))
@@ -67,7 +67,7 @@ class Intranetverwaltung_IndexController extends StudipController {
         ->render();
         
         $mp_dozenten = MultiPersonSearch::get("intranet_admin_add" . $intranet_id)
-        ->setLinkText(_("Intranet-Admins hinzufügen"))
+        ->setLinkText(_("Intranet-Admins hinzufÃ¼gen"))
         ->setDefaultSelectedUser($defaultSelectedUser->pluck('user_id'))
         ->setTitle(_('Personen in die Einrichtung eintragen'))
         ->setExecuteURL($this->url_for('intranetverwaltung/index/add_user/' . $intranet_id . '/admin'))
@@ -99,7 +99,7 @@ class Intranetverwaltung_IndexController extends StudipController {
         $seminar_id = Request::get('Seminar_id');
         IntranetConfig::find($intranet_id)->addCourseToIntranet($seminar_id);
         
-        PageLayout::postMessage(MessageBox::info(_("Veranstaltung wurde hinzugefügt."))); 
+        PageLayout::postMessage(MessageBox::info(_("Veranstaltung wurde hinzugefÃ¼gt."))); 
         $this->redirect('intranetverwaltung/index/index/' . $intranet_id );
     }
     
