@@ -44,15 +44,22 @@ select {
 }
 
 /*
-Style für die Intranet-Startseiten, ursprünglich basierend auf den Intranetentwürfen der kvhs Ammerland
+Style fÃ¼r die Intranet-Startseiten, ursprÃ¼nglich basierend auf den IntranetentwÃ¼rfen der kvhs Ammerland
 */
 
-#layout_page {
+#layout_page #layout_container{
     width: 1100px !important;
     margin-left: auto !important;
     margin-right: auto !important;
 }
 
+#layout-sidebar {
+    display: none;
+}
+
+#page_title_container {
+    display: none;
+}
 
 .intranet_news .contentbox > header{
     display: none;
