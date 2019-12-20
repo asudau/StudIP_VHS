@@ -59,7 +59,10 @@ if(strcmp($datesTemplate, "Die Zeiten der Veranstaltung stehen nicht fest.") !==
 
     ?>
         <br>
-     
+        
+    <?= $news->render(); ?> 
+        
+        
 
     
     <section class=contentbox>
