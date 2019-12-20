@@ -221,7 +221,8 @@ class SeminarController extends StudipController {
         
         $localEntries = DataFieldEntry::getDataFieldEntries(Course::findCurrent()->id);
         $this->style = $localEntries[$this->datafield_id];
-        $this->style->setValue($style);
+        $this->style->setValueFromSubmit(['base' => $style]);
+        //var_dump($this->style->getValue());
         $this->style->store();
         
         $this->course->beschreibung = $description;
