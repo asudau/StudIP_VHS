@@ -11,31 +11,30 @@ use Studip\LinkButton;
 
 <div id='miniCourseAvatar'>
 <?=
-    CourseAvatar::getAvatar($semid)->is_customized()
-        ? CourseAvatar::getAvatar($semid)->getImageTag(Avatar::SMALL, array('title' => htmlReady(trim($values["Name"]))))
+    CourseAvatar::getAvatar($course->id)->is_customized()
+        ? CourseAvatar::getAvatar($course->id)->getImageTag(Avatar::SMALL, array('title' => $course->getFullname()))
         : Icon::create('seminar', 'clickable', ['title' => htmlReady(trim($values["Name"]))])->asImg(20); ?>
 
 </div>
 	
     
 <div id='miniCourseDetails'>
-    <h1><?= htmlReady($GLOBALS['SessSemName']["header_line"]) ?></h1>
-    <?php if ($GLOBALS['SessSemName'][3]) : ?>
+    <h1><?= htmlReady($course->getFullname()) ?></h1>
+    <?php if ($course->untertitel) : ?>
         <b>Untertitel:</b>
-        <?= htmlReady($GLOBALS['SessSemName'][3]) ?>
+        <?= htmlReady($course->untertitel) ?>
         <br>
     <?php endif ?>
         
-    <?php if($description) : ?>
+    <?php if($course->beschreibung) : ?>
         <b>Kursbeschreibung:</b><br>
-        <?= formatReady($description) ?>
+        <?= formatReady($course->beschreibung) ?>
         <br><br>
     <?php endif ?>
 </div>
 
 <?
-$show_link = ($GLOBALS["perm"]->have_studip_perm('autor', $course_id) && $modules['schedule']);
-$datesTemplate = $sem->getDatesTemplate('dates/seminar_html', array('link_to_dates' => $show_link, 'show_room' => true));
+$datesTemplate = $sem->getDatesTemplate('dates/seminar_html', array('link_to_dates' => false, 'show_room' => true));
 if(strcmp($datesTemplate, "Die Zeiten der Veranstaltung stehen nicht fest.") !== 0): ?>
 
 		<b><?= _("Zeit/Veranstaltungsort") ?>:</b><br>
