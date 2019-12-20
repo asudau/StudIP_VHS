@@ -180,8 +180,19 @@ class SeminarController extends StudipController {
             $this->dates = $response->body;
         }
 	
+        //fetch files
         //$response = $this->relay("seminar/documents");
         //$this->documents = $response->body;
+        //$this->getSeminarDocuments();
+        
+        $sem_folder = IntranetStartController::get_folders_from_seminar_id($this->course->id);
+        $details = IntranetStartController::get_folderwithfiles_from_folder_ids($sem_folder);
+        //var_dump($details);die();
+        $this->folderwithfiles = $details['folderwithfiles'];
+        //var_dump($this->folderwithfiles);die();
+        
+        //folder auf Unterebene
+        $this->parentfolder = $details['parentfolder'];
         
         $this->render_action($this->style);
 
@@ -419,35 +430,35 @@ class SeminarController extends StudipController {
     }    
     
     private function getSeminarDocuments(){
-	// Dokumente 
- 	//Get File-Folders of Intern Seminar MitarbeiterInnen
-    $db = DBManager::get();
-    $stmt = $db->prepare("SELECT id, name FROM folders WHERE range_id = :cid");
-    $stmt->bindParam(":cid", $this->course->id);
-    $stmt->execute();
-    $this->folder = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $this->folderwithfiles = array();
-
-    foreach ($this->folder as $folder){
-
-        $db = \DBManager::get();
-        $stmt = $db->prepare("SELECT * FROM `file_refs` WHERE `folder_id` = :range_id
-            ORDER BY `name`");
-        $stmt->bindParam(":range_id", $folder['id']);
+        // Dokumente 
+        //Get File-Folders of Intern Seminar MitarbeiterInnen
+        $db = DBManager::get();
+        $stmt = $db->prepare("SELECT id, name FROM folders WHERE range_id = :cid");
+        $stmt->bindParam(":cid", $this->course->id);
         $stmt->execute();
-        $response = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $this->folder = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $files = array();
+        $this->folderwithfiles = array();
 
-        foreach ($response as $item) {
-            $files[] = $item;
+        foreach ($this->folder as $folder){
+
+            $db = \DBManager::get();
+            $stmt = $db->prepare("SELECT * FROM `file_refs` WHERE `folder_id` = :range_id
+                ORDER BY `name`");
+            $stmt->bindParam(":range_id", $folder['id']);
+            $stmt->execute();
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            $files = array();
+
+            foreach ($result as $item) {
+                $files[] = $item;
+            }
+            $this->folderwithfiles[$folder['name']] = $files;
+
         }
-        $this->folderwithfiles[$folder['name']] = $files;
 
-    }
-        
-	return $folderwithfiles;
+        //return $folderwithfiles;
     }
     
     private function get_tabs(){

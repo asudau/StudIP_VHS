@@ -178,16 +178,17 @@ class IntranetStartController extends StudipController {
             foreach ($folders as $folder){
 
                 $db = \DBManager::get();
-                $stmt = $db->prepare("SELECT * FROM `dokumente` WHERE `range_id` = :range_id
-                    ORDER BY `priority`, `name`");
+                $stmt = $db->prepare("SELECT * FROM `file_refs` WHERE `folder_id` = :folder_id
+                    ORDER BY `name`");
 
-                $stmt->bindParam(":range_id", $folder['folder_id']);
+                $stmt->bindParam(":folder_id", $folder['id']);
                 $stmt->execute();
                 $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                $folderwithfiles[$folder['folder_id']] = $files;
-                if(DocumentFolder::find($folder['range_id'])){
-                    $parentfolder[$folder['folder_id']] = $folder['range_id'];
+                $folderwithfiles[$folder['id']] = $files;
+                $folder = Folder::find($folder['id']);
+                if($folder->parent_id){
+                    $parentfolder[$folder['id']] = $folder->parent_id;
                 }
 
             }
