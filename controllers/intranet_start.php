@@ -289,8 +289,8 @@ class IntranetStartController extends StudipController {
     public function folder_action($folder_id = null)
     {
         $db = DBManager::get();
-        $stmt = $db->prepare("SELECT folder_id, name, range_id, seminar_id FROM folder WHERE folder_id = :folder_id");
-        $stmt->bindParam(":folder_id", $folder_id);
+        $stmt = $db->prepare("SELECT id, name, range_id FROM folders WHERE id = :id");
+        $stmt->bindParam(":id", $folder_id);
         $stmt->execute();
         $sem_folder = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
