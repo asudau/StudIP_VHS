@@ -123,7 +123,7 @@ class Intranetverwaltung_IndexController extends StudipController {
 
         if (count($this->mp->getAddedUsers()) !== 0) {
             foreach ($this->mp->getAddedUsers() as $u_id) {
-                log_event('INST_USER_ADD', $intranet_id ,$u_id, $status);
+                StudipLog::log('INST_USER_ADD', $intranet_id ,$u_id, $status);
 
                 // als autor aufnehmen
                 $query = "INSERT IGNORE INTO user_inst (user_id, Institut_id, inst_perms)
