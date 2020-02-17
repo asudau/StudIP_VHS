@@ -43,7 +43,8 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
             'kacheln_osnabrueck',
             'mitarbeiter',
             'index_wesermarsch',
-            'index_allgemein');
+            'index_allgemein',
+            'ohn_moocs');
            
         //Falls wir schon in einem Kurs sind, checke ob dieser schon gestartet und konfiguriere die Navigation
         $referer = $_SERVER['REQUEST_URI'];

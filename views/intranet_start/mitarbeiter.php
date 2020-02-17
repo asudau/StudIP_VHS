@@ -110,9 +110,9 @@
                 <? endif ?>
                     <h2 class="intranet"> 
                         <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
-                        <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>folder.php?cid=<?=$course_id?>&cmd=tree" title="Direkt in den Dateibereich wechseln" class="internal-link"><?=$filesCaptions[$course_id]?></a>
+                        <a href="<?=$edit_link_files . $course_id?>" title="Direkt in den Dateibereich wechseln" class="internal-link"><?=$filesCaptions[$course_id]?></a>
                         <? if ($GLOBALS['perm']->have_studip_perm('dozent', $course_id)){ ?>
-                            <a  href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>folder.php?cid=<?=$course_id?>&cmd=tree">
+                            <a  href="<?=$edit_link_files . $course_id?>">
                                 <?= Icon::create('add', 'clickable')?>           
                             </a>
                         <? } ?>

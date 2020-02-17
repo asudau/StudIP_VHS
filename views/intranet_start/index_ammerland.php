@@ -124,9 +124,9 @@
                     <img src="<?= $plugin->getPluginURL().'/assets/images/unterlagen1.png' ?>" alt="" border="0" width="100%">
                     <h2 class="intranet"> 
                         <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
-                        <a href="<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>folder.php?cid=<?=$course_id?>&cmd=tree" title="Direkt in den Dateibereich wechseln" class="internal-link"><?=$filesCaptions[$course_id]?></a>
+                        <a href="<?=$edit_link_files . $course_id?>" title="Direkt in den Dateibereich wechseln" class="internal-link"><?=$filesCaptions[$course_id]?></a>
                         <? if ($GLOBALS['perm']->have_studip_perm('dozent', $course_id)){ ?>
-                            <a href="<?=$edit_link_files?>">
+                            <a href="<?=$edit_link_files . $course_id?>">
                                 <?= Icon::create('add', 'clickable')?>           
                             </a>
                         <? } ?>
@@ -213,7 +213,7 @@
 			<div class="csc-textpic-text">
 		<!--  Text: [begin] -->
             <img src="<?=$plugin->getPluginURL().'/assets/images/schwarzesbrett.jpg' ?>" alt="" border="0" width="100%">
-			<h2 class="intranet"> <a href="<?=URLHelper::getLink("/plugins.php/schwarzesbrettplugin/category")?>" title="" class="internal-link">Schwarzes Brett</a>
+			<h2 class="intranet"> <a href="<?=URLHelper::getLink("/ammerland/plugins.php/schwarzesbrettplugin/category")?>" title="" class="internal-link">Schwarzes Brett</a>
                 <a style="margin-left: 74%;" data-dialog='' href="<?=URLHelper::getLink($GLOBALS['ABSOLUTE_URI_STUDIP']. "/plugins.php/schwarzesbrettplugin/article/create", array('return_to' => $GLOBALS['ABSOLUTE_URI_STUDIP']. 'plugins.php/studip_vhs/intranet_start'))?>">
                     <?= Icon::create('add', 'clickable')?>            
                 </a>      

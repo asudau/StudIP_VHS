@@ -23,9 +23,9 @@ class IntranetStartController extends StudipController {
         PageLayout::setTitle(_("Meine Startseite"));
     }
 
-    public function index_action()
+    public function index_action($inst_id)
     {
-        $inst_id = Institute::findCurrent()->id;
+        //$inst_id = Institute::findCurrent()->id;
         //TODO Berechtingung für INstitut abfragen
         $this->calendar_controller = new Calendar_CalendarController();
         $this->calendar_sem_id =  IntranetConfig::find($inst_id)->calendar_seminar;
@@ -41,7 +41,9 @@ class IntranetStartController extends StudipController {
         }
 
         //get seminars ($inst_id)
-        $this->intranet_courses = IntranetConfig::find($inst_id)->getRelatedCourses();        
+        //var_dump($inst_id);die();
+        $intranet = IntranetConfig::find($inst_id);
+        $this->intranet_courses = $intranet->getRelatedCourses();        
         foreach($this->intranet_courses as $course){
             $config = IntranetSeminar::find([$course->id, $inst_id]);
             if ($config && $config->show_news){
@@ -63,16 +65,16 @@ class IntranetStartController extends StudipController {
 
         //get permission of currentUser (autor/dozent) //ammerland Spezial
         
-//        $sem_id_mitarbeiterinnen = Config::get()->getValue('INTRANET_SEMID_MITARBEITERINNEN');
-//        
-//        $sem_id_projektbereich = Config::get()->getValue('INTRANET_SEMID_PROJEKTBEREICH');
-//        
-//        global $perm; 
-//        $this->admin = $perm->have_studip_perm('dozent', $sem_id_mitarbeiterinnen);
-//        $this->projekt_admin = $perm->have_studip_perm('dozent', $sem_id_projektbereich);
-//        
+        $sem_id_mitarbeiterinnen = Config::get()->getValue('INTRANET_SEMID_MITARBEITERINNEN');
+        
+        $sem_id_projektbereich = Config::get()->getValue('INTRANET_SEMID_PROJEKTBEREICH');
+        
+        global $perm; 
+        $this->admin = $perm->have_studip_perm('dozent', $sem_id_mitarbeiterinnen);
+        $this->projekt_admin = $perm->have_studip_perm('dozent', $sem_id_projektbereich);
+        
 
-//        $this->edit_link_files = URLHelper::getLink("folder.php?cid=" . $sem_id_projektbereich . "&cmd=tree");
+        $this->edit_link_files = URLHelper::getLink("dispatch.php/course/files?cid=");
         
         //get news of connected seminars
 
@@ -139,6 +141,7 @@ class IntranetStartController extends StudipController {
         //$this->courses_upcoming = $result;
         
         $this->template = IntranetConfig::find($inst_id)->template;
+        //var_dump($inst_id);die;
         $this->render_action($this->template);
 
     }
@@ -164,7 +167,7 @@ class IntranetStartController extends StudipController {
     
     public function get_folders_from_seminar_id($sem_id){
         $db = DBManager::get();
-        $stmt = $db->prepare("SELECT id, name, range_id FROM folders WHERE range_id = :cid");
+        $stmt = $db->prepare("SELECT id, name, range_id FROM folders WHERE range_id = :cid ORDER BY name ASC");
         $stmt->bindParam(":cid", $sem_id);
         $stmt->execute();
         $folders = $stmt->fetchAll(PDO::FETCH_ASSOC);
