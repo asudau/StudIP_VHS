@@ -77,7 +77,7 @@ class IntranetStartController extends StudipController {
         $this->edit_link_files = URLHelper::getLink("dispatch.php/course/files?cid=");
         
         //get news of connected seminars
-
+ 
 //        $dispatcher = new StudipDispatcher();
 //        $controller = new NewsController($dispatcher);
 //        $response = $controller->relay('news/display/' . $sem_id_mitarbeiterinnen);
