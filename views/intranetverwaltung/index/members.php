@@ -28,7 +28,11 @@
                 <? endif ?>
             </td>
             <td>
-                <a title='Aus Intranet austragen' href = <?= $controller->url_for('/intranetverwaltung/index/remove_user/'. $inst->id . '/' . $member->user_id )?>> <?=Icon::create('trash', 'clickable')?>
+                <a title='Aus Intranet austragen' href = <?= $controller->url_for('/intranetverwaltung/index/remove_user/'. $inst->id . '/' . $member->user_id )?>> 
+                        <?= Icon::create('trash')->asImg([
+                            'title'        => _('Bild löschen'),
+                            'data-confirm' => _('Soll der Nutzer wirklich aus der Intranet-Einrichtung und allen zugehörigen Intranet-Veranstaltungen entfernt werden?'),
+                        ]) ?>
             </td>
 <!--            <td>
                 <a title='(Nochmal) Einladen' href = <?= $controller->url_for('index/send_register_invitation/' . $member->user_id )?>> <?=Icon::create('mail', 'clickable')?>
