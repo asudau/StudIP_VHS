@@ -124,6 +124,23 @@ class IntranetConfig extends SimpleORMap
         }
     }
     
+    public static function removeUserFromIntranetCourses($user_id, $intranet_id, $status) {
+        $courses = IntranetConfig::find($intranet_id)->getRelatedCourses();
+        
+        $query = "DELETE FROM seminar_user WHERE Seminar_id=? AND user_id=?";
+        
+        foreach ($courses as $course) {
+            $statement = DBManager::get()->prepare($query);
+                $statement->execute(array(
+                    $course->id,
+                    $user_id,
+                    ));
+            StudipLog::log('SEM_USER_DEL', $course->id, $user_id, $status, 'Wurde aus Intranet-Veranstaltung ausgetragen');
+        }
+        
+    }
+        
+    
     public function CourseMembershipsOfUser($intranet_id, $user_id){
         $courses = IntranetConfig::find($intranet_id)->getRelatedCourses();
         $memberships = 0;

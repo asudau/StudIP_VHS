@@ -140,6 +140,22 @@ class Intranetverwaltung_IndexController extends StudipController {
         $this->redirect($this->url_for('/intranetverwaltung/index/members/' . $intranet_id));
     }
     
+    public function remove_user_action($intranet_id, $user_id){
+
+        StudipLog::log('INST_USER_DEL', $intranet_id ,$user_id);
+
+        // aus EInrichtung entfernen
+        $query = "DELETE FROM user_inst WHERE user_id=? AND Institut_id=?";
+        $statement = DBManager::get()->prepare($query);
+        $statement->execute(array($user_id, $intranet_id));
+
+        PageLayout::postMessage(MessageBox::info(sprintf(_("%s wurde aus dem Intranet und zugehörigen Veranstaltungen entfernt."), User::find($u_id)->username))); 
+
+        IntranetConfig::removeUserFromIntranetCourses($user_id, $intranet_id);
+            
+        $this->redirect($this->url_for('/intranetverwaltung/index/members/' . $intranet_id));
+    }
+    
     public function editseminar_action($sem_id, $inst_id){
         $this->entry = IntranetSeminar::find([$sem_id, $inst_id]);
         $this->inst_id = $inst_id;
