@@ -1,5 +1,5 @@
 <? use Studip\Button, Studip\LinkButton; ?>
-
+//wird nicht benutzt
 
 <div id='mitarbeiter'>
     
@@ -17,8 +17,8 @@
                 <input required type="text" id="beginn" name="begin" data-date-picker value="<?= $entry->getValue('begin') ?>"></input><br>
 
                 <label> Hinweis/Notiz:</label> <input type="" name="notice" value="<?= $entry->getValue('notice') ?>"></input>
-            <?= Button::createAccept(_('Änderung speichern'), 'submit') ?>
-            <?= LinkButton::create(_("Löschen"), $controller->url_for('urlaubskalender/delete/'.$entry->getValue('id')), array('onClick' => "return window.confirm('"._("Wirklich löschen?")."');"))?>
+            <?= Button::createAccept(_('ï¿½nderung speichern'), 'submit') ?>
+            <?= LinkButton::create(_("Lï¿½schen"), $controller->url_for('urlaubskalender/delete/'.$entry->getValue('id')), array('onClick' => "return window.confirm('"._("Wirklich lï¿½schen?")."');"))?>
             
         </fieldset>
       
@@ -29,7 +29,7 @@
 
     <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('urlaubskalender/birthday')) ?>
     <? } else{ ?>
-    <h2> Noch keine Einträge vorhanden </h2>
+    <h2> Noch keine Eintrï¿½ge vorhanden </h2>
     <? }?>
     
     
