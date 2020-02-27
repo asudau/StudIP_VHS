@@ -7,21 +7,21 @@
     <table class="default collapsable">
         <caption>
             <span class="actions">
-                    <a href="<?= URLHelper::getLink('dispatch.php/messages/write',
-                            array('filter' => 'prelim',
-                                'emailrequest' => 1,
-                                'course_id' => $course_id,
-                                'default_subject' => $subject))
-                    ?>" data-dialog>
-                        <?= Icon::create('inbox', 'clickable', ['title' => sprintf(_('Nachricht mit Mailweiterleitung an alle %s versenden'),'vorläufig akzeptierten Nutzer/-innen')])->asImg(16)?>
-                    </a>
+                <a href="<?= URLHelper::getLink('dispatch.php/messages/write', [
+                    'filter'           => 'prelim',
+                    'emailrequest'     => 1,
+                    'course_id'        => $course_id,
+                    'default_subject'  => $subject,
+                ]) ?>" data-dialog>
+                    <?= Icon::create('inbox', 'clickable', ['title' => sprintf(_('Nachricht mit Mailweiterleitung an alle %s versenden'),'vorlÃ¤ufig akzeptierten Nutzer/-innen')]) ?>
+                </a>
             </span>
-            <?= _('Vorläufig akzeptierte Teilnehmende') ?>
+            <?= _('VorlÃ¤ufig akzeptierte Teilnehmende') ?>
         </caption>
         <colgroup>
-            <? if (!$is_locked) : ?>
+        <? if (!$is_locked): ?>
             <col width="20">
-            <? endif ?>
+        <? endif ?>
             <col width="20">
             <col>
             <col width="15%">
@@ -30,94 +30,125 @@
         </colgroup>
         <thead>
             <tr class="sortable">
-                <? if (!$is_locked) : ?>
+            <? if (!$is_locked): ?>
                 <th>
-                    <input aria-label="<?= sprintf(_('Alle %s auswählen'), 'vorläufig akzeptierten NutzerInnen') ?>"
+                    <input aria-label="<?= sprintf(_('Alle %s auswÃ¤hlen'), 'vorlÃ¤ufig akzeptierten NutzerInnen') ?>"
                                type="checkbox" name="all" value="1" data-proxyfor=":checkbox[name^=accepted]">
                 </th>
-                <? endif ?>
+            <? endif ?>
                 <th></th>
-                <th><?=_('Nachname, Vorname')?></th>
-                <th <?= ($sort_by == 'mkdate' && $sort_status == 'accepted') ? sprintf('class="sort%s"', $order) : '' ?>>
-                    <a href="<?= URLHelper::getLink(sprintf('?sortby=mkdate&sort_status=accepted&order=%s&toggle=%s',
-                       $order, ($sort_by == 'mkdate'))) ?>#accepted">
+                <th <?if ($sort_by === 'nachname' && $sort_status === 'accepted') printf('class="sort%s"', $order); ?>>
+                    <? $order = $sort_status !== 'accepted' ? 'desc' : $order; ?>
+                    <a href="<?= URLHelper::getLink(sprintf(
+                        '?sortby=nachname&sort_status=accepted&order=%s&toggle=%s#users',
+                        $order,
+                        $sort_by === 'nachname'
+                    )) ?>">
+                        <?= _('Nachname, Vorname') ?>
+                    </a>
+                </th>
+                <th <? if ($sort_by === 'mkdate' && $sort_status === 'accepted') printf('class="sort%s"', $order); ?>>
+                    <a href="<?= URLHelper::getLink(sprintf(
+                        '?sortby=mkdate&sort_status=accepted&order=%s&toggle=%s#accepted',
+                       $order,
+                       $sort_by === 'mkdate'
+                    )) ?>">
                         <?= _('Anmeldedatum') ?>
                     </a>
                 </th>
                 <th><?=_('Studiengang')?></th>
-                <th style="text-align: right"><?= _('Aktion') ?></th>
+                <th class="actions"><?= _('Aktion') ?></th>
             </tr>
         </thead>
         <tbody>
-        <? $nr= 0; foreach($accepted as $accept) : ?>
+        <? $nr= 0; ?>
+        <? foreach ($accepted as $accept) : ?>
         <? $fullname = $accept['fullname'];?>
             <tr>
-                <? if (!$is_locked) : ?>
+            <? if (!$is_locked) : ?>
                 <td>
-                    <input aria-label="<?= sprintf(_('%s auswählen'), 'Vorläufig akzeptierte/n NutzerIn') ?>"
-                        type="checkbox" name="accepted[<?= $accept['user_id'] ?>]" value="1" />
+                    <input aria-label="<?= sprintf(_('%s auswÃ¤hlen'), _('VorlÃ¤ufig akzeptierte/n NutzerIn')) ?>"
+                           type="checkbox" name="accepted[<?= $accept['user_id'] ?>]" value="1"
+                           <? if (isset($flash['checked']) && in_array($accept['user_id'], $flash['checked'])) echo 'checked'; ?>>
                 </td>
-                <? endif ?>
-                <td style="text-align: right"><?= (++$nr < 10) ? sprintf('%02d', $nr) : $nr ?></td>
+            <? endif ?>
+                <td style="text-align: right"><?= sprintf('%02u', ++$nr) ?></td>
                 <td>
-                    <a href="<?= $controller->url_for(sprintf('profile?username=%s',$accept['username'])) ?>" <? if ($accept['mkdate'] >= $last_visitdate) echo 'class="new-member"'; ?>>
-                        <?= Avatar::getAvatar($accept['user_id'], $accept['username'])->getImageTag(Avatar::SMALL,
-                                array('style' => 'margin-right: 5px','title' => htmlReady($fullname))); ?>
-
+                    <a href="<?= $controller->url_for('profile?username=' . $accept['username']) ?>" <? if ($accept['mkdate'] >= $last_visitdate) echo 'class="new-member"'; ?>>
+                        <?= Avatar::getAvatar($accept['user_id'], $accept['username'])->getImageTag(Avatar::SMALL, [
+                            'style' => 'margin-right: 5px',
+                            'title' => $fullname,
+                        ]) ?>
                         <?= htmlReady($fullname) ?>
                     </a>
-                    <? if ($accept['comment'] != '') : ?>
-                        <?= tooltipHtmlIcon(sprintf('<strong>%s</strong><br>%s', _('Bemerkung'), htmlReady($accept['comment']))) ?>
-                    <? endif ?>
+                <? if ($accept['comment']): ?>
+                    <?= tooltipHtmlIcon(sprintf(
+                        '<strong>%s</strong><br>%s',
+                        _('Bemerkung'),
+                        htmlReady($accept['comment'])
+                    )) ?>
+                <? endif ?>
                 </td>
                 <td>
-                    <? if(!empty($accept['mkdate'])) : ?>
-                        <?= strftime('%x %X', $accept['mkdate'])?>
-                    <? endif ?>
+                <? if (!empty($accept['mkdate'])) : ?>
+                    <?= strftime('%x %X', $accept['mkdate'])?>
+                <? endif ?>
                 </td>
                 <td>
-                    <?= $this->render_partial("course/members/_studycourse.php", array('study_courses' => UserModel::getUserStudycourse($accept['user_id']))) ?>
+                    <?= $this->render_partial('course/members/_studycourse.php', [
+                        'studycourses' => new SimpleCollection(UserStudyCourse::findByUser($accept['user_id']))
+                    ]) ?>
                 </td>
-                <td style="text-align: right">
-                    <a data-dialog title='<?= _('Bemerkung hinzufügen') ?>' href="<?=$controller->url_for('course/members/add_comment', $accept['user_id']) ?>">
-                            <?= Icon::create('comment', 'clickable')->asImg() ?>
-                    </a>
-                    <? if($user_id != $accept['user_id']) : ?>
-                        <a href="<?= URLHelper::getLink('dispatch.php/messages/write',
-                                array('filter' => 'send_sms_to_all',
-                                    'emailrequest' => 1,
-                                    'rec_uname' => $accept['username'],
-                                    'default_subject' => $subject))
-                                ?>
-                        "  data-dialog>
-                            <?= Icon::create('mail', 'clickable', ['title' => sprintf(_('Nachricht mit Mailweiterleitung an %s senden'),htmlReady($fullname))])->asImg(16) ?>
-                        </a>
+                <td class="actions">
+                    <? $actionMenu = ActionMenu::get() ?>
+                    <? $actionMenu->addLink(
+                        $controller->url_for('course/members/add_comment/' . $accept['user_id']),
+                        _('Bemerkung hinzufÃ¼gen'),
+                        Icon::create('comment', 'clickable'),
+                        ['data-dialog' => 'size=auto']
+                    ) ?>
+                    <? if ($user_id !== $accept['user_id']) : ?>
+                        <? $actionMenu->addLink(
+                            URLHelper::getURL('dispatch.php/messages/write',[
+                                'filter'           => 'send_sms_to_all',
+                                'emailrequest'    => 1,
+                                'rec_uname'       => $accept['username'],
+                                'default_subject' => $subject,
+                            ]),
+                            _('Nachricht mit Mailweiterleitung senden'),
+                            Icon::create('mail', 'clickable', ['title' => sprintf('Nachricht mit Weiterleitung an %s senden', $fullname)]),
+                            ['data-dialog' => '']
+                        ) ?>
                     <? endif?>
                     <? if (!$is_locked) : ?>
-                    <a href="<?= $controller->url_for(sprintf('course/members/cancel_subscription/singleuser/accepted/%s',
-                                $accept['user_id'])) ?>">
-                        <?= Icon::create('door-leave', 'clickable', ['title' => sprintf(_('%s austragen'),htmlReady($fullname))])->asImg(16) ?>
-                    </a>
+                        <? $actionMenu->addLink(
+                            $controller->url_for('course/members/cancel_subscription/singleuser/accepted/' . $accept['user_id']),
+                            _('Aus Veranstaltung austragen'),
+                            Icon::create('door-leave', 'clickable', [
+                                'title' => sprintf(_('%s austragen'), htmlReady($fullname))
+                            ])
+                        ) ?>
                     <? endif ?>
+                    <?= $actionMenu->render() ?>
                 </td>
             </tr>
         <? endforeach ?>
         </tbody>
-        <? if (!$is_locked) : ?>
+    <? if (!$is_locked) : ?>
         <tfoot>
             <tr>
                 <td class="printhead" colspan="6">
-                    <select name="action_accepted" id="action_accepted" aria-label="<?= _('Aktion ausführen') ?>">
-                        <option value="">- <?= _('Aktion wählen') ?></option>
+                    <select name="action_accepted" id="action_accepted" aria-label="<?= _('Aktion ausfÃ¼hren') ?>">
+                        <option value="">- <?= _('Aktion wÃ¤hlen') ?></option>
                         <option value="upgrade"><?= _('Akzeptieren') ?></option>
                         <option value="remove"><?= _('Austragen') ?></option>
                         <option value="message"><?=_('Nachricht senden')?></option>
-                        <option value="copy_to_course"><?= _('In Seminar verschieben/kopieren') ?></option>
+                        <!--<option value="copy_to_course"><?= _('In Seminar verschieben/kopieren') ?></option>-->
                     </select>
-                    <?= Button::create(_('Ausführen'), 'submit_accepted') ?>
+                    <?= Button::create(_('AusfÃ¼hren'), 'submit_accepted') ?>
                 </td>
             </tr>
         </tfoot>
-        <? endif ?>
+    <? endif ?>
     </table>
 </form>
