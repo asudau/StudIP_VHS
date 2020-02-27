@@ -154,7 +154,7 @@ class SeminarController extends StudipController {
         }
 
         // Fetch  votes nur bis 3.1
-        /** 
+        /**   
         $this->votes = StudipVote::findBySQL('range_id = ? AND state IN (?) ORDER BY mkdate desc', array($this->course_id,$show_votes));
 	
         if ($vote = Request::get('vote')) {
