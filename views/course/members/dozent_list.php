@@ -43,7 +43,7 @@
         <tr>
             <td style="text-align: right"><?= (++$nr < 10) ? sprintf('%02d', $nr) : $nr ?></td>
             <td>
-                <a href="<?= $controller->url_for(sprintf('profile?username=%s',$dozent['username'])) ?>" <? if ($dozent['mkdate'] >= $last_visitdate) echo 'class="new-member"'; ?>>
+                <a href="<?= URLHelper::getURL('dispatch.php/profile?username='. $dozent['username']) ?>" <? if ($dozent['mkdate'] >= $last_visitdate) echo 'class="new-member"'; ?>>
                     <?= Avatar::getAvatar($dozent['user_id'], $dozent['username'])->getImageTag(Avatar::SMALL, [
                         'style' => 'margin-right: 5px',
                         'title' => $fullname,
