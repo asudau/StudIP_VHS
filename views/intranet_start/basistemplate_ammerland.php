@@ -84,13 +84,6 @@
                             <h2 class="intranet">
                                 <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
                                     <a href="" title="" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
-                                    <? if ($GLOBALS['perm']->have_studip_perm('dozent', $course_id)){ ?>
-                                        <nav>
-                                            <a href="<?=URLHelper::getLink("dispatch.php/news/edit_news/new/" . $course_id) ?>" rel="get_dialog">
-                                                <?= Icon::create('add', 'clickable')?>
-                                            </a>
-                                        </nav>
-                                    <? } ?>
                                 </div>
                             </h2>
 
