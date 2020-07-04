@@ -82,12 +82,16 @@
                             <!--  Text: [begin] -->
                             <img src="<?= $plugin->getPluginURL().'/assets/images/Projektbereich.png' ?>" alt="" border="0" width="100%">
                             <h2 class="intranet">
-                                <a href="" title="" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
-                                <? if ($GLOBALS['perm']->have_studip_perm('dozent', $course_id)){ ?>
-                                    <a style="margin-left: 68%;" href="<?=URLHelper::getLink("dispatch.php/news/edit_news/new/" . $course_id) ?>" rel="get_dialog">
-                                        <?= Icon::create('add', 'clickable')?>
-                                    </a>
-                                <? } ?>
+                                <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
+                                    <a href="" title="" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
+                                    <? if ($GLOBALS['perm']->have_studip_perm('dozent', $course_id)){ ?>
+                                        <nav>
+                                            <a href="<?=URLHelper::getLink("dispatch.php/news/edit_news/new/" . $course_id) ?>" rel="get_dialog">
+                                                <?= Icon::create('add', 'clickable')?>
+                                            </a>
+                                        </nav>
+                                    <? } ?>
+                                </div>
                             </h2>
 
                             <?= $this->render_partial($template, compact('widget')) ?>
@@ -99,9 +103,6 @@
                 </div>
                 <!--  CONTENT ELEMENT, uid:434/textpic [end] -->
             <? endforeach ?>
-
-
-
 
             <? if (count($courses_upcoming) >0 ){ ?>
                 <!--  CONTENT ELEMENT, uid:13/textpic [begin] -->
