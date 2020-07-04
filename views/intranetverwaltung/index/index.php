@@ -50,6 +50,14 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
                         Kein automatischer Eintrag konfiguriert
                     <? endif ?>
                 </td>
+                <td>
+                    <? if ($sem_config->show_news): ?>
+                        <?= Icon::create('news', 'clickable')?>
+                    <? endif ?>
+                    <? if ($sem_config->use_files): ?>
+                        <?= Icon::create('files', 'clickable')?>
+                    <? endif ?>
+                </td>
             </tr>
             <?php endforeach ?>
             <?php endif ?>
