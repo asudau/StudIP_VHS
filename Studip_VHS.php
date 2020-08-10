@@ -46,6 +46,43 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
             'index_wesermarsch',
             'index_allgemein',
             'ohn_moocs');
+
+        $this->icons = array(
+            'archive3',
+            'billboard',
+            'blubber',
+            'campusnavi',
+            'category',
+            'chat2',
+            'cloud2',
+            'classbook',
+            'community',
+            'date',
+            'download',
+            'eportfolio',
+            'evaluation',
+            'exclaim-circle',
+            'favorite',
+            'files',
+            'forum',
+            'globe',
+            'group',
+            'group4',
+            'home',
+            'institute',
+            'key',
+            'mail',
+            'plugin',
+            'question-circle-full',
+            'smiley',
+            'search',
+            'star',
+            'tools',
+            'twitter',
+            'youtube',
+            'wiki',
+            'wizard',
+            'computer');
            
         //Falls wir schon in einem Kurs sind, checke ob dieser schon gestartet und konfiguriere die Navigation
         $referer = $_SERVER['REQUEST_URI'];
@@ -64,7 +101,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         }
 
         //Adminbereich für Intranetverwaltung
-        if($perm->have_perm('root')){
+        if($perm->have_perm('admin')){
             $navigation = new Navigation('Intranetverwaltung', PluginEngine::getURL($this, array(), 'intranetverwaltung/index'));
             $navigation->addSubNavigation('index', new Navigation('Übersicht', PluginEngine::getURL($this, array(), 'intranetverwaltung/index')));
             $navigation->addSubNavigation('view_intranets', new Navigation('Intranet-Ansicht', PluginEngine::getURL($this, array(), 'intranet_start/index/')));

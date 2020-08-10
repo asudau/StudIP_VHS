@@ -21,7 +21,9 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
 <select name='inst_id' onchange="select_inst_id(this.value)">
     <option value='' > Auswählen </option>
     <?php foreach($institutes_with_intranet as $intranet) : ?>
-        <option <?= ($intranet->id == $intranet_inst->id) ? 'selected' :'' ?> value='<?=$intranet->id?>' > <?=$intranet->name?> </option>
+        <? if ( $GLOBALS['perm']->have_perm('root') || in_array($intranet->id, IntranetConfig::getIntranetIDsForUser(User::findCurrent())) ) : ?>
+            <option <?= ($intranet->id == $intranet_inst->id) ? 'selected' :'' ?> value='<?=$intranet->id?>' > <?=$intranet->name?> </option>
+        <? endif ?>
     <? endforeach ?>
 </select> 
 
@@ -72,6 +74,55 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
                     <option value='<?= $template?>' <?= ( $inst_config[$intranet_inst->institut_id]  == $template ) ? 'selected' : ''?>><?= $template?></option>
                 <?php endforeach ?>
             </select>
+    </fieldset>
+
+    <fieldset <?= !isset($flash['open']) || $flash['open'] != 'buttons' ? 'class="collapsed"' : ''?> data-open="buttons">
+        <legend><?= _('Individuelle Startseitenbuttons gestalten') ?></legend>
+        <table class="default">
+            <thead>
+            <tr>
+                <th>
+                    Titel
+                </th>
+                <th>
+                    Tooltip
+                </th>
+                <th>
+                    Ziel
+                </th>
+                <th>
+                    Icon
+                </th>
+                <th>
+                    Aktionen
+                </th>
+            </tr>
+            </thead>
+
+        <?php if($intranet_buttons) : ?>
+            <?php foreach($intranet_buttons as $button) : ?>
+                <tr>
+                    <td><?= $button->text ?></td>
+                    <td><?= $button->tooltip ?></td>
+                    <td><?= $button->target ?></td>
+                    <td><?= Icon::create($button->icon, 'clickable') ?></td>
+                    <td>
+                        <a data-dialog href="<?= $controller->url_for('intranetverwaltung/index/edit_buttons/' . $intranet_inst->id . '/' . $button->Button_id)?>">
+                        <?= Icon::create('edit', 'clickable') ?>
+                        </a>
+                    </td>
+                </tr>
+
+            <?php endforeach ?>
+        <?php endif ?>
+            <tr>
+                <td>
+                    <a data-dialog href="<?= $controller->url_for('intranetverwaltung/index/edit_buttons/' . $intranet_inst->id)?>">
+                        <?= Icon::create('add', 'clickable') ?>
+                    </a>
+                </td>
+            </tr>
+        </table>
     </fieldset>
     
     <button title="Änderungen übernehmen" name="submit" class="button" type="submit">Übernehmen</button></p>

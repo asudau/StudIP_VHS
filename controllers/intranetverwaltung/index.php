@@ -27,6 +27,7 @@ class Intranetverwaltung_IndexController extends StudipController {
     {
         Navigation::activateItem('admin/intranetverwaltung/index');
         $this->setup_navigation($intranet_id);
+        $this->intranet_buttons = IntranetIndividualButton::findManyByInstitut_Id($intranet_id);
         
         $sidebar = Sidebar::Get();
         $navcreate = new ActionsWidget();
@@ -102,6 +103,31 @@ class Intranetverwaltung_IndexController extends StudipController {
         PageLayout::postMessage(MessageBox::info(_("Veranstaltung wurde hinzugefügt."))); 
         $this->redirect('intranetverwaltung/index/index/' . $intranet_id );
     }
+
+    public function edit_buttons_action($intranet_id, $button_id){
+        $this->intranet_id = $intranet_id;
+        if ($button_id) {
+            $this->button = IntranetIndividualButton::findOneByButton_Id($button_id);
+        }
+    }
+
+    public function save_buttons_action($intranet_id, $button_id){
+        if ($button_id) {
+            $button = IntranetIndividualButton::findOneByButton_Id($button_id);
+        } else {
+            $button = new IntranetIndividualButton();
+        }
+        $button->Institut_id = $intranet_id;
+        $button->text = Request::get('button_text');
+        $button->icon = Request::get('button_icon');
+        $button->tooltip = Request::get('button_tooltip');
+        $button->position = Request::get('button_position');
+        $button->target = Request::get('button_target');
+        $button->store();
+
+        PageLayout::postMessage(MessageBox::info(sprintf(_("Änderungen gespeichert"))));
+        $this->redirect($this->url_for('intranetverwaltung/index/index/'. $button->Institut_id));
+    }
     
     public function add_missing_course_assignments_action($intranet_id, $user_id){
         
@@ -149,7 +175,7 @@ class Intranetverwaltung_IndexController extends StudipController {
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($user_id, $intranet_id));
 
-        PageLayout::postMessage(MessageBox::info(sprintf(_("%s wurde aus dem Intranet und zugehörigen Veranstaltungen entfernt."), User::find($u_id)->username))); 
+        PageLayout::postMessage(MessageBox::info(sprintf(_("%s wurde aus dem Intranet und zugehörigen Veranstaltungen entfernt."), User::find($user_id)->username)));
 
         IntranetConfig::removeUserFromIntranetCourses($user_id, $intranet_id);
             
