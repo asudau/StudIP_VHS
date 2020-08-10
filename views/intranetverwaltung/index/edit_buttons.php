@@ -20,7 +20,7 @@ use Studip\Button, Studip\LinkButton;
             <input type='text' name ='button_position' value='<?= $button->position ?>'>
         </section>
         <section>
-            <label><?= _('Art des Buttons') ?></label>
+            <label><?= _('Link (ohne http(s)://)') ?></label>
             <input type="text" name ='button_target' value='<?= $button->target ?>'>
         </section>
         <section>
