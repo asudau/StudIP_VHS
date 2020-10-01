@@ -74,7 +74,7 @@
             <? endif ?>
                 <td style="text-align: right"><?= sprintf('%02u', ++$nr) ?></td>
                 <td>
-                    <a href="<?= $controller->url_for('profile?username=' . $accept['username']) ?>" <? if ($accept['mkdate'] >= $last_visitdate) echo 'class="new-member"'; ?>>
+                    <a href="<?= URLHelper::getLink('dispatch.php/profile?username=' . $accept['username']) ?>" <? if ($accept['mkdate'] >= $last_visitdate) echo 'class="new-member"'; ?>>
                         <?= Avatar::getAvatar($accept['user_id'], $accept['username'])->getImageTag(Avatar::SMALL, [
                             'style' => 'margin-right: 5px',
                             'title' => $fullname,
