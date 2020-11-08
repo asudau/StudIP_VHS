@@ -80,7 +80,7 @@
                         <p class="bodytext">   
                         <section class="contentbox folder">
                         <? foreach ($birthday_dates as $date){ ?>
-                        <li class='birthday' title='... hat am <?=date('d.m.Y', $date->start) ?> Geburtstag'><?= Icon::create('star', 'clickable')?> <?= $date->summary?></li>
+                        <li class='birthday' title='... hat am <?=date('d. F', $date->start) ?> Geburtstag'><?= Icon::create('star', 'clickable')?> <?= $date->summary?> (<?=date('d. F', $date->start)?>)</li>
                         <?}?>
                         </section>
 

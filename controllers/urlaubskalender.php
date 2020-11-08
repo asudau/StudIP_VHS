@@ -841,16 +841,16 @@ class UrlaubskalenderController extends StudipController
         return $event_collection;
     }
   
-    public static function getEventsByDayAndMonth($range_id, $day, $month)
+    public static function getEventsByDaysAndMonth($range_id, $days, $month)
     {
         $stmt = DBManager::get()->prepare('SELECT event_id FROM calendar_event '
                 . 'LEFT JOIN event_data USING(event_id) '
                 . 'WHERE range_id = :range_id '
-                . 'AND (day = :day AND month = :month) '
-                . 'ORDER BY start ASC');
+                . 'AND (day IN(:days) AND month = :month) '
+                . 'ORDER BY start DESC');
         $stmt->execute(array(
             ':range_id' => $range_id,
-            ':day'      => $day,
+            ':days'     => $days, //implode(",", $days),
             ':month'    => $month
         ));
 

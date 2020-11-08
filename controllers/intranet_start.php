@@ -24,13 +24,8 @@ class IntranetStartController extends StudipController {
     }
 
     public function index_action($inst_id)
-    {
-        //$inst_id = Institute::findCurrent()->id;
-        //TODO Berechtingung für INstitut abfragen
-        $this->calendar_controller = new Calendar_CalendarController();
-        $this->calendar_sem_id =  IntranetConfig::find($inst_id)->calendar_seminar;
+    {   
         
-
         if ($GLOBALS['perm']->have_perm('admin')){
             $this->intranets = IntranetConfig::getInstitutesWithIntranet(true);
         } else {
@@ -39,6 +34,11 @@ class IntranetStartController extends StudipController {
         if ($inst_id == null){
             $inst_id = $this->intranets[0];
         }
+       
+        //TODO Berechtingung für INstitut abfragen
+        $this->calendar_controller = new Calendar_CalendarController();
+        $this->calendar_sem_id =  IntranetConfig::find($inst_id)->calendar_seminar;
+        
 
         //get seminars ($inst_id)
         //var_dump($inst_id);die();
@@ -104,7 +104,9 @@ class IntranetStartController extends StudipController {
         //get special dates (maybe)
         $this->today = new DateTime();
         $this->birthday_dates = [];
-        $this->today_dates = UrlaubskalenderController::getEventsByDayAndMonth($this->calendar_sem_id, $this->today->format('d'), $this->today->format('m'));
+        //$days = [$this->today->format('d')]; 
+        $days = [+$this->today->format('d')-2, +$this->today->format('d')-1, $this->today->format('d')];
+        $this->today_dates = UrlaubskalenderController::getEventsByDaysAndMonth($this->calendar_sem_id, $days, $this->today->format('m'));
         foreach ($this->today_dates as $calendar_event_id){
             $data = EventData::findOneByEvent_id($calendar_event_id);
             if ($data->category_intern == 11){

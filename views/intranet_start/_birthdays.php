@@ -11,8 +11,8 @@
         <p class="bodytext">   
         <section class="contentbox folder">
         <? foreach ($birthday_dates as $date){ ?>
-        <? $userinfo = UserModel::getUser($date->user_id); ?>
-        <li class='birthday' title='... hat heute Geburtstag'><?= Icon::create('star', 'clickable')?> <?= $userinfo['Vorname'] . ' ' . $userinfo['Nachname']?></li>
+            <? $userinfo = UserModel::getUser($date->user_id); ?>
+            <li class='birthday' title='... hat heute Geburtstag'><?= Icon::create('star', 'clickable')?> <?= $userinfo['Vorname'] . ' ' . $userinfo['Nachname'] . '(' . $date->day . '.' . $date->month . ')'?></li>
         <?}?>
         </section>
 
