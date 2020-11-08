@@ -43,6 +43,9 @@ class IntranetStartController extends StudipController {
         //get seminars ($inst_id)
         //var_dump($inst_id);die();
         $intranet = IntranetConfig::find($inst_id);
+        if (!$intranet) {
+            throw new AccessDeniedException(_("Dieser Intrantebereich wurde noch nicht konfiguriert"));     
+        }
         $this->intranet_courses = $intranet->getRelatedCourses();        
         foreach($this->intranet_courses as $course){
             $config = IntranetSeminar::find([$course->id, $inst_id]);
@@ -61,6 +64,7 @@ class IntranetStartController extends StudipController {
                  $this->admin = true;
             }
         }
+
         asort($this->newsPosition);
 
         //get permission of currentUser (autor/dozent) //ammerland Spezial
