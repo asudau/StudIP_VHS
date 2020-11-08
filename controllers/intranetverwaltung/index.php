@@ -110,6 +110,20 @@ class Intranetverwaltung_IndexController extends StudipController {
             $this->button = IntranetIndividualButton::findOneByButton_Id($button_id);
         }
     }
+    
+     public function delete_button_action($intranet_id, $button_id){
+        $this->intranet_id = $intranet_id;
+        if ($button_id) {
+            $button = IntranetIndividualButton::findOneByButton_Id($button_id);
+            if( $button->delete()) {
+                PageLayout::postMessage(MessageBox::success(_('Der Button wurde gelöscht.')));
+                $this->redirect('intranetverwaltung/index/index/' . $intranet_id );
+            } else {
+                PageLayout::postMessage(MessageBox::success(_('Button konnte nicht gelöscht werden.')));
+                $this->redirect('intranetverwaltung/index/index/' . $intranet_id );
+            }
+        }
+    }
 
     public function save_buttons_action($intranet_id, $button_id){
         if ($button_id) {

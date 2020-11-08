@@ -110,6 +110,9 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
                         <a data-dialog href="<?= $controller->url_for('intranetverwaltung/index/edit_buttons/' . $intranet_inst->id . '/' . $button->Button_id)?>">
                         <?= Icon::create('edit', 'clickable') ?>
                         </a>
+                        <a href="<?= $controller->url_for('intranetverwaltung/index/delete_button/' . $intranet_inst->id . '/' . $button->Button_id)?>">
+                        <?= Icon::create('trash', 'clickable') ?>
+                        </a>
                     </td>
                 </tr>
 
