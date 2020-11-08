@@ -85,7 +85,7 @@ class IntranetConfig extends SimpleORMap
         $user_intranets_ordered = array();
         $intranets = self::getInstitutesWithIntranet();
         foreach ($intranets as $intranet){
-            if (in_array($intranet->id, $user_intranets) || $GLOBALS['perm']->have_perm('root')){
+            if (in_array($intranet->id, $user_intranets)){ // || $GLOBALS['perm']->have_perm('root')){
                 $user_intranets_ordered[] = $intranet->id;
             }
         }
