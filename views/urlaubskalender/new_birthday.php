@@ -4,7 +4,7 @@
     <form action="<?= $controller->url_for('urlaubskalender/new_birthday') ?>" class="default" method="POST" data-dialog='size=auto'>
         <?= $quick_search->render(); ?>
         <footer data-dialog-button>
-          <?= Button::createAccept(_('Nutzer wählen'), 'submit') ?>
+          <?= Button::createAccept(_('Nutzer wÃ¤hlen'), 'submit') ?>
           <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('urlaubskalender/birthday')) ?>
         </footer>
     </form>
