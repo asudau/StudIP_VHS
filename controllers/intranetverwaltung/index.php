@@ -27,7 +27,7 @@ class Intranetverwaltung_IndexController extends StudipController {
     {
         Navigation::activateItem('admin/intranetverwaltung/index');
         $this->setup_navigation($intranet_id);
-        $this->intranet_buttons = IntranetIndividualButton::findManyByInstitut_Id($intranet_id);
+        $this->intranet_buttons = IntranetIndividualButton::findManyByInstitut_Id($intranet_id, 'ORDER BY `position` ASC');
         
         $sidebar = Sidebar::Get();
         $navcreate = new ActionsWidget();

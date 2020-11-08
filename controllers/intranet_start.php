@@ -81,7 +81,7 @@ class IntranetStartController extends StudipController {
         $this->edit_link_files = URLHelper::getLink("dispatch.php/course/files?cid=");
 
         //get individual buttons
-        $this->intranet_buttons = IntranetIndividualButton::findManyByInstitut_Id($inst_id);
+        $this->intranet_buttons = IntranetIndividualButton::findManyByInstitut_Id($inst_id, 'ORDER BY `position` ASC');
 
         //get news of connected seminars
  
