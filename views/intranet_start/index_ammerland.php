@@ -75,12 +75,12 @@
                 
                 <!--  Text: [begin] -->
                      <img src="<?=$plugin->getPluginURL().'/assets/images/klee_klein.jpg' ?>" alt="" border="0" width="100%">
-                     <h2 class="intranet"> <a href="<?=$controller->url_for('urlaubskalender/birthday')?>" title="Liste der Geburtstage der MitarbeiterInnen" class="internal-link">Geburtstage <?= $today->format('d.m.Y') ?></a></h2>
+                     <h2 class="intranet"> <a href="<?=$controller->url_for('urlaubskalender/birthday')?>" title="Liste der Geburtstage der MitarbeiterInnen" class="internal-link">Aktuelle Geburtstage</a></h2>
                      <?php if ($birthday_dates): ?>   
                         <p class="bodytext">   
                         <section class="contentbox folder">
                         <? foreach ($birthday_dates as $date){ ?>
-                        <li class='birthday' title='... hat am <?=date('d. F', $date->start) ?> Geburtstag'><?= Icon::create('star', 'clickable')?> <?= $date->summary?> (<?=date('d. F', $date->start)?>)</li>
+                        <li class='birthday' title='... hat am <?=date('d. F', $date->start) ?> Geburtstag'><?= Icon::create('star', 'clickable')?> <?= $date->summary?> (<?=(date('d.m.Y', $date->start) == $today->format('d.m.Y')) ? 'heute': date('d. F', $date->start) ?>)</li>
                         <?}?>
                         </section>
 
