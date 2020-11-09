@@ -284,13 +284,12 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
      }
      
      
-     //für Autoren sind KUrse die noch nciht begonnen haben nicht zugänglich
+     //für Autoren sind Kurse die noch nicht begonnen haben nicht zugänglich
      private function course_available($course_id){
         $localEntries = DataFieldEntry::getDataFieldEntries($course_id);
         
         $datafield_begin =  DataField::findOneBySQL('name = \'course begin\'');
         $this->datafield_id_begin = $datafield_begin->datafield_id;
-        
         //falls Kurs noch nciht gestartet und Nutzer autor -> noch kein Zugriff
         if ((!$GLOBALS['perm']->have_studip_perm('tutor', $course_id) && self::getCourseBegin($course_id) > time())){
             return false;
@@ -302,10 +301,14 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         
         $datafield_begin =  DataField::findOneBySQL('name = \'course begin\'');
         $datafield_id_begin = $datafield_begin->datafield_id;
-        if ($localEntries[$datafield_id_begin]->value){
+        if ($localEntries[$datafield_id_begin]->value > 1){
             $begin = $localEntries[$datafield_id_begin]->value - 4000;
         } else if (Course::find($course_id)->dates[0]){
-            $begin = Course::find($course_id)->dates[0]->date;
+            //get day (without time) of first appointment
+            $begintime = Course::find($course_id)->dates[0]->date;
+            $datestring = strftime('%d.%m.%Y', $begintime);
+            $date = new DateTime($datestring);
+            $begin = $date->getTimestamp();
         } else {
             $begin = Course::find($course_id)->mkdate;
         }
