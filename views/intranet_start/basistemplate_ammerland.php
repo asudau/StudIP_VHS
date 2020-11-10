@@ -136,10 +136,12 @@
                                     <a href="" title="" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
                                 </div>
                             </h2>
-                            <? foreach ($dozenten as $fb_leitung) : ?>
-                            <div style='margin:3px'><?= $fb_leitung['Vorname'] ?> <?= $fb_leitung['Nachname'] ?> - <?= $fb_leitung['Email']?> - <!--InstituteMember->Telefon)--></div>
-                            <? endforeach ?>
-
+                             <? if (get_title_for_status('dozent', 1, Seminar::getInstance($course_id)->status) == 'Fachbereichsleitung'): ?>
+                                <? foreach ($dozenten as $fb_leitung) : ?>
+                                <div style='margin:3px'><?= $fb_leitung['Vorname'] ?> <?= $fb_leitung['Nachname'] ?> - <?= $fb_leitung['Email']?> - <!--InstituteMember->Telefon)--></div>
+                                <? endforeach ?>
+                                <? endif ?>
+                            
                             <?= $this->render_partial($template, compact('widget')) ?>
 
                             <hr>
