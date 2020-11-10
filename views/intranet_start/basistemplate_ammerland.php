@@ -136,7 +136,7 @@
                                     <a href="" title="" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
                                 </div>
                             </h2>
-                            <? foreach ($fb_leitungen as $fb_leitung) : ?>
+                            <? foreach ($dozenten as $fb_leitung) : ?>
                             <div style='margin:3px'><?= $fb_leitung['Vorname'] ?> <?= $fb_leitung['Nachname'] ?> - <?= $fb_leitung['Email']?> - <!--InstituteMember->Telefon)--></div>
                             <? endforeach ?>
 
