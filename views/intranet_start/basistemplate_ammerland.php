@@ -38,8 +38,15 @@
                 <!--  Image block: [end] -->
             </div>
             <!--  CONTENT ELEMENT, uid:73/textpic [end] -->
-
-
+            
+				<table class="dsR4" cellspacing="0" cellpadding="0" border="0">
+					<tbody>
+                    <tr>
+						<td class="dsR15"><div class="zentriert"><a href="https://kvhs-ammerland.de/index.php?id=6" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/Logo-kvhs-ammerland-rot.gif" ?>" alt="" border="0" width="73" height="72"></a></div></td>
+                        <td class="dsR15"><div class="zentriert"><a href="https://www.facebook.com/Kreisvolkshochschule-Ammerland-106403756090356/" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/facebook.png" ?>" alt="" border="0" width="72" height="72"></a></div></td>
+                        <td class="dsR15"><div class="zentriert"><a href="https://www.facebook.com/Kreisvolkshochschule-Ammerland-106403756090356/" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/instagramm.png" ?>" alt="" border="0" width="73" height="72"></a></div></td>
+                    </tr>        
+                </table>
 
             <? foreach ($folderwithfiles_array as $course_id => $folderwithfiles) : ?>
                 <!--  CONTENT ELEMENT, uid:14/textpic [begin] -->
@@ -102,16 +109,36 @@
             <!-- News -->
             <? foreach ($newsTemplates as $course_id => $template) : ?>
                 <!--  CONTENT ELEMENT, uid:434/textpic [begin] -->
+                <? $fb_leitungen = []; ?>
+                <? $dozenten = Seminar::getInstance($course_id)->getMembers('dozent'); ?>
+                <? foreach ($dozenten as $dozent) : ?>
+                    <? if ( $dozent['label'] == 'Fachbereichsleitung' ) : ?>
+                        <? $fb_leitungen[] = $dozent; ?>
+                    <? endif ?>
+                <? endforeach ?>
+                
                 <div class="intranet_news csc-default csc-space-after-25">
                     <!--  Image block: [begin] -->
                     <div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight"><div class="csc-textpic-text">
                             <!--  Text: [begin] -->
-                            <img src="<?= $plugin->getPluginURL().'/assets/images/Projektbereich.png' ?>" alt="" border="0" width="100%">
+                            <? if ($course_id == '2dac34217342bd706ac114d57dd0b3ec' ) : ?>
+                                <div width='100%' style='background-color:#ddd;height:160px'>
+                                <img src="<?= $plugin->getPluginURL().'/assets/images/Logo-kvhs-ammerland-rot.gif' ?>" alt="" border="0" width="100px" height='100px' style='margin:10px'>
+                                <img src="<?= $plugin->getPluginURL().'/assets/images/Logo-ggmbh-ammerland-blau.gif' ?>" alt="" border="0" width="100px" height='100px' style='margin:10px; float:right'>
+                                </div>
+                            <? else :?>
+                                <div width='100%' style='background-color:#ddd;height:160px'>
+                                <img src="<?= CourseAvatar::getAvatar($course_id)->getCustomAvatarURl('original') ?>" alt="" border="0" width="100px" height='100px' style='margin:10px'>
+                                </div>
+                             <? endif ?>
                             <h2 class="intranet">
                                 <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
                                     <a href="" title="" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
                                 </div>
                             </h2>
+                            <? foreach ($fb_leitungen as $fb_leitung) : ?>
+                            <div style='margin:3px'><?= $fb_leitung['Vorname'] ?> <?= $fb_leitung['Nachname'] ?> - <?= $fb_leitung['Email']?> - <!--InstituteMember->Telefon)--></div>
+                            <? endforeach ?>
 
                             <?= $this->render_partial($template, compact('widget')) ?>
 
