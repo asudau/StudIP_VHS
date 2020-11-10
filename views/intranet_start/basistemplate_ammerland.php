@@ -44,7 +44,7 @@
                     <tr>
 						<td class="dsR15"><div class="zentriert"><a href="https://kvhs-ammerland.de/index.php?id=6" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/Logo-kvhs-ammerland-rot.gif" ?>" alt="" border="0" width="73" height="72"></a></div></td>
                         <td class="dsR15"><div class="zentriert"><a href="https://www.facebook.com/Kreisvolkshochschule-Ammerland-106403756090356/" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/facebook.png" ?>" alt="" border="0" width="72" height="72"></a></div></td>
-                        <td class="dsR15"><div class="zentriert"><a href="https://www.facebook.com/Kreisvolkshochschule-Ammerland-106403756090356/" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/instagramm.png" ?>" alt="" border="0" width="73" height="72"></a></div></td>
+                        <td class="dsR15"><div class="zentriert"><a href="https://www.instagram.com/" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/instagramm.png" ?>" alt="" border="0" width="73" height="72"></a></div></td>
                     </tr>        
                 </table>
 
