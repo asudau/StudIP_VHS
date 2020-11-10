@@ -36,6 +36,9 @@ class UrlaubskalenderController extends StudipController
         $this->sem_id = IntranetConfig::find(Institute::findCurrent()->id)->calendar_seminar;
         //falls keine instituts id verfügbar ist, über nutzer->intranets->zugehörige veranstaltung die sem_id holen wenn möglich
         $this->intranets = IntranetConfig::getIntranetIDsForUser(User::findCurrent());
+        if($GLOBALS['perm']->have_perm('root')){
+            $this->intranets = IntranetConfig::getInstitutesWithIntranet(true);
+        }
         $i = 0;
         while (!$this->sem_id && $i < sizeof($this->intranets) ){
             $this->sem_id = IntranetConfig::find($this->intranets[$i])->calendar_seminar;
