@@ -18,7 +18,7 @@ class SeminarController extends StudipController {
         }
         
         $datafield =  DataField::findOneBySQL('name = \'Overview style\'');
-        $this->datafield_id = $datafield->datafield_id;
+        $this->style_datafield_id = $datafield->datafield_id;
     }
 
     public function before_filter(&$action, &$args)
@@ -43,7 +43,7 @@ class SeminarController extends StudipController {
     public function index_action()
     {
         $localEntries = DataFieldEntry::getDataFieldEntries($this->course->id);
-        $this->style = $localEntries[$this->datafield_id]->value;
+        $this->style = $localEntries[$this->style_datafield_id]->value;
         
         //defaultwert wenn noch nichts gewählt wurde
         if(!$this->style || $this->style == ''){
@@ -220,7 +220,7 @@ class SeminarController extends StudipController {
         $localEntries = DataFieldEntry::getDataFieldEntries(Course::findCurrent()->id);
         $this->tabs = $this->get_tabs();
         
-        $this->style = $localEntries[$this->datafield_id]->value;
+        $this->style = $localEntries[$this->style_datafield_id]->value;
         
         $this->coursebegin = $this->plugin->getCourseBegin($course_id);
        
@@ -231,7 +231,7 @@ class SeminarController extends StudipController {
         $description = Request::get('description');
         
         $localEntries = DataFieldEntry::getDataFieldEntries(Course::findCurrent()->id);
-        $this->style = $localEntries[$this->datafield_id];
+        $this->style = $localEntries[$this->style_datafield_id];
         $this->style->setValueFromSubmit(['base' => $style]);
         $this->style->store();
         
