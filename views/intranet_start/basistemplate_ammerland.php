@@ -127,7 +127,7 @@
                     <!--  Image block: [begin] -->
                     <div class="csc-textpic csc-textpic-intext-right csc-textpic-equalheight"><div class="csc-textpic-text">
                             <!--  Text: [begin] -->
-                            <? if (true || $course_id == '2dac34217342bd706ac114d57dd0b3ec' ) : ?>
+                            <? if ($course_id == '2dac34217342bd706ac114d57dd0b3ec' ) : ?>
                                 <div width='100%' style='background-color:#ddd;height:160px'>
                                 <img src="<?= $plugin->getPluginURL().'/assets/images/Logo-kvhs-ammerland-rot.gif' ?>" alt="" border="0" width="100px" height='100px' style='margin:10px'>
                                 <img src="<?= $plugin->getPluginURL().'/assets/images/logo_kvhs.gif' ?>" alt="" border="0" width="176px" height='100px' style='margin:10px;margin-left:166px'>
