@@ -129,7 +129,7 @@
                             <!--  Text: [begin] -->
                             <? if ($course_id == '2dac34217342bd706ac114d57dd0b3ec' ) : ?>
                                 <div width='100%' style='background-color:#ddd;height:160px'>
-                                <img src="<?= $plugin->getPluginURL().'/assets/images/gesamtlogo_ammerland.jpg' ?>" alt="" border="0" width="456px" height='100px' style='margin:10px' margin-left='160px'>
+                                <img src="<?= $plugin->getPluginURL().'/assets/images/gesamtlogo_ammerland.jpg' ?>" alt="" border="0" width="456px" height='100px' style='margin:10px;margin-left:160px' >
                                 </div>
                             <? else :?>
                                 <div width='100%' style='background-color:#ddd;height:160px'>
