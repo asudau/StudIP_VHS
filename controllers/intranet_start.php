@@ -34,7 +34,8 @@ class IntranetStartController extends StudipController {
         if ($inst_id == null){
             $inst_id = $this->intranets[0];
         }
-       
+        $this->inst_id = $inst_id;
+        
         //TODO Berechtingung für INstitut abfragen
         $this->calendar_controller = new Calendar_CalendarController();
         $this->calendar_sem_id =  IntranetConfig::find($inst_id)->calendar_seminar;

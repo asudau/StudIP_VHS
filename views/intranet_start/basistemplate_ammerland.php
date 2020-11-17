@@ -136,12 +136,14 @@
                                 <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
                                     <a href="" title="" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
                                 </div>
-                            </h2>
-                             <? if (get_title_for_status('dozent', 1, Seminar::getInstance($course_id)->status) == 'Fachbereichsleitung'): ?>
+                                <? if (get_title_for_status('dozent', 1, Seminar::getInstance($course_id)->status) == 'Fachbereichsleitung'): ?>
                                 <? foreach ($dozenten as $fb_leitung) : ?>
-                                <div style='margin:3px'><?= $fb_leitung['Vorname'] ?> <?= $fb_leitung['Nachname'] ?> - <?= $fb_leitung['Email']?> - <!--InstituteMember->Telefon)--></div>
+                                    <div>
+                                       <?= $fb_leitung['Vorname'] ?> <?= $fb_leitung['Nachname'] ?> - <a href="mailto:<?= $fb_leitung['Email']?>" title="" class="internal-link"> <?= $fb_leitung['Email']?> <?= Icon::create('mail', 'clickable')?> </a> - <?= InstituteMember::find([$fb_leitung['user_id'], $inst_id])->telefon ?>
+                                   </div>
                                 <? endforeach ?>
                                 <? endif ?>
+                            </h2>
                             
                             <?= $this->render_partial($template, compact('widget')) ?>
 
