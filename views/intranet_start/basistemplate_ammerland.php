@@ -86,11 +86,17 @@
                         <? foreach ($intranet_buttons as $button) : ?>
                         <td class="dsR4"><div class="zentriert intranet-kachel">
                                 <? if ($button->target == 'dialog') : ?>
-                                <a data-dialog="title=<?= $button->text ?>;size=1000x800;" href="<?=$this->controller->url_for('intranet_start/index/linklist_dialog')?>" title="Feedback">
-                                    <?= Icon::create($button->icon, 'clickable', ['size' => 100])?>
-                                    <br>
-                                    <?= $button->text ?>
-                                </a>
+                                    <a data-dialog="title=<?= $button->text ?>;size=1000x800;" href="<?=$this->controller->url_for('intranet_start/index/linklist_dialog')?>" title="Feedback">
+                                        <?= Icon::create($button->icon, 'clickable', ['size' => 100])?>
+                                        <br>
+                                        <?= $button->text ?>
+                                    </a>
+                                <? elseif ($button->target !=str_replace("mailto","",$button->target)  ) : ?>
+                                    <a data-dialog href="<?=$this->controller->url_for('intranet_start/feedback_form/' . split(':', $button->target)[1])?> " target='_blank' title="<?= $button->tooltip ?>" >
+                                        <?= Icon::create($button->icon, 'clickable', ['size' => 100])?>
+                                        <br>
+                                        <?= $button->text ?>
+                                    </a>
                                 <? else : ?>
                                     <a href="https://<?= $button->target ?>" target='_blank' title="<?= $button->tooltip ?>" >
                                         <?= Icon::create($button->icon, 'clickable', ['size' => 100])?>
