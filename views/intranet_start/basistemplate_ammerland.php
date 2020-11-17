@@ -111,7 +111,7 @@
             </div>
             <? endif ?>
 
-            <!-- News -->
+            <!-- News -->  
             <? foreach ($newsPosition as $course_id => $position) : ?>
                 <? $template = $newsTemplates[$course_id]; ?>
                 <!--  CONTENT ELEMENT, uid:434/textpic [begin] -->
