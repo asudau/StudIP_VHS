@@ -132,7 +132,7 @@
                                 <img src="<?= CourseAvatar::getAvatar($course_id)->getCustomAvatarURl('original') ?>" alt="" border="0" width="100px" height='100px' style='margin:10px'>
                                 </div>
                              <? endif ?>
-                            <h2 class="intranet">
+                            <h2 class="intranet" style='color: #5d6a92;'>
                                 <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
                                     <a href="" title="" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
                                 </div>
