@@ -118,7 +118,7 @@
                 <? $fb_leitungen = []; ?>
                 <? $dozenten = Seminar::getInstance($course_id)->getMembers('dozent'); ?>
                 <? foreach ($dozenten as $dozent) : ?>
-                    <? if ( $dozent['label'] == 'Fachbereichsleitung' ) : ?>
+                    <? if ( $dozent['label'] == 'Projektleitung' ) : ?>
                         <? $fb_leitungen[] = $dozent; ?>
                     <? endif ?>
                 <? endforeach ?>
@@ -142,11 +142,15 @@
                                     <a href="" title="" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
                                 </div>
                                 <? if (get_title_for_status('dozent', 1, Seminar::getInstance($course_id)->status) == 'Fachbereichsleitung'): ?>
-                                <? foreach ($dozenten as $fb_leitung) : ?>
+                                    <? foreach ($dozenten as $fb_leitung) : ?>
+                                        <div>
+                                           <?= $fb_leitung['Vorname'] ?> <?= $fb_leitung['Nachname'] ?> - <a href="mailto:<?= $fb_leitung['Email']?>" title="" class="internal-link"> <?= $fb_leitung['Email']?> <?= Icon::create('mail', 'clickable')?> </a> - <?= Institute::find($inst_id)->telefon ?>
+                                       </div>
+                                    <? endforeach ?>
+                                <? elseif (sizeof($fb_leitungen) > 0) : ?>
                                     <div>
-                                       <?= $fb_leitung['Vorname'] ?> <?= $fb_leitung['Nachname'] ?> - <a href="mailto:<?= $fb_leitung['Email']?>" title="" class="internal-link"> <?= $fb_leitung['Email']?> <?= Icon::create('mail', 'clickable')?> </a> - <?= Institute::find($inst_id)->telefon ?>
+                                       <?= $fb_leitungen[0]['Vorname'] ?> <?= $fb_leitungen[0]['Nachname'] ?> - <a href="mailto:<?= $fb_leitungen[0]['Email']?>" title="" class="internal-link"> <?= $fb_leitungen[0]['Email']?> <?= Icon::create('mail', 'clickable')?> </a> - <?= Institute::find($inst_id)->telefon ?>
                                    </div>
-                                <? endforeach ?>
                                 <? endif ?>
                             </h2>
                             
