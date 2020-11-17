@@ -92,7 +92,7 @@
                                         <?= $button->text ?>
                                     </a>
                                 <? elseif ($button->target !=str_replace("mailto","",$button->target)  ) : ?>
-                                    <a data-dialog="size=auto" href="<?=$this->controller->url_for('intranet_start/feedback_form/' . split(':', $button->target)[1])?> " title="<?= $button->tooltip ?>" >
+                                    <a href="<?=$this->controller->url_for('intranet_start/feedback_form/' . split(':', $button->target)[1])?>" data-dialog="size=auto" title="<?= $button->tooltip ?>" >
                                         <?= Icon::create($button->icon, 'clickable', ['size' => 100])?>
                                         <br>
                                         <?= $button->text ?>
