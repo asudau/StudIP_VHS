@@ -91,7 +91,6 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
 		
 		if ($this->course)
 		{
-
             if(!$this->course_available($this->course_id) && $referer==str_replace("seminar_main.php","",$referer) && $referer==str_replace("/studip_vhs/seminar","",$referer) ){
                 PageLayout::postMessage(MessageBox::error(_('Dieser Kurs ist noch nicht gestartet.')));
                 header('Location: '. $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'dispatch.php/my_courses?cid=' , false, 303);
