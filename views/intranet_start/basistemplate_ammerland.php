@@ -129,8 +129,7 @@
                             <!--  Text: [begin] -->
                             <? if ($course_id == '2dac34217342bd706ac114d57dd0b3ec' ) : ?>
                                 <div width='100%' style='background-color:#ddd;height:160px'>
-                                <img src="<?= $plugin->getPluginURL().'/assets/images/Logo-kvhs-ammerland-rot.gif' ?>" alt="" border="0" width="100px" height='100px' style='margin:10px'>
-                                <img src="<?= $plugin->getPluginURL().'/assets/images/Logo-ggmbh-ammerland-blau.gif' ?>" alt="" border="0" width="100px" height='100px' style='margin:10px; float:right'>
+                                <img src="<?= $plugin->getPluginURL().'/assets/images/gesamtlogo_ammerland.jpg' ?>" alt="" border="0" width="456px" height='100px' style='margin:10px' margin-left='160px'>
                                 </div>
                             <? else :?>
                                 <div width='100%' style='background-color:#ddd;height:160px'>
