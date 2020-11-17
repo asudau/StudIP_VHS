@@ -31,6 +31,14 @@ use Studip\Button, Studip\LinkButton;
                     <input type='text' name ='news_caption' value = '<?= ($entry->news_caption )?>'> 
                 </td>
             </tr>
+            <tr>
+                <td style="width:700px"  >
+                    Position für News-Box:
+                </td>
+                <td style="width:300px">
+                    <input style="max-width:30px" type='text' name ='news_position' value = '<?= ($entry->news_position )?>'> 
+                </td>
+            </tr>
         </table>
         <legend>Dateien</legend>
 

@@ -212,6 +212,7 @@ class Intranetverwaltung_IndexController extends StudipController {
         }
         $entry->show_news = Request::get('show_news') ? true : false;
         $entry->news_caption = Request::get('news_caption');
+        $entry->news_position = Request::get('news_position');
         $entry->use_files = Request::get('use_files') ? true : false;
         $entry->files_caption = Request::get('files_caption');
         $entry->add_instuser_as = Request::get('add_instuser_as');

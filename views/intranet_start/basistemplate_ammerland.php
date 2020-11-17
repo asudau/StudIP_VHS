@@ -107,7 +107,8 @@
             <? endif ?>
 
             <!-- News -->
-            <? foreach ($newsTemplates as $course_id => $template) : ?>
+            <? foreach ($newsPosition as $course_id => $position) : ?>
+                <? $template = $newsTemplates[$course_id]; ?>
                 <!--  CONTENT ELEMENT, uid:434/textpic [begin] -->
                 <? $fb_leitungen = []; ?>
                 <? $dozenten = Seminar::getInstance($course_id)->getMembers('dozent'); ?>
