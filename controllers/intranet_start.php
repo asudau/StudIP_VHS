@@ -213,19 +213,19 @@ class IntranetStartController extends StudipController {
         
     }
     
-    public function feedback_form_action(){
-        
+    public function feedback_form_action($mail){
+        $this->mail = $mail;
     }
     
     public function about_el4_action(){
         
     }
     
-    public function send_form_action(){
+    public function send_form_action($mail){
         if (Request::get('message_body')){
             $mailtext = Studip\Markup::purifyHtml(Request::get('message_body'));
             //TODO Kontaktadresse konfigurierbar
-            $empfaenger = 'kvhs@kvhs-ammerland.de';//$contact_mail;//$contact_mail; //Mailadresse
+            $empfaenger = $mail . '@kvhs-ammerland.de';//$contact_mail;//$contact_mail; //Mailadresse
             //$absender   = "asudau@uos.de";
             $betreff    = 'Betreff: ' . Studip\Markup::purifyHtml(Request::get('message_subject'));
 

@@ -172,7 +172,7 @@
                     </div>
                     </td>
                     <td class="dsR4"><div class="zentriert intranet-kachel">
-                        <a data-dialog href="<?=$this->controller->url_for('intranet_start/feedback_form')?>" title="Störungsmeldung" >
+                        <a data-dialog href="<?=$this->controller->url_for('intranet_start/feedback_form/kvhs')?>" title="Störungsmeldung" >
                             <?= Icon::create('exclaim-circle-full', 'clickable', ['size' => 100])?>
                             <br>
                             Störungsmeldung
