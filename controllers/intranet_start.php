@@ -225,7 +225,7 @@ class IntranetStartController extends StudipController {
         if (Request::get('message_body')){
             $mailtext = Studip\Markup::purifyHtml(Request::get('message_body'));
             //TODO Kontaktadresse konfigurierbar
-            $empfaenger = $mail . '@kvhs-ammerland.de';//$contact_mail;//$contact_mail; //Mailadresse
+            $empfaenger = str_replace(["_dot_", "_at_"],[".", "@"], $mail) ; // '@kvhs-ammerland.de';//$contact_mail;//$contact_mail; //Mailadresse
             //$absender   = "asudau@uos.de";
             $betreff    = 'Betreff: ' . Studip\Markup::purifyHtml(Request::get('message_subject'));
 
