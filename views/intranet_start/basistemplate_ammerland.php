@@ -136,6 +136,9 @@
                             <? else :?>
                                 <div width='100%' style='background-color:#ddd;height:160px'>
                                 <img src="<?= CourseAvatar::getAvatar($course_id)->getCustomAvatarURl('original') ?>" alt="" border="0" width="100px" height='100px' style='margin:10px'>
+                                <a href='<?=$GLOBALS['ABSOLUTE_URI_STUDIP']?>plugins.php/meetingplugin/index?cid=<?= $course_id ?>' target='_blank' title='Zu den Videokonferenzräumen'>
+                                    <img src="<?= $plugin->getPluginURL().'/assets/images/bbb.jpeg' ?>" alt="" border="0" width="100px" height='100px' style='margin:10px; float:right'>
+                                </a>
                                 </div>
                              <? endif ?>
                             <h2 class="intranet" style='color: #5d6a92;'>
