@@ -139,7 +139,7 @@
                                 <? if (get_title_for_status('dozent', 1, Seminar::getInstance($course_id)->status) == 'Fachbereichsleitung'): ?>
                                 <? foreach ($dozenten as $fb_leitung) : ?>
                                     <div>
-                                       <?= $fb_leitung['Vorname'] ?> <?= $fb_leitung['Nachname'] ?> - <a href="mailto:<?= $fb_leitung['Email']?>" title="" class="internal-link"> <?= $fb_leitung['Email']?> <?= Icon::create('mail', 'clickable')?> </a> - <?= InstituteMember::find([$fb_leitung['user_id'], $inst_id])->telefon ?>
+                                       <?= $fb_leitung['Vorname'] ?> <?= $fb_leitung['Nachname'] ?> - <a href="mailto:<?= $fb_leitung['Email']?>" title="" class="internal-link"> <?= $fb_leitung['Email']?> <?= Icon::create('mail', 'clickable')?> </a> - <?= Institute::find($inst_id)->telefon ?>
                                    </div>
                                 <? endforeach ?>
                                 <? endif ?>
