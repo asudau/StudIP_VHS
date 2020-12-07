@@ -112,19 +112,30 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         $intranets = IntranetConfig::getIntranetIDsForUser(User::findCurrent());
 	    
     	if ($GLOBALS['ABSOLUTE_URI_STUDIP']!=str_replace("ohn-kursportal","",$GLOBALS['ABSOLUTE_URI_STUDIP'])){
-	    $intranets[0] = '5103a926820657c651b00d02186c99cb';
+	    $intranet = '5103a926820657c651b00d02186c99cb'; //OHN Intranet
+	    if (Navigation::hasItem('/start') && $intranets){
+                Navigation::getItem('/start')->setURL(PluginEngine::getLink($this, array(), 'intranet_start/index/' . $intranet) );
+	    }
+	    if ( $referer!=str_replace("dispatch.php/start","",$referer) ){
+                //$result = $this->getSemStmt($GLOBALS['user']->id);
+                header('Location: '. PluginEngine::getLink($this, array(), 'intranet_start/index/' . $intranet) , false, 303);
+                exit();	
+            //Nicht-Intranetnutzer werden, wenn sie die Intranet URL verwenden, auf die allgemeine Startseite weitergeleitet
+            } 
+		
+	} else {
+		
+	    if (Navigation::hasItem('/start') && $intranets){
+                Navigation::getItem('/start')->setURL(PluginEngine::getLink($this, array('cid' => $intranets[0]), 'intranet_start/index') );
+            }
+            //Intranetnutzer werden statt auf die allgemeine Startseite auf ihre individuelle Startseite weitergeleitet
+            if ( $referer!=str_replace("dispatch.php/start","",$referer) &&  $intranets){
+                //$result = $this->getSemStmt($GLOBALS['user']->id);
+                header('Location: '. PluginEngine::getLink($this, array(), 'intranet_start/index?cid=' . $intranets[0]) , false, 303);
+                exit();	
+            //Nicht-Intranetnutzer werden, wenn sie die Intranet URL verwenden, auf die allgemeine Startseite weitergeleitet
+            } 
 	}
-        
-        if (Navigation::hasItem('/start') && $intranets){
-            Navigation::getItem('/start')->setURL(PluginEngine::getLink($this, array('cid' => $intranets[0]), 'intranet_start/index') );
-        }
-        //Intranetnutzer werden statt auf die allgemeine Startseite auf ihre individuelle Startseite weitergeleitet
-        if ( $referer!=str_replace("dispatch.php/start","",$referer) &&  $intranets){
-            //$result = $this->getSemStmt($GLOBALS['user']->id);
-            header('Location: '. PluginEngine::getLink($this, array(), 'intranet_start/index?cid=' . $intranets[0]) , false, 303);
-            exit();	
-        //Nicht-Intranetnutzer werden, wenn sie die Intranet URL verwenden, auf die allgemeine Startseite weitergeleitet
-        } 
     }
 
     public function initialize ()
