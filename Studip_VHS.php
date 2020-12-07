@@ -118,7 +118,6 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
                 Navigation::getItem('/start')->setURL(PluginEngine::getLink($this, array(), 'intranet_start/index/' . $intranet) );
 	    }
 	    if ( $referer!=str_replace("dispatch.php/start","",$referer) ){
-                //$result = $this->getSemStmt($GLOBALS['user']->id);
                 header('Location: '. PluginEngine::getLink($this, array(), 'intranet_start/index/' . $intranet) , false, 303);
                 exit();	
             //Nicht-Intranetnutzer werden, wenn sie die Intranet URL verwenden, auf die allgemeine Startseite weitergeleitet
