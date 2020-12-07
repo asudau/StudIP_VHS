@@ -111,7 +111,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         //TODO: auslagern
         $intranets = IntranetConfig::getIntranetIDsForUser(User::findCurrent());
 	    
-    	if ($referer!=str_replace("ohn-kursportal","",$referer)){
+    	if ($GLOBALS['ABSOLUTE_URI_STUDIP']!=str_replace("ohn-kursportal","",$GLOBALS['ABSOLUTE_URI_STUDIP'])){
 	    $intranets[0] = '5103a926820657c651b00d02186c99cb';
 	}
         
