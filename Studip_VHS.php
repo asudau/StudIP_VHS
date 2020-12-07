@@ -112,7 +112,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         $intranets = IntranetConfig::getIntranetIDsForUser(User::findCurrent());
 	    
     	if ($GLOBALS['ABSOLUTE_URI_STUDIP']!=str_replace("ohn-kursportal","",$GLOBALS['ABSOLUTE_URI_STUDIP'])){
-	    $intranet = '7775103a926820657c651b00d02186c99cb'; //OHN Intranet
+	    $intranet = '5103a926820657c651b00d02186c99cb'; //OHN Intranet
 	    if (Navigation::hasItem('/start')){
                 Navigation::getItem('/start')->setURL(PluginEngine::getLink($this, array(), 'intranet_start/index/' . $intranet) );
 	    }
