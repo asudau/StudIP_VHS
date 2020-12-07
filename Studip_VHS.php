@@ -110,6 +110,10 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         //setup intranet navigation and forward if just logged in
         //TODO: auslagern
         $intranets = IntranetConfig::getIntranetIDsForUser(User::findCurrent());
+	    
+    	if ($referer!=str_replace("ohn-kursportal","",$referer)){
+	    $intranets[0] = '5103a926820657c651b00d02186c99cb';
+	}
         
         if (Navigation::hasItem('/start') && $intranets){
             Navigation::getItem('/start')->setURL(PluginEngine::getLink($this, array('cid' => $intranets[0]), 'intranet_start/index') );
