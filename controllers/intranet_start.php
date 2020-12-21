@@ -23,7 +23,7 @@ class IntranetStartController extends StudipController {
         PageLayout::setTitle(_("Meine Startseite"));
     }
 
-    public function index_action($inst_id)
+    public function index_action($inst_id = NULL)
     {   
         
         if ($GLOBALS['perm']->have_perm('admin')){
