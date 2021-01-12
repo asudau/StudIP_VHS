@@ -106,30 +106,11 @@
 				<h4 class="intranet">Unsere Angebote</h4>
 				<table class="dsR4" cellspacing="0" cellpadding="0" border="0">
 					<tbody>
-                    <tr>
-						<td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=92&katid=80&catDepth=1&kathaupt=1#kateg80" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/pro_sprachen.png" ?>" alt="" border="0" width="73" height="72"><br>
-							Sprachen</a></div></td>
-                        <td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=92&kathaupt=1&katid=148&catDepth=1#kateg148" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/pro_grundbildung.png" ?>" alt="" border="0" width="72" height="72"><br>
-							Grundbildung</a></div></td>
-                        <td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=92&katid=188&catDepth=1&kathaupt=1#kateg188" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/pro_kultur.png" ?>" alt="" border="0" width="73" height="72"><br>
-                            Kulturelle Bildung</a></div></td>
-                    </tr>        
-                        <td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=92&kathaupt=1&katid=189&catDepth=1#kateg189" target="_blank"><img src="<?= $plugin->getPluginURL()."/assets/images/pro_gesellschaft.png" ?>" alt="" border="0" width="73" height="72"><br>
-							Gesellschaft</a></div></td>
-                        <td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=92&kathaupt=1&katid=189&catDepth=1#kateg189" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/gesundheit.png" ?>" alt="" border="0" width="73" height="72"><br>
-							Gesundheits- bildung</a></div></td>
-						<td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=92&katid=222&catDepth=1&kathaupt=1#kateg222" target="_blank"><img src="<?= $plugin->getPluginURL()."/assets/images/kochen.png" ?>" alt="" border="0" width="73" height="72"><br>
-						Kochen und Ernährung</a></div></td>
-						
-					</tr>
-					<tr>
-                        <td class="dsR15"><div class="zentriert"><a href="https://www.kvhs-ammerland.de/index.php?id=69" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/pro_beruf.png" ?>" alt="" border="0" width="73" height="72"><br>
-							Berufliche Bildung</a></div></td>
-						<td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=92&kathaupt=1&katid=243&catDepth=1#kateg243"><img src="<?=$plugin->getPluginURL()."/assets/images/computer.png" ?>" alt="" border="0" width="73" height="72"><br>
-							Computer und neue Medien</a></div></td>
-						<td class="dsR15"><div class="zentriert"><a href="https://kvhs-wsm.de/vhs/index.php?id=140" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/bildurlaub.png" ?>" alt="" border="0" width="73" height="72"><br>
-							Bildungsurlaub</a></div></td>
-						
+                        <tr>
+						<td class="dsR15"><div class="zentriert"><a href="https://www.kvhs-wesermarsch.de " target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/logo_kvhs.gif" ?>" alt="" border="0" width="123" height="72"></a></div></td>
+                        <td class="dsR15"><div class="zentriert"><a href="https://www.facebook.com/kvhswsm/" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/facebook.png" ?>" alt="" border="0" width="72" height="72"></a></div></td>
+                        <td class="dsR15"><div class="zentriert"><a href="https://www.instagram.com/kvhswesermarsch/" target="_blank"><img src="<?=$plugin->getPluginURL()."/assets/images/instagramm.png" ?>" alt="" border="0" width="73" height="72"></a></div></td>
+                    </tr>   
 
 				</tbody></table>
 				
