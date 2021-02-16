@@ -20,7 +20,7 @@ class AddCoursebeginDatafield extends Migration
                 `object_class`, `edit_perms`, `view_perms`, `priority`,
                 `mkdate`, `chdate`, `type`, `typeparam`, `is_required`, `description`)
             VALUES (md5('course_begin'), 'course begin', 1,
-                NULL, 4, 5, '0', NULL, NULL, 3, '', '0', 'Kursstart/Zugriff für Nutzer')"
+                NULL, 4, 5, '0', NULL, NULL, 3, '', '0', 'Kursstart/Zugriff fÃ¼r Nutzer')"
         );
 
         $stm->execute();
