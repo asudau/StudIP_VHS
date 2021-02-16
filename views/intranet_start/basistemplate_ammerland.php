@@ -143,7 +143,7 @@
                                 <div style = 'display:flex; flex-wrap: wrap; justify-content: space-between; margin-right: 20px;'>
                                     <a href="" title="" class="internal-link"><?= $newsCaptions[$course_id] ?></a>
                                 </div>
-                                <? if (get_title_for_status('dozent', 1, Seminar::getInstance($course_id)->status) == 'Fachbereichsleitung'): ?>
+                                <? if (empty($fb_leitungen) && get_title_for_status('dozent', 1, Seminar::getInstance($course_id)->status) == 'Fachbereichsleitung'): ?>
                                     <? foreach ($dozenten as $fb_leitung) : ?>
                                         <div>
                                            <?= $fb_leitung['Vorname'] ?> <?= $fb_leitung['Nachname'] ?> - <a href="mailto:<?= $fb_leitung['Email']?>" title="" class="internal-link"> <?= $fb_leitung['Email']?> <?= Icon::create('mail', 'clickable')?> </a> - <?= Institute::find($inst_id)->telefon ?>
