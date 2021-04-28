@@ -250,6 +250,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         global $perm;
         $restNavigation = array();
         $newNavigation = Navigation::getItem('/course');
+        $subNavigations = array();
         foreach(Navigation::getItem('/course') as $key => $tab){
             $block = SeminarTab::findOneBySQL('seminar_id = ? AND tab IN (?) ORDER BY position ASC',
                                      array($this->course_id,$key) );
