@@ -170,9 +170,41 @@
 				</tbody></table>
 				
 			</div>
-			<div class="haupt">
+	<div class="haupt">
 	       
-                
+        <? if ($intranet_buttons): ?>
+            <div style='width: 100%; margin:auto; padding-bottom: 10px'>
+                <table cellspacing="0" cellpadding="0" border="0">
+                    <tbody><tr>
+                        <? foreach ($intranet_buttons as $button) : ?>
+                        <td class="dsR4"><div class="zentriert intranet-kachel">
+                                <? if ($button->target == 'dialog') : ?>
+                                    <a data-dialog="title=<?= $button->text ?>;size=1000x800;" href="<?=$this->controller->url_for('intranet_start/index/linklist_dialog')?>" title="Feedback">
+                                        <?= Icon::create($button->icon, 'clickable', ['size' => 100])?>
+                                        <br>
+                                        <?= $button->text ?>
+                                    </a>
+                                <? elseif ($button->target !=str_replace("mailto","",$button->target)  ) : ?>
+                                    <a href="<?=$this->controller->url_for('intranet_start/feedback_form/' . str_replace(['mailto:', '.', '@'],["", "_dot_", "_at_"], $button->target))?>" data-dialog="size=auto" title="<?= $button->tooltip ?>" >
+                                        <?= Icon::create($button->icon, 'clickable', ['size' => 100])?>
+                                        <br>
+                                        <?= $button->text ?>
+                                    </a>
+                                <? else : ?>
+                                    <a href="https://<?= $button->target ?>" target='_blank' title="<?= $button->tooltip ?>" >
+                                        <?= Icon::create($button->icon, 'clickable', ['size' => 100])?>
+                                        <br>
+                                        <?= $button->text ?>
+                                    </a>
+                                <? endif ?>
+                        </td>
+                        <? endforeach ?>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <? endif ?>
+            
     <!-- News -->
     <? foreach ($newsTemplates as $course_id => $template) : ?>
 	<!--  CONTENT ELEMENT, uid:434/textpic [begin] -->
