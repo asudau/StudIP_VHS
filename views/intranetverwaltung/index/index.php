@@ -93,6 +93,9 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
                 <th>
                     Icon
                 </th>
+                 <th>
+                    Anordnung
+                </th>
                 <th>
                     Aktionen
                 </th>
@@ -105,7 +108,14 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
                     <td><?= $button->text ?></td>
                     <td><?= $button->tooltip ?></td>
                     <td><?= $button->target ?></td>
-                    <td><?= Icon::create($button->icon, 'clickable') ?></td>
+                    <td>
+                        <? if ($button->icon != 'custom') : ?>
+                            <?= Icon::create($button->icon, 'clickable') ?>
+                        <? else : ?>
+                            <img style='heigth:1em;width:1em' src='<?= $button->icon_link ?>' >
+                        <? endif ?>
+                    </td>
+                    <td><?= ($button->content_side == 'right') ? 'Rechts' : 'Zentral'?></td>
                     <td>
                         <a data-dialog href="<?= $controller->url_for('intranetverwaltung/index/edit_buttons/' . $intranet_inst->id . '/' . $button->Button_id)?>">
                         <?= Icon::create('edit', 'clickable') ?>

@@ -137,6 +137,8 @@ class Intranetverwaltung_IndexController extends StudipController {
         $button->tooltip = Request::get('button_tooltip');
         $button->position = Request::get('button_position');
         $button->target = Request::get('button_target');
+        $button->content_side = Request::get('button_side');
+        $button->icon_link = Request::get('button_icon_link');
         $button->store();
 
         PageLayout::postMessage(MessageBox::info(sprintf(_("Änderungen gespeichert"))));

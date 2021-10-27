@@ -39,6 +39,7 @@ class Studip_VHS extends StudIPPlugin implements StandardPlugin, SystemPlugin
         $this->templates = array(
             'index_ammerland',
             'basistemplate_ammerland',
+            'flextemplate_ammerland',
             'index_el4',
             'kacheln',
             'kacheln_osnabrueck',
