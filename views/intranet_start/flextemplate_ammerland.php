@@ -58,7 +58,7 @@
                                         <? if ($button->icon != 'custom') : ?>
                                             <?= Icon::create($button->icon, 'clickable', ['size' => 100]) ?>
                                         <? else : ?>
-                                            <img style='margin-top:4px;heigth:98px;width:98px' src='<?= $button->icon_link ?>' >
+                                            <img style='margin-top:4px;heigth:98px;width:98px' src='https://<?= $button->icon_link ?>' >
                                         <? endif ?>
                                     </a>
                                 <? elseif ($button->target !=str_replace("mailto","",$button->target)  ) : ?>
@@ -66,7 +66,7 @@
                                         <? if ($button->icon != 'custom') : ?>
                                             <?= Icon::create($button->icon, 'clickable', ['size' => 100]) ?>
                                         <? else : ?>
-                                            <img style='margin-top:4px;heigth:98px;width:98px' src='<?= $button->icon_link ?>' >
+                                            <img style='margin-top:4px;heigth:98px;width:98px' src='https://<?= $button->icon_link ?>' >
                                         <? endif ?>
                                     </a>
                                 <? else : ?>
